@@ -4,12 +4,11 @@ namespace App;
 use App\Provider\DummyServicesProvider;
 use App\Provider\EasyDBServiceProvider;
 use App\Provider\HttpMiddlewareProvider;
-use App\Provider\HttpRequestServicesProvider;
+use App\Provider\HttpServicesProvider;
 use App\Provider\ServicesProviderInterface;
 use App\Provider\TwigServiceProvider;
 use DI\ContainerBuilder as ActualContainerBuilder;
-use DI\Definition\Helper\AutowireDefinitionHelper;
-use DI\Definition\Helper\CreateDefinitionHelper;
+use DI\Definition\Helper\DefinitionHelper;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use function DI\autowire;
@@ -23,7 +22,7 @@ final class ContainerBuilder
 
         $this->registerServices(
             $builder,
-            new HttpRequestServicesProvider(),
+            new HttpServicesProvider(),
             new HttpMiddlewareProvider(),
             new TwigServiceProvider($path, $env),
             new EasyDBServiceProvider(),
@@ -48,9 +47,9 @@ final class ContainerBuilder
     }
 
     /**
-     * @param string|array|callable|CreateDefinitionHelper $serviceDefinition
+     * @param string|array|callable|DefinitionHelper $serviceDefinition
      *
-     * @return AutowireDefinitionHelper|string|callable
+     * @return DefinitionHelper|string|callable
      * @throws InvalidArgumentException
      */
     private function getActualDefinition($serviceDefinition)
@@ -72,7 +71,7 @@ final class ContainerBuilder
             }
 
             return $autowiredDefinition;
-        } elseif ($serviceDefinition instanceof CreateDefinitionHelper) {
+        } elseif ($serviceDefinition instanceof DefinitionHelper) {
             return $serviceDefinition;
         }
 

@@ -16,15 +16,11 @@ final class RequestHandlerStack implements RequestHandlerInterface
     /** @var string[]|array */
     private $guardsNames = [];
 
-    /** @var array */
-    private $vars = [];
-
-    public function __construct(Container $container, string $actionName, array $guardsNames, array $vars)
+    public function __construct(Container $container, string $actionName, array $guardsNames)
     {
         $this->container = $container;
         $this->actionName = $actionName;
         $this->guardsNames = $guardsNames;
-        $this->vars = $vars;
     }
 
     /**
@@ -33,7 +29,7 @@ final class RequestHandlerStack implements RequestHandlerInterface
     public function handle(Request $request): Response
     {
         if (empty($this->guardsNames)) {
-            $actionInvoker = new ActionInvoker($this->container, $this->actionName, $this->vars);
+            $actionInvoker = new ActionInvoker($this->container, $this->actionName);
 
             return $actionInvoker->handle($request);
         }

@@ -13,19 +13,15 @@ final class ActionInvoker implements RequestHandlerInterface
     /** @var string */
     private $actionName;
 
-    /** @var array */
-    private $vars = [];
-
-    public function __construct(Container $container, string $actionName, array $vars)
+    public function __construct(Container $container, string $actionName)
     {
         $this->container = $container;
         $this->actionName = $actionName;
-        $this->vars = $vars;
     }
 
     public function handle(Request $request): Response
     {
         return $this->container
-            ->call([$this->actionName, 'execute'], $this->vars);
+            ->call([$this->actionName, 'execute']);
     }
 }

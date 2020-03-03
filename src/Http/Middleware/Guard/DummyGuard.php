@@ -22,6 +22,8 @@ final class DummyGuard implements GuardMiddlewareInterface
 
     public function process(Request $request, RequestHandlerInterface $handler): Response
     {
+        // inspect $request, do stuff, maybe return a RedirectResponse instance, via $this->redirect()?
+
         return $handler->handle($request);
     }
 }

@@ -68,7 +68,8 @@ final class Router
     private function found(array $routeInfo): Response
     {
         $handler = $routeInfo[1];
-        $vars = $routeInfo[2];
+        $this->container
+            ->set('request.vars', $routeInfo[2]);
 
         if (count($handler) === 2) {
             [$actionClassName, $guardsNames] = $handler;
@@ -76,14 +77,11 @@ final class Router
             [$actionClassName] = $handler;
         }
 
-        if (!isset($guardsNames)) {
-            $guardsNames = [];
-        }
-
-        $stack = new RequestHandlerStack($this->container, $actionClassName, $guardsNames, $vars);
+        $stack = new RequestHandlerStack($this->container, $actionClassName, $guardsNames ?? []);
 
         return $stack->handle(
-            $this->getRequest($vars)
+            $this->container
+                ->get(Request::class)
         );
     }
 
@@ -100,19 +98,11 @@ final class Router
         $allowedMethods = $routeInfo[1];
 
         return new Response(
-            sprintf('Allowed methods: %s.', implode(', ', $allowedMethods)),
+            sprintf(
+                'Allowed methods: %s.',
+                implode(', ', $allowedMethods)
+            ),
             Response::HTTP_METHOD_NOT_ALLOWED
         );
-    }
-
-    private function getRequest(array $vars): Request
-    {
-        $request = $this->container->get(Request::class);
-        foreach ($vars as $name => $value) {
-            $request->attributes
-                ->set($name, $value);
-        }
-
-        return $request;
     }
 }
