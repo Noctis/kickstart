@@ -8,8 +8,11 @@ final class DummyAction extends BaseAction
 {
     public function execute(DummyRequest $request): Response
     {
+        $name = $request->get('name') ?: 'World';
+
         return $this->render('dummy.html.twig', [
-            'foo' => $request->getFoo(),
+            'name' => $name,
+            'foo'  => $request->getFoo(),
         ]);
     }
 }

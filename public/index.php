@@ -9,7 +9,7 @@ require_once __DIR__ .'/../bootstrap.php';
 
 $dispatcher = simpleDispatcher(
     function (RouteCollector $r) {
-        $r->get('/', [
+        $r->get('/[{name}]', [
             \App\Http\Action\DummyAction::class,
             [
                 DummyGuard::class,
@@ -17,9 +17,9 @@ $dispatcher = simpleDispatcher(
         ]);
 
         /*$r->addGroup(
-            '/',
+            '/app',
             function (\FastRoute\RouteCollector $r) {
-                $r->get('/', [\App\Http\Action\DummyAction::class]);
+                $r->get('/[{name}]', [\App\Http\Action\DummyAction::class]);
             }
         );*/
     }
