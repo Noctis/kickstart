@@ -26,11 +26,6 @@ trait FlashMessageTrait
         return $message;
     }
 
-    public function setWarningMessage(string $message): void
-    {
-        $this->setFlashMessage($message, 'warning');
-    }
-
     protected function setFlashMessage(?string $message, string $type = 'flash'): void
     {
         /** @psalm-suppress UndefinedInterfaceMethod */

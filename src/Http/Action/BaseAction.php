@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace App\Http\Action;
 
+use App\Http\Helper\FlashMessageTrait;
 use App\Http\Helper\HttpRedirectionTrait;
 use App\Http\Helper\RenderTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,7 +10,7 @@ use Twig\Environment as Twig;
 
 abstract class BaseAction
 {
-    use HttpRedirectionTrait, RenderTrait;
+    use FlashMessageTrait, HttpRedirectionTrait, RenderTrait;
 
     /** @var Request */
     protected $request;
