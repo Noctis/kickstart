@@ -2,7 +2,6 @@
 namespace App\Http\Middleware\Guard;
 
 use App\Http\Helper\HttpRedirectionTrait;
-use App\Http\Middleware\GuardMiddlewareInterface;
 use App\Http\Middleware\RequestHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
