@@ -3,6 +3,7 @@
     "license": "proprietary",
     "require": {
         "php": "^7.3",
+        "ext-pdo": "*",
         "darsyn/ip": "^4.0",
         "nikic/fast-route": "^1.3",
         "paragonie/easydb": "^2.11",

@@ -1,25 +1,50 @@
 <?php declare(strict_types=1);
 namespace App\Http\Request;
 
-use Darsyn\IP\Version\IPv4;
+use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-abstract class AbstractRequest extends Request
+abstract class AbstractRequest
 {
-    /**
-     * @psalm-suppress ImplementedReturnTypeMismatch
-     */
-    public function getClientIP(): IPv4
+    /** @var Request */
+    protected $request;
+
+    public function __construct(Request $request)
     {
-        /** @psalm-suppress PossiblyNullArgument */
-        return IPv4::factory(
-            parent::getClientIp()
-        );
+        $this->request = $request;
     }
 
-    public function getSessionID(): string
+    /**
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    public function get(string $key, $default = null)
     {
-        return $this->getSession()
-            ->getId();
+        return $this->request
+            ->get($key, $default);
+    }
+
+    public function getSession(): SessionInterface
+    {
+        return $this->request
+            ->getSession();
+    }
+
+    public function getFiles(): FileBag
+    {
+        return $this->request->files;
+    }
+
+    public function getClientIp(): ?string
+    {
+        return $this->request
+            ->getClientIp();
+    }
+
+    public function getBasePath(): string
+    {
+        return $this->request->getSchemeAndHttpHost() . $this->request->getBasePath();
     }
 }

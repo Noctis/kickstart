@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 namespace App\Provider;
 
+use App\Service\DummyService;
+use App\Service\DummyServiceInterface;
+
 final class DummyServicesProvider implements ServicesProviderInterface
 {
     /**
@@ -8,6 +11,8 @@ final class DummyServicesProvider implements ServicesProviderInterface
      */
     public function getServicesDefinitions(): array
     {
-        return [];
+        return [
+            DummyServiceInterface::class => DummyService::class,
+        ];
     }
 }
