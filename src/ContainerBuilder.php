@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 namespace App;
 
+use App\Provider\DatabaseConnectionProvider;
 use App\Provider\DummyServicesProvider;
-use App\Provider\EasyDBServiceProvider;
 use App\Provider\HttpMiddlewareProvider;
 use App\Provider\HttpServicesProvider;
 use App\Provider\ServicesProviderInterface;
@@ -25,7 +25,7 @@ final class ContainerBuilder
             new HttpServicesProvider(),
             new HttpMiddlewareProvider(),
             new TwigServiceProvider($path, $env),
-            new EasyDBServiceProvider(),
+            new DatabaseConnectionProvider(),
             new DummyServicesProvider()
         );
 
