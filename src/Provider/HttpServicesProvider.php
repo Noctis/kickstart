@@ -16,16 +16,13 @@ final class HttpServicesProvider implements ServicesProviderInterface
      */
     public function getServicesDefinitions(): array
     {
-        $requestFactory = factory([RequestFactory::class, 'createFromGlobals'])
-            ->parameter(
-                'vars',
-                get('request.vars')
-            );
-
         return [
-            Session::class       => factory([SessionFactory::class, 'create']),
-            Request::class       => $requestFactory,
-            'App\Http\Request\*' => $requestFactory,
+            Session::class => factory([SessionFactory::class, 'create']),
+            Request::class => factory([RequestFactory::class, 'createFromGlobals'])
+                ->parameter(
+                    'vars',
+                    get('request.vars')
+                ),
         ];
     }
 }
