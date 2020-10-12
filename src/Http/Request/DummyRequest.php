@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class DummyRequest extends AbstractRequest
 {
-    /** @var DummyServiceInterface */
-    private $dummyService;
+    private DummyServiceInterface $dummyService;
 
     public function __construct(DummyServiceInterface $dummyService, Request $request)
     {

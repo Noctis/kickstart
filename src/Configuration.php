@@ -6,11 +6,12 @@ use Dotenv\Dotenv;
 final class Configuration
 {
     /** @var string[] */
-    private $requiredOptions = [
+    private array $requiredOptions = [
         'db_host',
         'db_user',
         'db_pass',
         'db_name',
+        'db_port',
         'dummy_param',
     ];
 

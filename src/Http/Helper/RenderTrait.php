@@ -6,8 +6,7 @@ use Twig\Environment as Twig;
 
 trait RenderTrait
 {
-    /** @var Twig */
-    protected $twig;
+    protected Twig $twig;
 
     protected function problem(string $message, string $returnUrl = null): Response
     {

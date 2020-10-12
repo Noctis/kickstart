@@ -7,8 +7,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 abstract class AbstractRequest
 {
-    /** @var Request */
-    protected $request;
+    protected Request $request;
 
     public function __construct(Request $request)
     {

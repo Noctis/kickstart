@@ -3,8 +3,7 @@ namespace App\Entity;
 
 final class DummyEntity implements DummyEntityInterface
 {
-    /** @var int */
-    private $id;
+    private int $id;
 
     public function __construct(int $id)
     {

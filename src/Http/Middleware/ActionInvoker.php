@@ -7,11 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ActionInvoker implements RequestHandlerInterface
 {
-    /** @var Container */
-    private $container;
-
-    /** @var string */
-    private $actionName;
+    private Container $container;
+    private string $actionName;
 
     public function __construct(Container $container, string $actionName)
     {

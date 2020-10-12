@@ -5,8 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 trait FlashMessageTrait
 {
-    /** @var Request */
-    protected $request;
+    protected Request $request;
 
     protected function getFlashMessage(string $type = 'flash', bool $persist = false): ?string
     {
