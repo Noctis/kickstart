@@ -8,14 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class RequestHandlerStack implements RequestHandlerInterface
 {
-    /** @var Container */
-    private $container;
-
-    /** @var string */
-    private $actionName;
+    private Container $container;
+    private string $actionName;
 
     /** @var string[]|array */
-    private $guardsNames = [];
+    private array $guardsNames = [];
 
     public function __construct(Container $container, string $actionName, array $guardsNames)
     {

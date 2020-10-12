@@ -8,11 +8,8 @@ use Twig\Loader\FilesystemLoader;
 
 final class TwigServiceProvider implements ServicesProviderInterface
 {
-    /** @var string */
-    private $path;
-
-    /** @var string */
-    private $env;
+    private string $path;
+    private string $env;
 
     public function __construct(string $path, string $env)
     {

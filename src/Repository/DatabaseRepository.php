@@ -1,12 +1,11 @@
 <?php declare(strict_types=1);
 namespace App\Repository;
 
-use App\Service\DatabaseConnection\DatabaseConnectionInterface;
+use Noctis\Database\Connection\DatabaseConnectionInterface;
 
 abstract class DatabaseRepository
 {
-    /** @var DatabaseConnectionInterface */
-    protected $db;
+    protected DatabaseConnectionInterface $db;
 
     public function __construct(DatabaseConnectionInterface $db)
     {

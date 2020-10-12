@@ -11,7 +11,10 @@ final class RequestFactory implements RequestFactoryInterface
     public function createFromGlobals(RequestedEntry $entry, ContainerInterface $c, array $vars = []): Request
     {
         $requestClassName = $entry->getName();
-        /** @psalm-suppress InvalidStringClass */
+        /**
+         * @psalm-suppress InvalidStringClass
+         * @var Request $requestClassName
+         */
         $request = $requestClassName::createFromGlobals();
         /** @var Request $request */
         $request->setSession(

@@ -10,11 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class Router
 {
-    /** @var Dispatcher */
-    private $dispatcher;
-
-    /** @var DiContainer */
-    private $container;
+    private Dispatcher $dispatcher;
+    private DiContainer $container;
 
     public function __construct(Dispatcher $dispatcher, DiContainer $container)
     {

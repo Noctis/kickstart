@@ -12,6 +12,7 @@ final class DummyRepository extends DatabaseRepository implements DummyRepositor
     {
         $sql = 'SELECT * FROM '. self::TABLE_NAME .' WHERE id = ?';
 
+        /** @psalm-suppress PossiblyNullArgument */
         return $this->createFromRow(
             $this->db
                 ->row($sql, $id)

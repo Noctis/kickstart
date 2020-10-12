@@ -11,8 +11,7 @@ final class DummyGuard implements GuardMiddlewareInterface
 {
     use HttpRedirectionTrait;
 
-    /** @var bool */
-    private $dummyParam;
+    private bool $dummyParam;
 
     public function __construct(bool $dummyParam)
     {

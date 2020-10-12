@@ -12,8 +12,7 @@ abstract class BaseAction
 {
     use FlashMessageTrait, HttpRedirectionTrait, RenderTrait;
 
-    /** @var Request */
-    protected $request;
+    protected Request $request;
 
     public function __construct(Twig $twig, Request $request)
     {
