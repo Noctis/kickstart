@@ -7,6 +7,7 @@ final class Configuration
 {
     /** @var string[] */
     private array $requiredOptions = [
+        'basepath',
         'db_host',
         'db_user',
         'db_pass',

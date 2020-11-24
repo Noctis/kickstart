@@ -18,6 +18,8 @@ trait RenderTrait
 
     protected function render(string $view, array $params = []): Response
     {
+        $params['basepath'] = getenv('basepath');
+
         $html = $this->twig
             ->render($view, $params);
 

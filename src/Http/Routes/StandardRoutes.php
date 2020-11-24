@@ -10,19 +10,17 @@ final class StandardRoutes
     public function get(): callable
     {
         return function (RouteCollector $r): void {
-            $r->get('/[{name}]', [
-                DummyAction::class,
-                [
-                    DummyGuard::class,
-                ],
-            ]);
-
-            /*$r->addGroup(
-                '/app',
-                function (\FastRoute\RouteCollector $r) {
-                    $r->get('/[{name}]', [\App\Http\Action\DummyAction::class]);
+            $r->addGroup(
+                getenv('basepath'),
+                function (RouteCollector $r) {
+                    $r->get('[{name}]', [
+                        DummyAction::class,
+                        [
+                            DummyGuard::class,
+                        ],
+                    ]);
                 }
-            );*/
+            );
         };
     }
 }
