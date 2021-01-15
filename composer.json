@@ -11,7 +11,7 @@
         "php": "^7.4",
         "ext-pdo": "*",
         "nikic/fast-route": "^1.3",
-        "noctis/database-lib": "dev-master",
+        "noctis/database-lib": "^1.0",
         "paragonie/easydb": "^2.11",
         "php-di/php-di": "^6.0",
         "psr/http-server-middleware": "^1.0",
