@@ -16,7 +16,7 @@ final class DatabaseConnectionProvider implements ServicesProviderInterface
             DatabaseConnectionInterface::class => function (): EasyDBDatabaseConnection {
                 try {
                     /** @psalm-suppress PossiblyFalseArgument */
-                    return new EasyDBDatabaseConnection(
+                    return EasyDBDatabaseConnection::create(
                         sprintf(
                             'mysql:dbname=%s;host=%s;port=%s',
                             getenv('db_name'),
