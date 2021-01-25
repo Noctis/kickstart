@@ -19,12 +19,12 @@ final class DatabaseConnectionProvider implements ServicesProviderInterface
                     return EasyDBDatabaseConnection::create(
                         sprintf(
                             'mysql:dbname=%s;host=%s;port=%s',
-                            getenv('db_name'),
-                            getenv('db_host'),
-                            getenv('db_port')
+                            $_ENV['db_name'],
+                            $_ENV['db_host'],
+                            $_ENV['db_port']
                         ),
-                        getenv('db_user'),
-                        getenv('db_pass')
+                        $_ENV['db_user'],
+                        $_ENV['db_pass']
                     );
                 } catch (ConstructorFailed $ex) {
                     die('Could not connect to DB: '. $ex->getMessage());

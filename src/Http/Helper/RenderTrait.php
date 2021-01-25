@@ -10,7 +10,7 @@ trait RenderTrait
 
     protected function render(string $view, array $params = []): Response
     {
-        $params['basepath'] = getenv('basepath');
+        $params['basepath'] = $_ENV['basepath'];
 
         $html = $this->twig
             ->render($view, $params);
