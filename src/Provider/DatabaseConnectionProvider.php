@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace App\Provider;
+namespace Noctis\KickStart\Provider;
 
 use Noctis\Database\Connection\DatabaseConnectionInterface;
 use Noctis\Database\Connection\EasyDB as EasyDBDatabaseConnection;

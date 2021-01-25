@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace App\Http\Factory;
+namespace Noctis\KickStart\Http\Factory;
 
 use DI\Factory\RequestedEntry;
 use Psr\Container\ContainerInterface;

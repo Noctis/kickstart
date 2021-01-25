@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace App\Http\Helper;
+namespace Noctis\KickStart\Http\Helper;
 
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment as Twig;

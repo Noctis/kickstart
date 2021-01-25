@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
-namespace App\Http;
+namespace Noctis\KickStart\Http;
 
-use App\Http\Middleware\RequestHandlerStack;
 use DI\Container as DiContainer;
 use FastRoute\Dispatcher;
+use Noctis\KickStart\Http\Middleware\RequestHandlerStack;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

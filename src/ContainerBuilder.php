@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
-namespace App;
+namespace Noctis\KickStart;
 
-use App\Provider\DatabaseConnectionProvider;
-use App\Provider\DummyServicesProvider;
-use App\Provider\HttpMiddlewareProvider;
-use App\Provider\HttpServicesProvider;
-use App\Provider\ServicesProviderInterface;
-use App\Provider\TwigServiceProvider;
 use DI\ContainerBuilder as ActualContainerBuilder;
 use DI\Definition\Helper\DefinitionHelper;
 use InvalidArgumentException;
+use Noctis\KickStart\Provider\DatabaseConnectionProvider;
+use Noctis\KickStart\Provider\DummyServicesProvider;
+use Noctis\KickStart\Provider\HttpMiddlewareProvider;
+use Noctis\KickStart\Provider\HttpServicesProvider;
+use Noctis\KickStart\Provider\ServicesProviderInterface;
+use Noctis\KickStart\Provider\TwigServiceProvider;
 use Psr\Container\ContainerInterface;
 use function DI\autowire;
 

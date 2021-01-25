@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
-namespace App\Provider;
+namespace Noctis\KickStart\Provider;
 
-use App\Http\Factory\RequestFactory;
-use App\Http\Factory\SessionFactory;
 use DI\Definition\Helper\FactoryDefinitionHelper;
+use Noctis\KickStart\Http\Factory\RequestFactory;
+use Noctis\KickStart\Http\Factory\SessionFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use function DI\factory;

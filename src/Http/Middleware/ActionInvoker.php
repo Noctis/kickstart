@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace App\Http\Middleware;
+namespace Noctis\KickStart\Http\Middleware;
 
 use DI\Container;
 use Symfony\Component\HttpFoundation\Request;

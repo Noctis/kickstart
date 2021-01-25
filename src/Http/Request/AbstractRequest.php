@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace App\Http\Request;
+namespace Noctis\KickStart\Http\Request;
 
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
-namespace App\Http\Action;
+namespace Noctis\KickStart\Http\Action;
 
-use App\Http\Helper\FlashMessageTrait;
-use App\Http\Helper\HttpRedirectionTrait;
-use App\Http\Helper\RenderTrait;
+use Noctis\KickStart\Http\Helper\FlashMessageTrait;
+use Noctis\KickStart\Http\Helper\HttpRedirectionTrait;
+use Noctis\KickStart\Http\Helper\RenderTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment as Twig;

@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace App\Repository;
+namespace Noctis\KickStart\Repository;
 
 use Noctis\Database\Connection\DatabaseConnectionInterface;
 

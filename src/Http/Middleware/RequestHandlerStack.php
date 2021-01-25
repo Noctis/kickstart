@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
-namespace App\Http\Middleware;
+namespace Noctis\KickStart\Http\Middleware;
 
-use App\Http\Middleware\Guard\GuardMiddlewareInterface;
 use DI\Container;
+use Noctis\KickStart\Http\Middleware\Guard\GuardMiddlewareInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
