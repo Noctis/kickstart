@@ -8,14 +8,6 @@ trait RenderTrait
 {
     protected Twig $twig;
 
-    protected function problem(string $message, string $returnUrl = null): Response
-    {
-        return $this->render('problem.html.twig', [
-            'message'   => $message,
-            'returnUrl' => $returnUrl,
-        ]);
-    }
-
     protected function render(string $view, array $params = []): Response
     {
         $params['basepath'] = getenv('basepath');
