@@ -5,8 +5,6 @@ use DI\ContainerBuilder as ActualContainerBuilder;
 use DI\Definition\Helper\DefinitionHelper;
 use InvalidArgumentException;
 use Noctis\KickStart\Provider\DatabaseConnectionProvider;
-use Noctis\KickStart\Provider\DummyServicesProvider;
-use Noctis\KickStart\Provider\HttpMiddlewareProvider;
 use Noctis\KickStart\Provider\HttpServicesProvider;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
 use Noctis\KickStart\Provider\TwigServiceProvider;
@@ -15,18 +13,44 @@ use function DI\autowire;
 
 final class ContainerBuilder
 {
-    public function build(string $path, string $env): ContainerInterface
+    /** @var ServicesProviderInterface[] */
+    private array $servicesProviders = [];
+
+    public function __construct(string $path, string $env)
+    {
+        $this->servicesProviders = [
+            new HttpServicesProvider(),
+            new TwigServiceProvider($path, $env),
+            new DatabaseConnectionProvider(),
+        ];
+    }
+
+    /**
+     * @param ServicesProviderInterface[] $providers
+     */
+    public function addServicesProviders(array $providers): void
+    {
+        array_map(
+            function (ServicesProviderInterface $servicesProvider): void {
+                $this->servicesProviders[] = $servicesProvider;
+            },
+            $providers
+        );
+    }
+
+    public function build(): ContainerInterface
     {
         $builder = new ActualContainerBuilder();
         //$builder->useAnnotations(true);
 
         $this->registerServices(
             $builder,
-            new HttpServicesProvider(),
+            ...$this->servicesProviders
+            /*new HttpServicesProvider(),
             new HttpMiddlewareProvider(),
             new TwigServiceProvider($path, $env),
             new DatabaseConnectionProvider(),
-            new DummyServicesProvider()
+            new DummyServicesProvider()*/
         );
 
         return $builder->build();
