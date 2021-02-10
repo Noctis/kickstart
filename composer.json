@@ -14,7 +14,6 @@
         "vlucas/phpdotenv": "^5.3"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-master",
         "symfony/var-dumper": "^5.2",
         "vimeo/psalm": "^4.4"
     },
