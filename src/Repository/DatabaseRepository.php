@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 namespace Noctis\KickStart\Repository;
 
-use Noctis\Database\Connection\DatabaseConnectionInterface;
+use ParagonIE\EasyDB\EasyDB;
 
 abstract class DatabaseRepository
 {
-    protected DatabaseConnectionInterface $db;
+    protected EasyDB $db;
 
-    public function __construct(DatabaseConnectionInterface $db)
+    public function __construct(EasyDB $db)
     {
         $this->db = $db;
     }

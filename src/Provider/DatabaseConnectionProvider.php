@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 namespace Noctis\KickStart\Provider;
 
-use Noctis\Database\Connection\DatabaseConnectionInterface;
-use Noctis\Database\Connection\EasyDB as EasyDBDatabaseConnection;
+use ParagonIE\EasyDB\EasyDB;
 use ParagonIE\EasyDB\Exception\ConstructorFailed;
+use ParagonIE\EasyDB\Factory;
 
 final class DatabaseConnectionProvider implements ServicesProviderInterface
 {
@@ -13,10 +13,9 @@ final class DatabaseConnectionProvider implements ServicesProviderInterface
     public function getServicesDefinitions(): array
     {
         return [
-            DatabaseConnectionInterface::class => function (): EasyDBDatabaseConnection {
+            EasyDB::class => function (): EasyDB {
                 try {
-                    /** @psalm-suppress PossiblyFalseArgument */
-                    return EasyDBDatabaseConnection::create(
+                    return Factory::fromArray([
                         sprintf(
                             'mysql:dbname=%s;host=%s;port=%s',
                             $_ENV['db_name'],
@@ -25,7 +24,7 @@ final class DatabaseConnectionProvider implements ServicesProviderInterface
                         ),
                         $_ENV['db_user'],
                         $_ENV['db_pass']
-                    );
+                    ]);
                 } catch (ConstructorFailed $ex) {
                     die('Could not connect to DB: '. $ex->getMessage());
                 }
