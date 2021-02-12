@@ -5,7 +5,6 @@ use DI\ContainerBuilder as ActualContainerBuilder;
 use DI\Definition\Helper\DefinitionHelper;
 use InvalidArgumentException;
 use Noctis\KickStart\Provider\ConfigurationProvider;
-use Noctis\KickStart\Provider\DatabaseConnectionProvider;
 use Noctis\KickStart\Provider\HttpServicesProvider;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
 use Noctis\KickStart\Provider\TwigServiceProvider;
@@ -23,7 +22,6 @@ final class ContainerBuilder
             new ConfigurationProvider(),
             new HttpServicesProvider(),
             new TwigServiceProvider($path, $env),
-            new DatabaseConnectionProvider(),
         ];
     }
 
