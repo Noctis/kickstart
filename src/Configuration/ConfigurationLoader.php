@@ -33,9 +33,7 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
      */
     private function getRequiredOptionsNames(array $requirements): array
     {
-        return array_keys(
-            $this->getOptionsWithSpecificRequirement($requirements, 'required')
-        );
+        return $this->getOptionsWithSpecificRequirement($requirements, 'required');
     }
 
     /**
@@ -45,9 +43,7 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
      */
     private function getBoolOptionsNames(array $requirements): array
     {
-        return array_keys(
-            $this->getOptionsWithSpecificRequirement($requirements, 'bool')
-        );
+        return $this->getOptionsWithSpecificRequirement($requirements, 'bool');
     }
 
     /**
@@ -57,29 +53,29 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
      */
     private function getIntOptionsNames(array $requirements): array
     {
-        return array_keys(
-            $this->getOptionsWithSpecificRequirement($requirements, 'int')
-        );
+        return $this->getOptionsWithSpecificRequirement($requirements, 'int');
     }
 
     /**
      * @param array<string, string> $requirements
      *
-     * @return array<string, string>
+     * @return array<array-key, string>
      */
     private function getOptionsWithSpecificRequirement(array $requirements, string $name): array
     {
-        return array_filter(
-            array_map(
-                function (string $paramsList): array {
-                    return array_map(
-                        'trim',
-                        explode(',', $paramsList)
-                    );
-                },
-                $requirements
-            ),
-            fn(array $params): bool => in_array($name, $params)
+        return array_keys(
+            array_filter(
+                array_map(
+                    function (string $paramsList): array {
+                        return array_map(
+                            'trim',
+                            explode(',', $paramsList)
+                        );
+                    },
+                    $requirements
+                ),
+                fn(array $params): bool => in_array($name, $params)
+            )
         );
     }
 }
