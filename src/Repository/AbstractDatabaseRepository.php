@@ -3,7 +3,7 @@ namespace Noctis\KickStart\Repository;
 
 use ParagonIE\EasyDB\EasyDB;
 
-abstract class DatabaseRepository
+abstract class AbstractDatabaseRepository
 {
     protected EasyDB $db;
 

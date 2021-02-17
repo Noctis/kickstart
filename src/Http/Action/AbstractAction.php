@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment as Twig;
 
-abstract class BaseAction
+abstract class AbstractAction
 {
     use FlashMessageTrait, HttpRedirectionTrait, RenderTrait;
 
