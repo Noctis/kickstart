@@ -4,7 +4,7 @@ namespace Noctis\KickStart\Provider;
 interface ServicesProviderInterface
 {
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function getServicesDefinitions(): array;
 }

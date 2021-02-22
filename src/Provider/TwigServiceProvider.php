@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Noctis\KickStart\Provider;
 
-use Psr\Container\ContainerInterface;
 use Twig\Environment as Twig;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
@@ -18,29 +17,24 @@ final class TwigServiceProvider implements ServicesProviderInterface
     }
 
     /**
-     * @return callable[]
+     * @inheritDoc
      */
     public function getServicesDefinitions(): array
     {
         return [
-            Twig::class => $this->twigFactory(),
+            Twig::class => function (): Twig {
+                $loader = new FilesystemLoader($this->path .'/templates');
+                $twig = new Twig($loader, [
+                    'cache' => false,
+                    'debug' => $this->env === 'dev',
+                ]);
+
+                $twig->addExtension(
+                    new DebugExtension()
+                );
+
+                return $twig;
+            }
         ];
-    }
-
-    private function twigFactory(): callable
-    {
-        return function (ContainerInterface $container): Twig {
-            $loader = new FilesystemLoader($this->path .'/templates');
-            $twig = new Twig($loader, [
-                'cache' => false,
-                'debug' => $this->env === 'dev',
-            ]);
-
-            $twig->addExtension(
-                new DebugExtension()
-            );
-
-            return $twig;
-        };
     }
 }

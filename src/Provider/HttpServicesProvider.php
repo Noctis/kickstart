@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Noctis\KickStart\Provider;
 
-use DI\Definition\Helper\FactoryDefinitionHelper;
 use Noctis\KickStart\Http\Factory\RequestFactory;
 use Noctis\KickStart\Http\Factory\SessionFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +11,7 @@ use function DI\get;
 final class HttpServicesProvider implements ServicesProviderInterface
 {
     /**
-     * @return FactoryDefinitionHelper[]
+     * @inheritDoc
      */
     public function getServicesDefinitions(): array
     {

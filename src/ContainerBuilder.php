@@ -2,11 +2,8 @@
 namespace Noctis\KickStart;
 
 use DI\ContainerBuilder as ActualContainerBuilder;
-use DI\Definition\Helper\DefinitionHelper;
-use InvalidArgumentException;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
 use Psr\Container\ContainerInterface;
-use function DI\autowire;
 
 final class ContainerBuilder
 {
@@ -31,57 +28,17 @@ final class ContainerBuilder
         $builder = new ActualContainerBuilder();
         //$builder->useAnnotations(true);
 
-        $this->registerServices(
-            $builder,
-            ...$this->servicesProviders
-        );
+        $this->registerServices($builder, ...$this->servicesProviders);
 
         return $builder->build();
     }
 
-    private function registerServices(
-        ActualContainerBuilder $builder,
-        ServicesProviderInterface ...$providers
-    ): void {
-        $actualDefinitions = [];
-        foreach ($providers as $servicesProvider) {
-            foreach ($servicesProvider->getServicesDefinitions() as $name => $serviceDefinition) {
-                $actualDefinitions[$name] = $this->getActualDefinition($serviceDefinition);
-            }
-        }
-
-        $builder->addDefinitions($actualDefinitions);
-    }
-
-    /**
-     * @param string|array|callable|DefinitionHelper $serviceDefinition
-     *
-     * @return DefinitionHelper|string|callable
-     * @throws InvalidArgumentException
-     */
-    private function getActualDefinition($serviceDefinition)
+    private function registerServices(ActualContainerBuilder $builder, ServicesProviderInterface ...$providers): void
     {
-        /**
-         * @psalm-suppress RedundantConditionGivenDocblockType
-         * @psalm-suppress LessSpecificReturnStatement
-         */
-        if (is_callable($serviceDefinition)) {
-            return $serviceDefinition;
-        } elseif (is_string($serviceDefinition)) {
-            return autowire($serviceDefinition);
-        } elseif (is_array($serviceDefinition)) {
-            [$serviceDefinition, $constructorArguments] = $serviceDefinition;
-
-            $autowiredDefinition = autowire($serviceDefinition);
-            foreach ($constructorArguments as $argument => $value) {
-                $autowiredDefinition->constructorParameter($argument, $value);
-            }
-
-            return $autowiredDefinition;
-        } elseif ($serviceDefinition instanceof DefinitionHelper) {
-            return $serviceDefinition;
+        foreach ($providers as $servicesProvider) {
+            $builder->addDefinitions(
+                $servicesProvider->getServicesDefinitions()
+            );
         }
-
-        throw new InvalidArgumentException('Unknown service definition type given.');
     }
 }
