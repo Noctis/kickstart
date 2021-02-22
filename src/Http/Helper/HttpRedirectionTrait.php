@@ -11,6 +11,6 @@ trait HttpRedirectionTrait
             ? '?'. http_build_query($params)
             : '';
 
-        return new RedirectResponse($_ENV['basepath'] . $url . $queryString);
+        return new RedirectResponse($_ENV['basehref'] . $url . $queryString);
     }
 }

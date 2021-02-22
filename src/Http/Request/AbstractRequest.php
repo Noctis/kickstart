@@ -37,7 +37,7 @@ abstract class AbstractRequest
             ->getClientIp();
     }
 
-    public function getBasePath(): string
+    public function getBaseHref(): string
     {
         return $this->request->getSchemeAndHttpHost() . $this->request->getBasePath();
     }

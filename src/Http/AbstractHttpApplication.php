@@ -38,7 +38,7 @@ abstract class AbstractHttpApplication extends AbstractApplication
         return [
             new BaseConfigurationProvider(),
             new HttpServicesProvider(),
-            new TwigServiceProvider($_ENV['BASEDIR'], $this->env)
+            new TwigServiceProvider($_ENV['basepath'], $this->env)
         ];
     }
 

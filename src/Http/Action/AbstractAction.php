@@ -26,11 +26,6 @@ abstract class AbstractAction
         $this->request = $request;
     }
 
-    protected function getBasePath(): string
-    {
-        return $this->request->getSchemeAndHttpHost() . $this->request->getBasePath();
-    }
-
     protected function notFound(): Response
     {
         return new Response(
