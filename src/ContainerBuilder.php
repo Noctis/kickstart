@@ -4,10 +4,7 @@ namespace Noctis\KickStart;
 use DI\ContainerBuilder as ActualContainerBuilder;
 use DI\Definition\Helper\DefinitionHelper;
 use InvalidArgumentException;
-use Noctis\KickStart\Provider\ConfigurationProvider;
-use Noctis\KickStart\Provider\HttpServicesProvider;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
-use Noctis\KickStart\Provider\TwigServiceProvider;
 use Psr\Container\ContainerInterface;
 use function DI\autowire;
 
@@ -15,15 +12,6 @@ final class ContainerBuilder
 {
     /** @var ServicesProviderInterface[] */
     private array $servicesProviders;
-
-    public function __construct(string $path, string $env)
-    {
-        $this->servicesProviders = [
-            new ConfigurationProvider(),
-            new HttpServicesProvider(),
-            new TwigServiceProvider($path, $env),
-        ];
-    }
 
     /**
      * @param ServicesProviderInterface[] $providers
