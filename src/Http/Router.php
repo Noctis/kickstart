@@ -23,25 +23,12 @@ final class Router
     {
         $routeInfo = $this->determineRouteInfo();
 
-        switch ($routeInfo[0]) {
-            // ... 200 Found
-            case Dispatcher::FOUND:
-                $response = $this->found($routeInfo);
-                break;
-
-            // ... 404 Not Found
-            case Dispatcher::NOT_FOUND:
-                $response = $this->notFound();
-                break;
-
-            // ... 405 Method Not Allowed
-            case Dispatcher::METHOD_NOT_ALLOWED:
-                $response = $this->methodNotAllowed($routeInfo);
-                break;
-
-            default:
-                throw new RuntimeException();
-        }
+        $response = match ($routeInfo[0]) {
+            Dispatcher::FOUND              => $this->found($routeInfo),             // ... 200 Found
+            Dispatcher::NOT_FOUND          => $this->notFound(),                    // ... 404 Not Found
+            Dispatcher::METHOD_NOT_ALLOWED => $this->methodNotAllowed($routeInfo),  // ... 405 Method Not Allowed
+            default                        => throw new RuntimeException(),
+        };
 
         $response->send();
     }

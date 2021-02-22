@@ -14,7 +14,7 @@ use function DI\autowire;
 final class ContainerBuilder
 {
     /** @var ServicesProviderInterface[] */
-    private array $servicesProviders = [];
+    private array $servicesProviders;
 
     public function __construct(string $path, string $env)
     {
@@ -46,11 +46,6 @@ final class ContainerBuilder
         $this->registerServices(
             $builder,
             ...$this->servicesProviders
-            /*new HttpServicesProvider(),
-            new HttpMiddlewareProvider(),
-            new TwigServiceProvider($path, $env),
-            new DatabaseConnectionProvider(),
-            new DummyServicesProvider()*/
         );
 
         return $builder->build();

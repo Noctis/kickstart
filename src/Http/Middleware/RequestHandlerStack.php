@@ -12,8 +12,11 @@ final class RequestHandlerStack implements RequestHandlerInterface
     private string $actionName;
 
     /** @var string[]|array */
-    private array $guardsNames = [];
+    private array $guardsNames;
 
+    /**
+     * @param string[]|array $guardsNames
+     */
     public function __construct(Container $container, string $actionName, array $guardsNames)
     {
         $this->container = $container;
@@ -21,9 +24,6 @@ final class RequestHandlerStack implements RequestHandlerInterface
         $this->guardsNames = $guardsNames;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function handle(Request $request): Response
     {
         if (empty($this->guardsNames)) {

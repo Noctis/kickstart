@@ -16,7 +16,6 @@ final class RequestFactory implements RequestFactoryInterface
          * @var Request $requestClassName
          */
         $request = $requestClassName::createFromGlobals();
-        /** @var Request $request */
         $request->setSession(
             $c->get(Session::class)
         );

@@ -14,12 +14,7 @@ abstract class AbstractRequest
         $this->request = $request;
     }
 
-    /**
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public function get(string $key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
         return $this->request
             ->get($key, $default);
