@@ -10,7 +10,7 @@ use Noctis\KickStart\Provider\StandardServicesProvider;
 use Noctis\KickStart\Provider\TwigServiceProvider;
 use function FastRoute\simpleDispatcher;
 
-abstract class AbstractHttpApplication extends AbstractApplication
+abstract class AbstractWebApplication extends AbstractApplication
 {
     private HttpRoutesProviderInterface $routesProvider;
 
