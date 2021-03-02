@@ -6,6 +6,7 @@ use Noctis\KickStart\AbstractApplication;
 use Noctis\KickStart\Http\Routes\HttpRoutesProviderInterface;
 use Noctis\KickStart\Provider\ConfigurationProvider as BaseConfigurationProvider;
 use Noctis\KickStart\Provider\HttpServicesProvider;
+use Noctis\KickStart\Provider\StandardServicesProvider;
 use Noctis\KickStart\Provider\TwigServiceProvider;
 use function FastRoute\simpleDispatcher;
 
@@ -38,7 +39,8 @@ abstract class AbstractHttpApplication extends AbstractApplication
         return [
             new BaseConfigurationProvider(),
             new HttpServicesProvider(),
-            new TwigServiceProvider($_ENV['basepath'], $this->env)
+            new TwigServiceProvider($_ENV['basepath'], $this->env),
+            new StandardServicesProvider(),
         ];
     }
 

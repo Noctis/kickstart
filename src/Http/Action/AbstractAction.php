@@ -3,22 +3,31 @@ namespace Noctis\KickStart\Http\Action;
 
 use Noctis\KickStart\Http\Helper\FlashMessageTrait;
 use Noctis\KickStart\Http\Helper\HttpRedirectionTrait;
-use Noctis\KickStart\Http\Helper\RenderTrait;
+use Noctis\KickStart\Service\TemplateRendererInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment as Twig;
 
 abstract class AbstractAction
 {
-    use FlashMessageTrait, HttpRedirectionTrait, RenderTrait;
+    use FlashMessageTrait, HttpRedirectionTrait;
 
+    protected TemplateRendererInterface $templateRenderer;
     protected Request $request;
 
-    public function __construct(Twig $twig, Request $request)
+    public function __construct(TemplateRendererInterface $templateRenderer, Request $request)
     {
-        $this->twig = $twig;
-
+        $this->templateRenderer = $templateRenderer;
         $this->setRequest($request);
+    }
+
+    protected function render(string $view, array $params = []): Response
+    {
+        $params['basehref'] = $_ENV['basehref'];
+
+        $html = $this->templateRenderer
+            ->render($view, $params);
+
+        return new Response($html);
     }
 
     protected function setRequest(Request $request): void
