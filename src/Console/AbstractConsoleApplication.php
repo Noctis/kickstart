@@ -2,7 +2,7 @@
 namespace Noctis\KickStart\Console;
 
 use Noctis\KickStart\AbstractApplication;
-use Noctis\KickStart\Provider\ConfigurationProvider as BaseConfigurationProvider;
+use Noctis\KickStart\Provider\ConfigurationProvider;
 use Symfony\Component\Console\Application as SymfonyConsoleApplication;
 
 abstract class AbstractConsoleApplication extends AbstractApplication
@@ -32,7 +32,7 @@ abstract class AbstractConsoleApplication extends AbstractApplication
     protected function getServiceProviders(): array
     {
         return [
-            new BaseConfigurationProvider(),
+            new ConfigurationProvider(),
         ];
     }
 

@@ -4,7 +4,7 @@ namespace Noctis\KickStart\Http;
 use FastRoute\Dispatcher;
 use Noctis\KickStart\AbstractApplication;
 use Noctis\KickStart\Http\Routes\HttpRoutesProviderInterface;
-use Noctis\KickStart\Provider\ConfigurationProvider as BaseConfigurationProvider;
+use Noctis\KickStart\Provider\ConfigurationProvider;
 use Noctis\KickStart\Provider\HttpServicesProvider;
 use Noctis\KickStart\Provider\StandardServicesProvider;
 use Noctis\KickStart\Provider\TwigServiceProvider;
@@ -35,7 +35,7 @@ abstract class AbstractHttpApplication extends AbstractApplication
     protected function getServiceProviders(): array
     {
         return [
-            new BaseConfigurationProvider(),
+            new ConfigurationProvider(),
             new HttpServicesProvider(),
             new TwigServiceProvider($_ENV['basepath']),
             new StandardServicesProvider(),
