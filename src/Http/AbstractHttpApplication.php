@@ -12,12 +12,10 @@ use function FastRoute\simpleDispatcher;
 
 abstract class AbstractHttpApplication extends AbstractApplication
 {
-    private string $env;
     private HttpRoutesProviderInterface $routesProvider;
 
-    public function __construct(string $env, HttpRoutesProviderInterface $routesProvider)
+    public function __construct(HttpRoutesProviderInterface $routesProvider)
     {
-        $this->env = $env;
         $this->routesProvider = $routesProvider;
     }
 
@@ -39,7 +37,7 @@ abstract class AbstractHttpApplication extends AbstractApplication
         return [
             new BaseConfigurationProvider(),
             new HttpServicesProvider(),
-            new TwigServiceProvider($_ENV['basepath'], $this->env),
+            new TwigServiceProvider($_ENV['basepath']),
             new StandardServicesProvider(),
         ];
     }
