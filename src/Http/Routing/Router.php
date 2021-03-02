@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Noctis\KickStart\Http;
+namespace Noctis\KickStart\Http\Routing;
 
 use DI\Container as DiContainer;
 use FastRoute\Dispatcher;

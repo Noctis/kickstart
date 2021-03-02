@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace Noctis\KickStart\Http\Routes;
+namespace Noctis\KickStart\Http\Routing;
 
 interface HttpRoutesProviderInterface
 {

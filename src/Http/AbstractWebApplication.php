@@ -3,7 +3,8 @@ namespace Noctis\KickStart\Http;
 
 use FastRoute\Dispatcher;
 use Noctis\KickStart\AbstractApplication;
-use Noctis\KickStart\Http\Routes\HttpRoutesProviderInterface;
+use Noctis\KickStart\Http\Routing\HttpRoutesProviderInterface;
+use Noctis\KickStart\Http\Routing\Router;
 use Noctis\KickStart\Provider\ConfigurationProvider;
 use Noctis\KickStart\Provider\HttpServicesProvider;
 use Noctis\KickStart\Provider\StandardServicesProvider;
