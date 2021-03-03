@@ -2,11 +2,13 @@
 
 ##What is it?
 
-It's a relatively code-base which allows one to start (kick-start, if you will) working on building a small PHP application.
+It's a relatively small code-base which allows one to start (kick-start, if you will) 
+working on building a small PHP application.
 
 ##Who is it for?
 
-Kickstart is best used for starting small Web-based and/or CLI applications, which utilize a relative database (RDBMS).
+Kickstart is best used for starting small Web-based and/or CLI applications, which 
+utilize a relative database (RDBMS).
 
 ##What exactly does it do?
 
@@ -17,7 +19,8 @@ business logic.
 
 ##So... like a framework?
 
-Yeah, you could say that. I won't call this project a framework though. Or a mini-framework for that matter.
+Yeah, you could say that. I won't call this project a framework though. Or a 
+mini-framework for that matter.
 
 Why should I used it instead of Laravel, or Symfony?
 
@@ -42,14 +45,28 @@ But you get the idea.
 
 ##What standard components does Kickstart offer?
 
-* routing, with optional and/or required named request params - based on [FastRoute](https://github.com/nikic/FastRoute), by [Nikita Popov](https://github.com/nikic),
-* dependency-injection - based on [PHP-DI](https://php-di.org/) by [Matthieu Napoli](https://github.com/mnapoli),
-* database connectivity - based on [EasyDB](https://github.com/paragonie/easydb) by the [Paragon Initiative Enterprises](https://paragonie.com/),
-* HTTP requests & responses handling - based on [Symfony's](https://symfony.com/) [HttpFoundation](https://symfony.com/doc/5.2/components/http_foundation.html) component,
-* HTTP middleware - my own implementation, in accordance with the [middleware part](https://www.php-fig.org/psr/psr-15/#12-middleware) of [PSR-15](https://www.php-fig.org/psr/psr-15/)
+* routing, with optional and/or required named request params - based on 
+  [FastRoute](https://github.com/nikic/FastRoute), 
+  by [Nikita Popov](https://github.com/nikic),
+* dependency-injection - based on 
+  [PHP-DI](https://php-di.org/) 
+  by [Matthieu Napoli](https://github.com/mnapoli),
+* database connectivity - based on 
+  [EasyDB](https://github.com/paragonie/easydb) 
+  by the [Paragon Initiative Enterprises](https://paragonie.com/),
+* HTTP requests & responses handling - based on 
+  [Symfony's](https://symfony.com/) 
+  [HttpFoundation](https://symfony.com/doc/5.2/components/http_foundation.html) 
+  component,
+* HTTP middleware - my own implementation, in accordance with the 
+  [middleware part](https://www.php-fig.org/psr/psr-15/#12-middleware) of 
+  [PSR-15](https://www.php-fig.org/psr/psr-15/)
 * template engine - based on Symfony's [Twig 3](https://twig.symfony.com/doc/3.x/),
-* CLI (console) - based on Symfony's [Console](https://symfony.com/doc/5.2/components/console.html) component,
-* configuration - based on the ever popular [PHP dotenv](https://github.com/vlucas/phpdotenv) by [Vance Lucas](https://github.com/vlucas).
+* CLI (console) - based on Symfony's 
+  [Console](https://symfony.com/doc/5.2/components/console.html) component,
+* configuration - based on the ever popular 
+  [PHP dotenv](https://github.com/vlucas/phpdotenv) 
+  by [Vance Lucas](https://github.com/vlucas).
 
 These are all off-the-shelf free components, which I've tied together into a
 working skeleton application.
@@ -61,14 +78,14 @@ internationalization (i18n), mail sending... but I decided to leave that to the
 end user. If they want, they're free to add them themselves. I'll include 
 examples on how to do that in the documentation.
 
-But I don't need a console component, or a database connectivity component!
+##But I don't need a console component, or a database connectivity component!
 
 You're free not to utilize them. Their existence won't slow your application
 down, at least not noticeably. If you really want to get rid of a certain
 component, i.e. completely, I'll include examples on how to do that in the
 documentation.
 
-OK, so how do I install this thing?
+##OK, so how do I install this thing?
 
 Here's an example command:
 
