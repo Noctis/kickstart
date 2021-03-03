@@ -95,7 +95,7 @@ you want. `app-name` is the name of the folder which will be created in the curr
 working directory:
 
 ```
-composer create-project noctis/kickstart-app app-name --repository='{"type":"vcs","url":"git@bitbucket.org:NoctisPL\/kickstart.git"}'
+composer create-project noctis/kickstart-app app-name --repository='{"type":"vcs","url":"git@bitbucket.org:NoctisPL\/kickstart-app.git"}'
 ```
 
 ##Wait. "kickstart-app"? I thought this project was called "kickstart"?
