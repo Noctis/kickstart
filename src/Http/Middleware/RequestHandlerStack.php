@@ -14,12 +14,12 @@ final class RequestHandlerStack implements RequestHandlerInterface
     /** @var class-string<AbstractAction> */
     private string $actionName;
 
-    /** @var array<array-key, class-string<GuardMiddlewareInterface>>|array<empty, empty> */
+    /** @var list<class-string<GuardMiddlewareInterface>>|array<empty, empty> */
     private array $guardsNames;
 
     /**
-     * @param class-string<AbstractAction>                                                 $actionName
-     * @param array<array-key, class-string<GuardMiddlewareInterface>>|array<empty, empty> $guardsNames
+     * @param class-string<AbstractAction>                                     $actionName
+     * @param list<class-string<GuardMiddlewareInterface>>|array<empty, empty> $guardsNames
      */
     public function __construct(Container $container, string $actionName, array $guardsNames)
     {

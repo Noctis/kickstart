@@ -10,12 +10,11 @@ abstract class AbstractConsoleApplication extends AbstractApplication
 {
     private string $env;
 
-    /** @var array<array-key, class-string<AbstractCommand>> */
+    /** @var list<class-string<AbstractCommand>> */
     private array $commandsClassesNames;
 
     /**
-     * @param string $env
-     * @param array<array-key, class-string<AbstractCommand>> $commandsClassesNames
+     * @param list<class-string<AbstractCommand>> $commandsClassesNames
      */
     public function __construct(string $env, array $commandsClassesNames)
     {

@@ -29,7 +29,7 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
     /**
      * @param array<string, string> $requirements
      *
-     * @return array<array-key, string>
+     * @return list<string>
      */
     private function getRequiredOptionsNames(array $requirements): array
     {
@@ -39,7 +39,7 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
     /**
      * @param array<string, string> $requirements
      *
-     * @return array<array-key, string>
+     * @return list<string>
      */
     private function getBoolOptionsNames(array $requirements): array
     {
@@ -49,7 +49,7 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
     /**
      * @param array<string, string> $requirements
      *
-     * @return array<array-key, string>
+     * @return list<string>
      */
     private function getIntOptionsNames(array $requirements): array
     {
@@ -59,7 +59,7 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
     /**
      * @param array<string, string> $requirements
      *
-     * @return array<array-key, string>
+     * @return list<string>
      */
     private function getOptionsWithSpecificRequirement(array $requirements, string $name): array
     {
