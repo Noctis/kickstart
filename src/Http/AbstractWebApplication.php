@@ -22,10 +22,11 @@ abstract class AbstractWebApplication extends AbstractApplication
 
     public function run(): void
     {
-        $router = new Router(
-            $this->getDispatcher(),
-            $this->getContainerBuilder()
-                ->build()
+        $container = $this->getContainerBuilder()
+            ->build();
+        $router = $container->get(Router::class);
+        $router->setDispatcher(
+            $this->getDispatcher()
         );
         $router->route();
     }

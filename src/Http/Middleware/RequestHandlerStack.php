@@ -14,12 +14,12 @@ final class RequestHandlerStack implements RequestHandlerInterface
     /** @var class-string<AbstractAction> */
     private string $actionName;
 
-    /** @var array<array-key, class-string<GuardMiddlewareInterface>> */
+    /** @var array<array-key, class-string<GuardMiddlewareInterface>>|array<empty, empty> */
     private array $guardsNames;
 
     /**
-     * @param class-string<AbstractAction> $actionName
-     * @param array<array-key, class-string<GuardMiddlewareInterface>> $guardsNames
+     * @param class-string<AbstractAction>                                                 $actionName
+     * @param array<array-key, class-string<GuardMiddlewareInterface>>|array<empty, empty> $guardsNames
      */
     public function __construct(Container $container, string $actionName, array $guardsNames)
     {
@@ -44,6 +44,9 @@ final class RequestHandlerStack implements RequestHandlerInterface
     }
 
 
+    /**
+     * @param class-string<GuardMiddlewareInterface> $name
+     */
     public function getGuard(string $name): GuardMiddlewareInterface
     {
         return $this->container

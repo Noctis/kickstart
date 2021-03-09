@@ -17,7 +17,7 @@ final class ConfigurationProvider implements ServicesProviderInterface
 
                 foreach ($_ENV as $name => $value) {
                     $configuration->set(
-                        $name,
+                        (string)$name,
                         $this->normalizeValue($value)
                     );
                 }

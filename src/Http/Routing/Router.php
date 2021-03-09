@@ -3,20 +3,35 @@ namespace Noctis\KickStart\Http\Routing;
 
 use DI\Container;
 use FastRoute\Dispatcher;
-use Noctis\KickStart\Http\Middleware\RequestHandlerStack;
+use Noctis\KickStart\Http\Routing\Handler\MethodNotAllowedHandler;
+use Noctis\KickStart\Http\Routing\Handler\RouteFoundHandler;
+use Noctis\KickStart\Http\Routing\Handler\RouteNotFoundHandler;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 final class Router
 {
-    private Dispatcher $dispatcher;
+    private ?Dispatcher $dispatcher;
     private Container $container;
+    private RouteFoundHandler $routeFoundHandler;
+    private RouteNotFoundHandler $routeNotFoundHandler;
+    private MethodNotAllowedHandler $methodNotAllowedHandler;
 
-    public function __construct(Dispatcher $dispatcher, Container $container)
+    public function __construct(
+        Container $container,
+        RouteFoundHandler $routeFoundHandler,
+        RouteNotFoundHandler $routeNotFoundHandler,
+        MethodNotAllowedHandler $methodNotAllowedHandler
+    ) {
+        $this->dispatcher = null;
+        $this->container = $container;
+        $this->routeFoundHandler = $routeFoundHandler;
+        $this->routeNotFoundHandler = $routeNotFoundHandler;
+        $this->methodNotAllowedHandler = $methodNotAllowedHandler;
+    }
+
+    public function setDispatcher(Dispatcher $dispatcher): void
     {
         $this->dispatcher = $dispatcher;
-        $this->container = $container;
     }
 
     public function route(): void
@@ -24,9 +39,9 @@ final class Router
         $routeInfo = $this->determineRouteInfo();
 
         $response = match ($routeInfo[0]) {
-            Dispatcher::FOUND              => $this->found($routeInfo),             // ... 200 Found
-            Dispatcher::NOT_FOUND          => $this->notFound(),                    // ... 404 Not Found
-            Dispatcher::METHOD_NOT_ALLOWED => $this->methodNotAllowed($routeInfo),  // ... 405 Method Not Allowed
+            Dispatcher::FOUND              => $this->routeFoundHandler->handle($routeInfo),         // ... 200 Found
+            Dispatcher::NOT_FOUND          => $this->routeNotFoundHandler->handle($routeInfo),      // ... 404 Not Found
+            Dispatcher::METHOD_NOT_ALLOWED => $this->methodNotAllowedHandler->handle($routeInfo),   // ... 405 Method Not Allowed
             default                        => throw new RuntimeException(),
         };
 
@@ -35,8 +50,16 @@ final class Router
 
     private function determineRouteInfo(): array
     {
-        // Fetch method and URI from somewhere
+        if (!isset($this->dispatcher)) {
+            throw new RuntimeException('Router dispatcher not set. Did you forget to call setDispatcher()?');
+        }
+
+        /**
+         * Fetch method and URI from somewhere
+         * @var string $httpMethod
+         */
         $httpMethod = filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING);
+        /** @var string $uri */
         $uri = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_URL);
 
         // Strip query string (?foo=bar) and decode URI
@@ -47,46 +70,5 @@ final class Router
 
         return $this->dispatcher
             ->dispatch($httpMethod, $uri);
-    }
-
-    private function found(array $routeInfo): Response
-    {
-        $handler = $routeInfo[1];
-        $this->container
-            ->set('request.vars', $routeInfo[2]);
-
-        if (count($handler) === 2) {
-            [$actionClassName, $guardsNames] = $handler;
-        } else {
-            [$actionClassName] = $handler;
-        }
-
-        $stack = new RequestHandlerStack($this->container, $actionClassName, $guardsNames ?? []);
-
-        return $stack->handle(
-            $this->container
-                ->get(Request::class)
-        );
-    }
-
-    private function notFound(): Response
-    {
-        return new Response(
-            '404, bro!',
-            Response::HTTP_NOT_FOUND
-        );
-    }
-
-    private function methodNotAllowed(array $routeInfo): Response
-    {
-        $allowedMethods = $routeInfo[1];
-
-        return new Response(
-            sprintf(
-                'Allowed methods: %s.',
-                implode(', ', $allowedMethods)
-            ),
-            Response::HTTP_METHOD_NOT_ALLOWED
-        );
     }
 }
