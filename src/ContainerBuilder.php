@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 namespace Noctis\KickStart;
 
+use DI\Container;
 use DI\ContainerBuilder as ActualContainerBuilder;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
-use Psr\Container\ContainerInterface;
 
 final class ContainerBuilder
 {
     /** @var ServicesProviderInterface[] */
-    private array $servicesProviders;
+    private array $servicesProviders = [];
 
     /**
      * @param ServicesProviderInterface[] $providers
@@ -23,7 +23,7 @@ final class ContainerBuilder
         );
     }
 
-    public function build(): ContainerInterface
+    public function build(): Container
     {
         $builder = new ActualContainerBuilder();
         //$builder->useAnnotations(true);

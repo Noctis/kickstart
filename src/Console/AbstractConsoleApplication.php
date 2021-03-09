@@ -2,6 +2,7 @@
 namespace Noctis\KickStart\Console;
 
 use Noctis\KickStart\AbstractApplication;
+use Noctis\KickStart\Console\Command\AbstractCommand;
 use Noctis\KickStart\Provider\ConfigurationProvider;
 use Symfony\Component\Console\Application as SymfonyConsoleApplication;
 
@@ -9,9 +10,13 @@ abstract class AbstractConsoleApplication extends AbstractApplication
 {
     private string $env;
 
-    /** @var string[] */
+    /** @var array<array-key, class-string<AbstractCommand>> */
     private array $commandsClassesNames;
 
+    /**
+     * @param string $env
+     * @param array<array-key, class-string<AbstractCommand>> $commandsClassesNames
+     */
     public function __construct(string $env, array $commandsClassesNames)
     {
         $this->env = $env;

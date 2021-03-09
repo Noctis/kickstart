@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 final class RequestFactory implements RequestFactoryInterface
 {
+    /**
+     * @param array<string, mixed>|array $vars
+     */
     public function createFromGlobals(RequestedEntry $entry, ContainerInterface $c, array $vars = []): Request
     {
         $requestClassName = $entry->getName();

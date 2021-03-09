@@ -26,6 +26,9 @@ abstract class AbstractAction
         $this->setRequest($request);
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     protected function render(string $view, array $params = []): Response
     {
         $params['basehref'] = $this->configuration

@@ -2,6 +2,7 @@
 namespace Noctis\KickStart\Http\Middleware;
 
 use DI\Container;
+use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\Guard\GuardMiddlewareInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,13 +10,16 @@ use Symfony\Component\HttpFoundation\Response;
 final class RequestHandlerStack implements RequestHandlerInterface
 {
     private Container $container;
+
+    /** @var class-string<AbstractAction> */
     private string $actionName;
 
-    /** @var string[]|array */
+    /** @var array<array-key, class-string<GuardMiddlewareInterface>> */
     private array $guardsNames;
 
     /**
-     * @param string[]|array $guardsNames
+     * @param class-string<AbstractAction> $actionName
+     * @param array<array-key, class-string<GuardMiddlewareInterface>> $guardsNames
      */
     public function __construct(Container $container, string $actionName, array $guardsNames)
     {

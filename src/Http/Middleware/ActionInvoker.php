@@ -2,6 +2,7 @@
 namespace Noctis\KickStart\Http\Middleware;
 
 use DI\Container;
+use Noctis\KickStart\Http\Action\AbstractAction;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -10,6 +11,9 @@ final class ActionInvoker implements RequestHandlerInterface
     private Container $container;
     private string $actionName;
 
+    /**
+     * @param class-string<AbstractAction> $actionName
+     */
     public function __construct(Container $container, string $actionName)
     {
         $this->container = $container;

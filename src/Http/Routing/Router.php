@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing;
 
-use DI\Container as DiContainer;
+use DI\Container;
 use FastRoute\Dispatcher;
 use Noctis\KickStart\Http\Middleware\RequestHandlerStack;
 use RuntimeException;
@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 final class Router
 {
     private Dispatcher $dispatcher;
-    private DiContainer $container;
+    private Container $container;
 
-    public function __construct(Dispatcher $dispatcher, DiContainer $container)
+    public function __construct(Dispatcher $dispatcher, Container $container)
     {
         $this->dispatcher = $dispatcher;
         $this->container = $container;
