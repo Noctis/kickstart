@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="Noctis\KickStart\" />
       <sourceFolder url="file://$MODULE_DIR$/tests/unit" isTestSource="true" packagePrefix="Tests\Unit\" />
+      <sourceFolder url="file://$MODULE_DIR$/tests/acceptance" isTestSource="true" packagePrefix="Tests\Acceptance\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php80" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/string" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-grapheme" />
