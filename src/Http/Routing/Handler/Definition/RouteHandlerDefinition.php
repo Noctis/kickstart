@@ -3,14 +3,14 @@ namespace Noctis\KickStart\Http\Routing\Handler\Definition;
 
 use InvalidArgumentException;
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\Guard\GuardMiddlewareInterface;
+use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
 final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
 {
     /** @var class-string<AbstractAction> */
     private string $actionClassName;
 
-    /** @var list<class-string<GuardMiddlewareInterface>> */
+    /** @var list<class-string<AbstractMiddleware>> */
     private array $guardNames;
 
     /**
@@ -35,8 +35,8 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
     }
 
     /**
-     * @param class-string<AbstractAction>                 $actionClassName
-     * @param list<class-string<GuardMiddlewareInterface>> $guardNames
+     * @param class-string<AbstractAction>           $actionClassName
+     * @param list<class-string<AbstractMiddleware>> $guardNames
      */
     public function __construct(string $actionClassName, array $guardNames)
     {

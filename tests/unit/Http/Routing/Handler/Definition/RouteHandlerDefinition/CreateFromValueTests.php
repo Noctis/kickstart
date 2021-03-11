@@ -2,7 +2,7 @@
 namespace Tests\Unit\Http\Routing\Handler\Definition\RouteHandlerDefinition;
 
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\Guard\GuardMiddlewareInterface;
+use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerDefinition;
 use PHPUnit\Framework\TestCase;
 
@@ -46,7 +46,7 @@ final class CreateFromValueTests extends TestCase
     public function test_it_is_correctly_created_from_an_array_of_action_class_name_and_guard_classes_names(): void
     {
         $value = [AbstractAction::class, [
-            GuardMiddlewareInterface::class,
+            AbstractMiddleware::class,
         ]];
 
         $handlerDefinition = RouteHandlerDefinition::createFromValue($value);
@@ -56,7 +56,7 @@ final class CreateFromValueTests extends TestCase
             $handlerDefinition->getActionClassName()
         );
         $this->assertSame(
-            [GuardMiddlewareInterface::class],
+            [AbstractMiddleware::class],
             $handlerDefinition->getGuardNames()
         );
     }

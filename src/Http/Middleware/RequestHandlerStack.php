@@ -3,53 +3,36 @@ namespace Noctis\KickStart\Http\Middleware;
 
 use DI\Container;
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\Guard\GuardMiddlewareInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class RequestHandlerStack implements RequestHandlerInterface
 {
     private Container $container;
+    private AbstractAction $action;
 
-    /** @var class-string<AbstractAction> */
-    private string $actionName;
-
-    /** @var list<class-string<GuardMiddlewareInterface>>|array<empty, empty> */
-    private array $guardsNames;
+    /** @var list<AbstractMiddleware>|array<empty, empty> */
+    private array $guards;
 
     /**
-     * @param class-string<AbstractAction>                                     $actionName
-     * @param list<class-string<GuardMiddlewareInterface>>|array<empty, empty> $guardsNames
+     * @param list<AbstractMiddleware>|array<empty, empty> $guards
      */
-    public function __construct(Container $container, string $actionName, array $guardsNames)
+    public function __construct(Container $container, AbstractAction $action, array $guards)
     {
         $this->container = $container;
-        $this->actionName = $actionName;
-        $this->guardsNames = $guardsNames;
+        $this->action = $action;
+        $this->guards = $guards;
     }
 
     public function handle(Request $request): Response
     {
-        if (empty($this->guardsNames)) {
-            $actionInvoker = new ActionInvoker($this->container, $this->actionName);
-
-            return $actionInvoker->handle($request);
+        if (empty($this->guards)) {
+            return $this->container
+                ->call([$this->action, 'execute']);
         }
 
-        $guard = $this->getGuard(
-            array_shift($this->guardsNames)
-        );
+        $guard = array_shift($this->guards);
 
         return $guard->process($request, $this);
-    }
-
-
-    /**
-     * @param class-string<GuardMiddlewareInterface> $name
-     */
-    public function getGuard(string $name): GuardMiddlewareInterface
-    {
-        return $this->container
-            ->get($name);
     }
 }

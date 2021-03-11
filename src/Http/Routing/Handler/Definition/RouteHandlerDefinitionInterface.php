@@ -2,7 +2,7 @@
 namespace Noctis\KickStart\Http\Routing\Handler\Definition;
 
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\Guard\GuardMiddlewareInterface;
+use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
 interface RouteHandlerDefinitionInterface
 {
@@ -12,7 +12,7 @@ interface RouteHandlerDefinitionInterface
     public function getActionClassName(): string;
 
     /**
-     * @return list<class-string<GuardMiddlewareInterface>>
+     * @return list<class-string<AbstractMiddleware>>
      */
     public function getGuardNames(): array;
 }
