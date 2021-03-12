@@ -3,7 +3,7 @@ namespace Noctis\KickStart\Http\Routing\Handler;
 
 use Symfony\Component\HttpFoundation\Response;
 
-final class MethodNotAllowedHandler implements RouteHandlerInterface
+final class MethodNotAllowedHandler implements MethodNotAllowedHandlerInterface
 {
     public function handle(array $routeInfo): Response
     {

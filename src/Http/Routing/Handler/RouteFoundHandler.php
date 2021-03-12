@@ -9,7 +9,7 @@ use Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class RouteFoundHandler implements RouteHandlerInterface
+final class RouteFoundHandler implements RouteFoundHandlerInterface
 {
     private Container $container;
 
