@@ -18,6 +18,8 @@ abstract class AbstractConsoleApplication extends AbstractApplication
      */
     public function __construct(string $env, array $commandsClassesNames)
     {
+        parent::__construct();
+
         $this->env = $env;
         $this->commandsClassesNames = $commandsClassesNames;
     }
@@ -42,12 +44,10 @@ abstract class AbstractConsoleApplication extends AbstractApplication
 
     private function registerCommands(SymfonyConsoleApplication $app): void
     {
-        $container = $this->getContainerBuilder()
-            ->build();
-
         foreach ($this->commandsClassesNames as $className) {
             $app->add(
-                $container->get($className)
+                $this->container
+                    ->get($className)
             );
         }
     }

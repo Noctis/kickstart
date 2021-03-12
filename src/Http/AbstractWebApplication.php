@@ -13,18 +13,23 @@ use function FastRoute\simpleDispatcher;
 
 abstract class AbstractWebApplication extends AbstractApplication
 {
-    private HttpRoutesProviderInterface $routesProvider;
+    /** @var class-string<HttpRoutesProviderInterface> */
+    private string $routesProviderClassName;
 
-    public function __construct(HttpRoutesProviderInterface $routesProvider)
+    /**
+     * @param class-string<HttpRoutesProviderInterface> $routesProviderClassName
+     */
+    public function __construct(string $routesProviderClassName)
     {
-        $this->routesProvider = $routesProvider;
+        parent::__construct();
+
+        $this->routesProviderClassName = $routesProviderClassName;
     }
 
     public function run(): void
     {
-        $container = $this->getContainerBuilder()
-            ->build();
-        $router = $container->get(Router::class);
+        $router = $this->container
+            ->get(Router::class);
         $router->setDispatcher(
             $this->getDispatcher()
         );
@@ -46,9 +51,12 @@ abstract class AbstractWebApplication extends AbstractApplication
 
     private function getDispatcher(): Dispatcher
     {
+        /** @var HttpRoutesProviderInterface $routesProvider */
+        $routesProvider = $this->container
+            ->get($this->routesProviderClassName);
+
         return simpleDispatcher(
-            $this->routesProvider
-                ->get()
+            $routesProvider->get()
         );
     }
 }
