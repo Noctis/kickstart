@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing\Handler\Definition;
 
-use InvalidArgumentException;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
@@ -16,11 +15,11 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
     /**
      * @param class-string<AbstractAction>|array $value
      */
-    public static function createFromValue(mixed $value): self
+    public static function createFromValue(string|array $value): self
     {
         if (is_string($value)) {
             return new self($value, []);
-        } elseif (is_array($value)) {
+        } else {
             $actionClassName = $value[0];
 
             $guardNames = [];
@@ -30,8 +29,6 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
 
             return new self($actionClassName, $guardNames);
         }
-
-        throw new InvalidArgumentException('Invalid route definition value given.');
     }
 
     /**

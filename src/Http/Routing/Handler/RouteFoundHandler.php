@@ -61,7 +61,7 @@ final class RouteFoundHandler implements RouteFoundHandlerInterface
     private function getGuards(array $guardsNames): array
     {
         return array_map(
-            fn (string $guardClassName) => $this->container->get($guardClassName),
+            fn (string $guardClassName): AbstractMiddleware => $this->container->get($guardClassName),
             $guardsNames
         );
     }
