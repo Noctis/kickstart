@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Noctis\KickStart\Provider;
 
 use Noctis\KickStart\Configuration\ConfigurationInterface;
@@ -26,11 +29,11 @@ final class TwigServiceProvider implements ServicesProviderInterface
                 $configuration = $container->get(ConfigurationInterface::class);
                 $debugMode = $configuration->get('debug') === true;
 
-                $loader = new FilesystemLoader($this->basePath .'/templates');
+                $loader = new FilesystemLoader($this->basePath . '/templates');
                 $twig = new Twig($loader, [
                     'cache'            => $debugMode === true
                                             ? false
-                                            : $this->basePath .'/var/cache/templates',
+                                            : $this->basePath . '/var/cache/templates',
                     'debug'            => $debugMode,
                     'strict_variables' => $debugMode,
                 ]);

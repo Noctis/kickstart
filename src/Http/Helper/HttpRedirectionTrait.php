@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Noctis\KickStart\Http\Helper;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -11,7 +14,7 @@ trait HttpRedirectionTrait
             ->getBaseUrl();
 
         $queryString = !empty($params)
-            ? '?'. http_build_query($params)
+            ? '?' . http_build_query($params)
             : '';
 
         return new RedirectResponse($baseHref . $url . $queryString);

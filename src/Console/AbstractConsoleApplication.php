@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Noctis\KickStart\Console;
 
 use Noctis\KickStart\AbstractApplication;

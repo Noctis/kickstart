@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Noctis\KickStart\Http\Action;
 
 use Noctis\KickStart\Http\Helper\FlashMessageTrait;
@@ -9,7 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractAction
 {
-    use FlashMessageTrait, HttpRedirectionTrait;
+    use FlashMessageTrait;
+    use HttpRedirectionTrait;
 
     protected TemplateRendererInterface $templateRenderer;
     protected Request $request;

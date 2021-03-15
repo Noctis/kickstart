@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Noctis\KickStart\Http\Routing;
 
 use FastRoute\Dispatcher;
@@ -38,12 +41,11 @@ final class Router
         $routeInfo = $this->determineRouteInfo();
 
         $response = match ($routeInfo[0]) {
-            Dispatcher::FOUND              => $this->routeFoundHandler->handle($routeInfo),         // ... 200 Found
-            Dispatcher::NOT_FOUND          => $this->routeNotFoundHandler->handle($routeInfo),      // ... 404 Not Found
-            Dispatcher::METHOD_NOT_ALLOWED => $this->methodNotAllowedHandler->handle($routeInfo),   // ... 405 Method Not Allowed
+            Dispatcher::FOUND              => $this->routeFoundHandler->handle($routeInfo),         // ... 200
+            Dispatcher::NOT_FOUND          => $this->routeNotFoundHandler->handle($routeInfo),      // ... 404
+            Dispatcher::METHOD_NOT_ALLOWED => $this->methodNotAllowedHandler->handle($routeInfo),   // ... 405
             default                        => throw new RuntimeException(),
         };
-
         $response->send();
     }
 
@@ -53,7 +55,7 @@ final class Router
             throw new RuntimeException('Router dispatcher not set. Did you forget to call setDispatcher()?');
         }
 
-        $httpMethod =$this->httpInfoProvider
+        $httpMethod = $this->httpInfoProvider
             ->getMethod();
         $uri = $this->httpInfoProvider
             ->getUri();
