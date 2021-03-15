@@ -3,7 +3,6 @@ namespace Noctis\KickStart\Provider;
 
 use Noctis\KickStart\Service\TemplateRendererInterface;
 use Noctis\KickStart\Service\TwigRenderer;
-use function DI\autowire;
 
 final class StandardServicesProvider implements ServicesProviderInterface
 {
@@ -13,7 +12,7 @@ final class StandardServicesProvider implements ServicesProviderInterface
     public function getServicesDefinitions(): array
     {
         return [
-            TemplateRendererInterface::class => autowire(TwigRenderer::class),
+            TemplateRendererInterface::class => TwigRenderer::class,
         ];
     }
 }

@@ -3,7 +3,9 @@ namespace Noctis\KickStart;
 
 use DI\Container;
 use DI\ContainerBuilder as ActualContainerBuilder;
+use DI\Definition\Helper\DefinitionHelper;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
+use function DI\autowire;
 
 final class ContainerBuilder
 {
@@ -37,7 +39,16 @@ final class ContainerBuilder
     {
         foreach ($providers as $servicesProvider) {
             $builder->addDefinitions(
-                $servicesProvider->getServicesDefinitions()
+                array_map(
+                    function (string|callable|DefinitionHelper $definition): callable|DefinitionHelper {
+                        if (is_string($definition)) {
+                            return autowire($definition);
+                        }
+
+                        return $definition;
+                    },
+                    $servicesProvider->getServicesDefinitions()
+                )
             );
         }
     }

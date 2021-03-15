@@ -13,7 +13,6 @@ use Noctis\KickStart\Http\Routing\HttpInfoProvider;
 use Noctis\KickStart\Http\Routing\HttpInfoProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
-use function DI\autowire;
 use function DI\factory;
 use function DI\get;
 
@@ -25,10 +24,10 @@ final class HttpServicesProvider implements ServicesProviderInterface
     public function getServicesDefinitions(): array
     {
         return [
-            HttpInfoProviderInterface::class => autowire(HttpInfoProvider::class),
-            MethodNotAllowedHandlerInterface::class => autowire(MethodNotAllowedHandler::class),
-            RouteFoundHandlerInterface::class => autowire(RouteFoundHandler::class),
-            RouteNotFoundHandlerInterface::class => autowire(RouteNotFoundHandler::class),
+            HttpInfoProviderInterface::class => HttpInfoProvider::class,
+            MethodNotAllowedHandlerInterface::class => MethodNotAllowedHandler::class,
+            RouteFoundHandlerInterface::class => RouteFoundHandler::class,
+            RouteNotFoundHandlerInterface::class => RouteNotFoundHandler::class,
             Session::class => factory([SessionFactory::class, 'create']),
             Request::class => factory([RequestFactory::class, 'createFromGlobals'])
                 ->parameter(
