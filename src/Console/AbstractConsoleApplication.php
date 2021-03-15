@@ -8,19 +8,16 @@ use Symfony\Component\Console\Application as SymfonyConsoleApplication;
 
 abstract class AbstractConsoleApplication extends AbstractApplication
 {
-    private string $env;
-
     /** @var list<class-string<AbstractCommand>> */
     private array $commandsClassesNames;
 
     /**
      * @param list<class-string<AbstractCommand>> $commandsClassesNames
      */
-    public function __construct(string $env, array $commandsClassesNames)
+    public function __construct(array $commandsClassesNames)
     {
         parent::__construct();
 
-        $this->env = $env;
         $this->commandsClassesNames = $commandsClassesNames;
     }
 
