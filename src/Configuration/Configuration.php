@@ -4,10 +4,22 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Configuration;
 
-final class Configuration implements ConfigurationInterface
+class Configuration implements ConfigurationInterface
 {
     /** @var array<string, mixed> */
     private array $values = [];
+
+    public function getBaseHref(): string
+    {
+        $baseHref = $this->get('basehref');
+
+        // Remove trailing slash ("/"), if applicable
+        if ($baseHref[-1] === '/') {
+            $baseHref = substr($baseHref, 0, -1);
+        }
+
+        return $baseHref;
+    }
 
     /**
      * @inheritDoc

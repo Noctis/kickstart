@@ -6,6 +6,8 @@ namespace Noctis\KickStart\Configuration;
 
 interface ConfigurationInterface
 {
+    public function getBaseHref(): string;
+
     /**
      * @param mixed $default
      *
