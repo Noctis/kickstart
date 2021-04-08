@@ -6,27 +6,27 @@ namespace Noctis\KickStart\Http;
 
 use FastRoute\Dispatcher;
 use Noctis\KickStart\AbstractApplication;
-use Noctis\KickStart\Http\Routing\HttpRoutesProviderInterface;
 use Noctis\KickStart\Http\Routing\Router;
+use Noctis\KickStart\Http\Routing\RoutesLoaderInterface;
 use Noctis\KickStart\Provider\ConfigurationProvider;
 use Noctis\KickStart\Provider\HttpServicesProvider;
 use Noctis\KickStart\Provider\StandardServicesProvider;
 use Noctis\KickStart\Provider\TwigServiceProvider;
+
 use function FastRoute\simpleDispatcher;
 
 abstract class AbstractWebApplication extends AbstractApplication
 {
-    /** @var class-string<HttpRoutesProviderInterface> */
-    private string $routesProviderClassName;
+    private array $routes;
+    private RoutesLoaderInterface $routesLoader;
 
-    /**
-     * @param class-string<HttpRoutesProviderInterface> $routesProviderClassName
-     */
-    public function __construct(string $routesProviderClassName)
+    public function __construct(array $routes)
     {
         parent::__construct();
 
-        $this->routesProviderClassName = $routesProviderClassName;
+        $this->routes = $routes;
+        $this->routesLoader = $this->container
+            ->get(RoutesLoaderInterface::class);
     }
 
     public function run(): void
@@ -54,12 +54,9 @@ abstract class AbstractWebApplication extends AbstractApplication
 
     private function getDispatcher(): Dispatcher
     {
-        /** @var HttpRoutesProviderInterface $routesProvider */
-        $routesProvider = $this->container
-            ->get($this->routesProviderClassName);
-
         return simpleDispatcher(
-            $routesProvider->get()
+            $this->routesLoader
+                ->load($this->routes)
         );
     }
 }

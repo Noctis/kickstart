@@ -14,6 +14,8 @@ use Noctis\KickStart\Http\Routing\Handler\RouteNotFoundHandler;
 use Noctis\KickStart\Http\Routing\Handler\RouteNotFoundHandlerInterface;
 use Noctis\KickStart\Http\Routing\HttpInfoProvider;
 use Noctis\KickStart\Http\Routing\HttpInfoProviderInterface;
+use Noctis\KickStart\Http\Routing\RoutesLoader;
+use Noctis\KickStart\Http\Routing\RoutesLoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use function DI\factory;
@@ -31,6 +33,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
             MethodNotAllowedHandlerInterface::class => MethodNotAllowedHandler::class,
             RouteFoundHandlerInterface::class => RouteFoundHandler::class,
             RouteNotFoundHandlerInterface::class => RouteNotFoundHandler::class,
+            RoutesLoaderInterface::class => RoutesLoader::class,
             Session::class => factory([SessionFactory::class, 'create']),
             Request::class => factory([RequestFactory::class, 'createFromGlobals'])
                 ->parameter(
