@@ -32,6 +32,11 @@
             "Tests\\Unit\\": "tests/unit/"
         }
     },
+    "extra": {
+        "branch-alias": {
+            "dev-future/v2": "2.0-dev"
+        }
+    },
     "config": {
         "sort-packages": true
     },
