@@ -8,16 +8,8 @@ interface ConfigurationInterface
 {
     public function getBaseHref(): string;
 
-    /**
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    public function get(string $name, $default = null);
+    public function get(string $name, mixed $default = null): mixed;
 
-    /**
-     * @param mixed  $value
-     */
     public function set(string $name, mixed $value): void;
 
     public function has(string $name): bool;

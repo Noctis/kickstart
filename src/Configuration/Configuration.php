@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Configuration;
 
-class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface
 {
     /** @var array<string, mixed> */
     private array $values = [];
@@ -21,17 +21,11 @@ class Configuration implements ConfigurationInterface
         return $baseHref;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function get(string $name, $default = null)
+    public function get(string $name, mixed $default = null): mixed
     {
         return $this->values[$name] ?? $default;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function set(string $name, mixed $value): void
     {
         $this->values[$name] = $value;
