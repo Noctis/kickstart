@@ -1,6 +1,7 @@
 {
     "name": "noctis/kickstart",
     "description": "The base system part of the Kickstart project.",
+    "keywords": ["kickstart", "application base"],
     "license": "MIT",
     "require": {
         "php": "^8.0",
