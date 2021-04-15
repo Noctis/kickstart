@@ -12,18 +12,20 @@ by hand, i.e. it's not possible to just copy over their contents from the 2.0.0 
 
 ### Dependencies
 
-* Run the following command to install the `noctis/kickstart` base package:
-  ```shell
-  composer require noctis/kickstart:^2.0
-  ```
+* Remove the reference to the `git@bitbucket.org:NoctisPL/database-lib.git` repository in `composer.json`.
 * Run the following command to remove obsolete packages:
   ```shell
   composer remove ext-pdo nikic/fast-route noctis/database-lib psr/http-server-middleware twig/twig vlucas/phpdotenv vimeo/psalm
   ```
 * Run the following commands to install new packages & update existing:
   ```shell
-  composer require php:^8.0 php-di/php-di:^6.3 symfony/console:^5.2 symfony/http-foundation:^5.2
-  composer require --dev squizlabs/php_codesniffer:^3.5 symfony/var-dumper:^5.2
+  composer update symfony/service-contracts symfony/polyfill-mbstring
+  composer require --ignore-platform-reqs php:^8.0 php-di/php-di:^6.3 symfony/console:^5.2 symfony/http-foundation:^5.2
+  composer require --ignore-platform-reqs --dev squizlabs/php_codesniffer:^3.5 symfony/var-dumper:^5.2
+  ```
+* Run the following command to install the `noctis/kickstart` base package:
+  ```shell
+  composer require noctis/kickstart:^2.0
   ```
 
 ### Console Commands
