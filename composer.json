@@ -3,6 +3,13 @@
     "description": "The base system part of the Kickstart project.",
     "keywords": ["kickstart", "application base"],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Lucas Czejgis",
+            "email": "lucas.czejgis@gmail.com",
+            "role": "Sole Developer"
+        }
+    ],
     "require": {
         "php": "^8.0",
         "ext-filter": "*",
