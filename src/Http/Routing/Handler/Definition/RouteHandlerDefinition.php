@@ -23,10 +23,12 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
         if (is_string($value)) {
             return new self($value, []);
         } else {
+            /** @var class-string<AbstractAction> $actionClassName */
             $actionClassName = $value[0];
 
             $guardNames = [];
             if (count($value) === 2) {
+                /** @var list<class-string<AbstractMiddleware>> $guardNames */
                 $guardNames = $value[1];
             }
 

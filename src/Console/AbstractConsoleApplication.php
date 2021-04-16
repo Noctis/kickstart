@@ -45,10 +45,11 @@ abstract class AbstractConsoleApplication extends AbstractApplication
     private function registerCommands(SymfonyConsoleApplication $app): void
     {
         foreach ($this->commandsClassesNames as $className) {
-            $app->add(
-                $this->container
-                    ->get($className)
-            );
+            /** @var AbstractCommand $command */
+            $command = $this->container
+                ->get($className);
+
+            $app->add($command);
         }
     }
 }

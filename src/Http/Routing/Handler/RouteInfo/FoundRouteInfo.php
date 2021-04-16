@@ -16,7 +16,9 @@ final class FoundRouteInfo implements RouteInfoInterface
 
     public static function createFromArray(array $routeInfo): self
     {
-        $routeHandlerDefinition = RouteHandlerDefinition::createFromValue($routeInfo[1]);
+        /** @var array{0: string, 1: array} $handlerInfo */
+        $handlerInfo = $routeInfo[1];
+        $routeHandlerDefinition = RouteHandlerDefinition::createFromValue($handlerInfo);
 
         /** @var array<string, string> $requestVars */
         $requestVars = $routeInfo[2];

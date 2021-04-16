@@ -9,7 +9,7 @@ use Dotenv\Dotenv;
 final class ConfigurationLoader implements ConfigurationLoaderInterface
 {
     /**
-     * @param array<string, string>|array $requirements
+     * @inheritDoc
      */
     public function load(string $path, array $requirements = []): void
     {

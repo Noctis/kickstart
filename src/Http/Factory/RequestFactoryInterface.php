@@ -10,5 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface RequestFactoryInterface
 {
+    /**
+     * @param array<string, string> $vars
+     */
     public function createFromGlobals(RequestedEntry $entry, ContainerInterface $c, array $vars = []): Request;
 }

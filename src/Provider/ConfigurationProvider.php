@@ -18,6 +18,7 @@ final class ConfigurationProvider implements ServicesProviderInterface
             ConfigurationInterface::class => function (): Configuration {
                 $configuration = new Configuration();
 
+                /** @var string $value */
                 foreach ($_ENV as $name => $value) {
                     $configuration->set(
                         (string)$name,

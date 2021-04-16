@@ -11,6 +11,7 @@ final class Configuration implements ConfigurationInterface
 
     public function getBaseHref(): string
     {
+        /** @var string $baseHref */
         $baseHref = $this->get('basehref');
 
         // Remove trailing slash ("/"), if applicable

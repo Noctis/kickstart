@@ -22,6 +22,7 @@ final class RoutesLoader implements RoutesLoaderInterface
     public function load(array $routes): callable
     {
         return function (RouteCollector $r) use ($routes): void {
+            /** @var list<array> $routes */
             $r->addGroup(
                 $this->configuration
                     ->getBaseHref(),
@@ -36,8 +37,14 @@ final class RoutesLoader implements RoutesLoaderInterface
 
     private function loadRouteDefinition(RouteCollector $r, array $definition): void
     {
+        /**
+         * @var string $method
+         * @var string $url
+         * @var class-string<AbstractAction> $action
+         */
         [$method, $url, $action] = $definition;
         if (count($definition) === 4) {
+            /** @var list<class-string<AbstractMiddleware>> $guards */
             $guards = $definition[3];
         } else {
             $guards = [];

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Helper;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 trait FlashMessageTrait
 {
@@ -12,28 +13,30 @@ trait FlashMessageTrait
 
     protected function getFlashMessage(string $type = 'flash', bool $persist = false): ?string
     {
-        /** @psalm-suppress UndefinedInterfaceMethod */
-        $flashMessages = $this->request
-            ->getSession()
-            ->getFlashBag()
-            ->get($type);
-        $message = !empty($flashMessages)
-            ? $flashMessages[0]
-            : null;
+        /** @var Session $session */
+        $session = $this->request
+            ->getSession();
 
-        if ($persist) {
+        /** @var list<string> $flashMessages */
+        $flashMessages = $session->getFlashBag()
+            ->get($type);
+
+        $message = $flashMessages[0] ?? null;
+
+        if ($persist && $message !== null) {
             $this->setFlashMessage($message, $type);
         }
 
         return $message;
     }
 
-    protected function setFlashMessage(?string $message, string $type = 'flash'): void
+    protected function setFlashMessage(string $message, string $type = 'flash'): void
     {
-        /** @psalm-suppress UndefinedInterfaceMethod */
-        $this->request
-            ->getSession()
-            ->getFlashBag()
+        /** @var Session $session */
+        $session = $this->request
+            ->getSession();
+
+        $session->getFlashBag()
             ->set($type, $message);
     }
 }

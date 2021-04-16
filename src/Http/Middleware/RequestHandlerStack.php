@@ -30,7 +30,10 @@ final class RequestHandlerStack implements RequestHandlerInterface
     public function handle(Request $request): Response
     {
         if (empty($this->guards)) {
-            /** @psalm-suppress InvalidArgument */
+            /**
+             * @psalm-suppress InvalidArgument
+             * @var Response
+             */
             return $this->container
                 ->call([$this->action, 'execute']);
         }

@@ -12,15 +12,12 @@ use Symfony\Component\HttpFoundation\Session\Session;
 final class RequestFactory implements RequestFactoryInterface
 {
     /**
-     * @param array<string, mixed>|array $vars
+     * @inheritDoc
      */
     public function createFromGlobals(RequestedEntry $entry, ContainerInterface $c, array $vars = []): Request
     {
         $requestClassName = $entry->getName();
-        /**
-         * @psalm-suppress InvalidStringClass
-         * @var Request $requestClassName
-         */
+        /** @var Request $requestClassName */
         $request = $requestClassName::createFromGlobals();
         $request->setSession(
             $c->get(Session::class)

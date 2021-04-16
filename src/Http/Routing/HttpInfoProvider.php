@@ -8,6 +8,7 @@ final class HttpInfoProvider implements HttpInfoProviderInterface
 {
     public function getMethod(): ?string
     {
+        /** @var string|null */
         return filter_input(
             INPUT_SERVER,
             'REQUEST_METHOD',
@@ -33,6 +34,7 @@ final class HttpInfoProvider implements HttpInfoProviderInterface
 
     public function getRawUri(): ?string
     {
+        /** @var string|null */
         return filter_input(
             INPUT_SERVER,
             'REQUEST_URI',

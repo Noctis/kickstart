@@ -52,6 +52,7 @@ final class RouteFoundHandler implements RouteFoundHandlerInterface
      */
     private function getAction(string $actionClassName): AbstractAction
     {
+        /** @var AbstractAction */
         return $this->container
             ->get($actionClassName);
     }
@@ -64,7 +65,11 @@ final class RouteFoundHandler implements RouteFoundHandlerInterface
     private function getGuards(array $guardsNames): array
     {
         return array_map(
-            fn (string $guardClassName): AbstractMiddleware => $this->container->get($guardClassName),
+            function (string $guardClassName): AbstractMiddleware {
+                /** @var AbstractMiddleware */
+                return $this->container
+                    ->get($guardClassName);
+            },
             $guardsNames
         );
     }
