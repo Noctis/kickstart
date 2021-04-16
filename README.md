@@ -1,5 +1,7 @@
 # Kickstart Base
 
+[![Type Coverage](https://shepherd.dev/github/Noctis/kickstart/coverage.svg)](https://shepherd.dev/github/Noctis/kickstart)
+
 ## What is it?
 
 It's the system (base) part of the Kickstart project. The Kickstart project itself consists of two parts:
