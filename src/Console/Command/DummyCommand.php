@@ -6,7 +6,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class DummyCommand extends BaseCommand
 {
-    protected static string $defaultName = 'dummy:command';
+    protected static $defaultName = 'dummy:command';
 
     protected function configure(): void
     {
