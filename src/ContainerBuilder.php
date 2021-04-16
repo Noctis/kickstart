@@ -43,7 +43,7 @@ final class ContainerBuilder
         foreach ($providers as $servicesProvider) {
             $builder->addDefinitions(
                 array_map(
-                    function (string|callable|DefinitionHelper $definition): callable|DefinitionHelper {
+                    function (string | callable | DefinitionHelper $definition): callable | DefinitionHelper {
                         if (is_string($definition)) {
                             return autowire($definition);
                         }

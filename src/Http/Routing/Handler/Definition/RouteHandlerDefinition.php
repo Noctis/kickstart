@@ -18,7 +18,7 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
     /**
      * @param class-string<AbstractAction>|array $value
      */
-    public static function createFromValue(string|array $value): self
+    public static function createFromValue(string | array $value): self
     {
         if (is_string($value)) {
             return new self($value, []);
