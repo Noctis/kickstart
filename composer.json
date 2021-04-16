@@ -46,6 +46,11 @@
             "dev-future/v2": "2.0-dev"
         }
     },
+    "scripts": {
+        "phpunit": "phpunit --configuration phpunit.xml.dist",
+        "psalm": "psalm --config=psalm.xml.dist --shepherd",
+        "phpcs": "phpcs --standard=PSR12"
+    },
     "config": {
         "sort-packages": true
     },

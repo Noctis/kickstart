@@ -29,8 +29,11 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+    - name: Run Unit Tests
+      run: composer run-script phpunit
 
-    # - name: Run test suite
-    #   run: composer run-script test
+    - name: Run Psalm
+      run: composer run-script psalm ./src
+
+    #- name: Run Coding Style Check
+    #  run: composer run-script phpcs ./src
