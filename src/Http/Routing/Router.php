@@ -5,29 +5,29 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing;
 
 use FastRoute\Dispatcher;
+use Noctis\KickStart\Http\Routing\Handler\FoundHandlerInterface;
 use Noctis\KickStart\Http\Routing\Handler\MethodNotAllowedHandlerInterface;
-use Noctis\KickStart\Http\Routing\Handler\RouteFoundHandlerInterface;
-use Noctis\KickStart\Http\Routing\Handler\RouteNotFoundHandlerInterface;
+use Noctis\KickStart\Http\Routing\Handler\NotFoundHandlerInterface;
 use RuntimeException;
 
 final class Router
 {
     private ?Dispatcher $dispatcher;
     private HttpInfoProviderInterface $httpInfoProvider;
-    private RouteFoundHandlerInterface $routeFoundHandler;
-    private RouteNotFoundHandlerInterface $routeNotFoundHandler;
+    private FoundHandlerInterface $foundHandler;
+    private NotFoundHandlerInterface $notFoundHandler;
     private MethodNotAllowedHandlerInterface $methodNotAllowedHandler;
 
     public function __construct(
         HttpInfoProviderInterface $httpInfoProvider,
-        RouteFoundHandlerInterface $routeFoundHandler,
-        RouteNotFoundHandlerInterface $routeNotFoundHandler,
+        FoundHandlerInterface $foundHandler,
+        NotFoundHandlerInterface $notFoundHandler,
         MethodNotAllowedHandlerInterface $methodNotAllowedHandler
     ) {
         $this->dispatcher = null;
         $this->httpInfoProvider = $httpInfoProvider;
-        $this->routeFoundHandler = $routeFoundHandler;
-        $this->routeNotFoundHandler = $routeNotFoundHandler;
+        $this->foundHandler = $foundHandler;
+        $this->notFoundHandler = $notFoundHandler;
         $this->methodNotAllowedHandler = $methodNotAllowedHandler;
     }
 
@@ -41,8 +41,8 @@ final class Router
         $routeInfo = $this->determineRouteInfo();
 
         $response = match ($routeInfo[0]) {
-            Dispatcher::FOUND              => $this->routeFoundHandler->handle($routeInfo),         // ... 200
-            Dispatcher::NOT_FOUND          => $this->routeNotFoundHandler->handle($routeInfo),      // ... 404
+            Dispatcher::FOUND              => $this->foundHandler->handle($routeInfo),              // ... 200
+            Dispatcher::NOT_FOUND          => $this->notFoundHandler->handle($routeInfo),           // ... 404
             Dispatcher::METHOD_NOT_ALLOWED => $this->methodNotAllowedHandler->handle($routeInfo),   // ... 405
             default                        => throw new RuntimeException(),
         };

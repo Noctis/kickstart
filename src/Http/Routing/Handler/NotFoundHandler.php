@@ -6,7 +6,7 @@ namespace Noctis\KickStart\Http\Routing\Handler;
 
 use Symfony\Component\HttpFoundation\Response;
 
-final class RouteNotFoundHandler implements RouteNotFoundHandlerInterface
+final class NotFoundHandler implements NotFoundHandlerInterface
 {
     public function handle(array $routeInfo): Response
     {

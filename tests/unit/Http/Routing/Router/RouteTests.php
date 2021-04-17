@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Tests\Unit\Http\Routing\Router;
 
 use FastRoute\Dispatcher;
+use Noctis\KickStart\Http\Routing\Handler\FoundHandlerInterface;
 use Noctis\KickStart\Http\Routing\Handler\MethodNotAllowedHandlerInterface;
-use Noctis\KickStart\Http\Routing\Handler\RouteFoundHandlerInterface;
-use Noctis\KickStart\Http\Routing\Handler\RouteNotFoundHandlerInterface;
+use Noctis\KickStart\Http\Routing\Handler\NotFoundHandlerInterface;
 use Noctis\KickStart\Http\Routing\HttpInfoProviderInterface;
 use Noctis\KickStart\Http\Routing\Router;
 use PHPUnit\Framework\TestCase;
@@ -158,10 +161,10 @@ final class RouteTests extends TestCase
     }
 
     /** @noinspection PhpUndefinedMethodInspection */
-    private function getRouteFoundHandler(bool $shouldBeCalled): RouteFoundHandlerInterface
+    private function getRouteFoundHandler(bool $shouldBeCalled): FoundHandlerInterface
     {
-        /** @var RouteFoundHandlerInterface $handler */
-        $handler = $this->prophesize(RouteFoundHandlerInterface::class);
+        /** @var FoundHandlerInterface $handler */
+        $handler = $this->prophesize(FoundHandlerInterface::class);
 
         if ($shouldBeCalled) {
             /** @noinspection PhpParamsInspection */
@@ -176,10 +179,10 @@ final class RouteTests extends TestCase
         return $handler->reveal();
     }
 
-    private function getRouteNotFoundHandler(bool $shouldBeCalled): RouteNotFoundHandlerInterface
+    private function getRouteNotFoundHandler(bool $shouldBeCalled): NotFoundHandlerInterface
     {
-        /** @var RouteFoundHandlerInterface $handler */
-        $handler = $this->prophesize(RouteNotFoundHandlerInterface::class);
+        /** @var NotFoundHandlerInterface $handler */
+        $handler = $this->prophesize(NotFoundHandlerInterface::class);
 
         if ($shouldBeCalled) {
             /** @noinspection PhpParamsInspection */
@@ -196,7 +199,7 @@ final class RouteTests extends TestCase
 
     private function getMethodNotAllowedHandler(bool $shouldBeCalled): MethodNotAllowedHandlerInterface
     {
-        /** @var RouteFoundHandlerInterface $handler */
+        /** @var MethodNotAllowedHandlerInterface $handler */
         $handler = $this->prophesize(MethodNotAllowedHandlerInterface::class);
 
         if ($shouldBeCalled) {
