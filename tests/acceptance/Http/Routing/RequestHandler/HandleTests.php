@@ -1,13 +1,16 @@
-<?php declare(strict_types=1);
-namespace Tests\Acceptance\Http\Middleware\RequestHandlerStack;
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Acceptance\Http\Routing\RequestHandler;
 
 use DI\Container;
 use DI\ContainerBuilder;
 use Noctis\KickStart\Configuration\ConfigurationInterface;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
-use Noctis\KickStart\Http\Middleware\RequestHandlerInterface;
-use Noctis\KickStart\Http\Middleware\RequestHandlerStack;
+use Noctis\KickStart\Http\Routing\RequestHandler;
+use Noctis\KickStart\Http\Routing\RequestHandlerInterface;
 use Noctis\KickStart\Service\TemplateRendererInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -15,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @covers \Noctis\KickStart\Http\Middleware\RequestHandlerStack::handle()
+ * @covers \Noctis\KickStart\Http\Routing\RequestHandler::handle()
  */
 final class HandleTests extends TestCase
 {
@@ -69,9 +72,9 @@ final class HandleTests extends TestCase
     /**
      * @param list<AbstractMiddleware> $guards
      */
-    private function getRequestHandlerStack(array $guards, bool $actionShouldBeCalled = true): RequestHandlerStack
+    private function getRequestHandlerStack(array $guards, bool $actionShouldBeCalled = true): RequestHandler
     {
-        return new RequestHandlerStack(
+        return new RequestHandler(
             $this->getContainer(),
             $this->getHttpAction($actionShouldBeCalled),
             $guards
@@ -82,9 +85,9 @@ final class HandleTests extends TestCase
     {
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions([
-            ConfigurationInterface::class    => $this->getConfiguration(),
+            ConfigurationInterface::class => $this->getConfiguration(),
             TemplateRendererInterface::class => $this->getTemplateRenderer(),
-            Request::class                   => $this->getRequest(),
+            Request::class => $this->getRequest(),
         ]);
 
         return $containerBuilder->build();
@@ -109,8 +112,7 @@ final class HandleTests extends TestCase
 
     private function getMiddlewareGuard(): AbstractMiddleware
     {
-        return new class extends AbstractMiddleware
-        {
+        return new class extends AbstractMiddleware {
             private ?Response $response = null;
 
             public function setResponse(Response $response): self

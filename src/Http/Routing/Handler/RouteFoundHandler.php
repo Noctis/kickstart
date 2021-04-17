@@ -7,7 +7,7 @@ namespace Noctis\KickStart\Http\Routing\Handler;
 use DI\Container;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
-use Noctis\KickStart\Http\Middleware\RequestHandlerStack;
+use Noctis\KickStart\Http\Routing\RequestHandler;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +31,7 @@ final class RouteFoundHandler implements RouteFoundHandlerInterface
             );
 
         $routeHandlerDefinition = $routeInfo->getRouteHandlerDefinition();
-        $stack = new RequestHandlerStack(
+        $requestHandler = new RequestHandler(
             $this->container,
             $this->getAction(
                 $routeHandlerDefinition->getActionClassName()
@@ -41,7 +41,7 @@ final class RouteFoundHandler implements RouteFoundHandlerInterface
             )
         );
 
-        return $stack->handle(
+        return $requestHandler->handle(
             $this->container
                 ->get(Request::class)
         );

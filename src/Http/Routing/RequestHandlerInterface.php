@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Noctis\KickStart\Http\Middleware;
+namespace Noctis\KickStart\Http\Routing;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
