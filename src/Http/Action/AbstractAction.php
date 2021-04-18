@@ -4,50 +4,102 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Action;
 
-use Noctis\KickStart\Http\Helper\FlashMessageTrait;
-use Noctis\KickStart\Http\Helper\HttpRedirectionTrait;
-use Noctis\KickStart\Service\TemplateRendererInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Laminas\Diactoros\Response\EmptyResponse;
+use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\RedirectResponse;
+use Laminas\Session\Container;
+use Noctis\KickStart\Configuration\ConfigurationInterface;
+use Noctis\KickStart\File\FileInterface;
+use Noctis\KickStart\Http\Response\FileResponse;
+use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriFactoryInterface;
 
 abstract class AbstractAction
 {
-    use FlashMessageTrait;
-    use HttpRedirectionTrait;
+    protected ServerRequestInterface $request;
+    protected Container $flashContainer;
 
-    protected TemplateRendererInterface $templateRenderer;
-    protected Request $request;
+    private ResponseFactoryInterface $responseFactory;
+    private UriFactoryInterface $uriFactory;
+    private ConfigurationInterface $configuration;
 
-    public function __construct(TemplateRendererInterface $templateRenderer, Request $request)
-    {
-        $this->templateRenderer = $templateRenderer;
-        $this->setRequest($request);
+    public function __construct(
+        ResponseFactoryInterface $responseFactory,
+        UriFactoryInterface $uriFactory,
+        ConfigurationInterface $configuration,
+        ServerRequestInterface $request
+    ) {
+        $this->responseFactory = $responseFactory;
+        $this->uriFactory = $uriFactory;
+        $this->configuration = $configuration;
+        $this->request = $request;
+        $this->flashContainer = new Container('flash');
     }
 
     /**
      * @param array<string, mixed> $params
      */
-    protected function render(string $view, array $params = []): Response
+    protected function render(string $view, array $params = []): HtmlResponse
     {
-        $params['basehref'] = $this->request
-            ->getBaseUrl();
+        $baseHref = $this->request
+            ->getRequestTarget();
 
-        $html = $this->templateRenderer
-            ->render($view, $params);
-
-        return new Response($html);
+        return $this->responseFactory
+            ->htmlResponse($view, $baseHref, $params);
     }
 
-    protected function setRequest(Request $request): void
+    /**
+     * @param array<string, string> $params
+     */
+    protected function redirect(string $path, array $params = []): RedirectResponse
     {
-        $this->request = $request;
+        if (preg_match('/:\/\//', $path) === 1) {
+            $uri = $this->uriFactory
+                ->createUri($path);
+        } else {
+            $uri = $this->request
+                ->getUri()
+                ->withPath(
+                    sprintf(
+                        '%s/%s',
+                        $this->configuration->getBaseHref(),
+                        $path
+                    )
+                );
+        }
+
+        return $this->responseFactory
+            ->redirectionResponse($uri, $params);
     }
 
-    protected function notFound(): Response
+    protected function sendFile(FileInterface $file): FileResponse
     {
-        return new Response(
-            '404, bro!',
-            Response::HTTP_NOT_FOUND
-        );
+        return $this->responseFactory
+            ->fileResponse($file);
+    }
+
+    protected function setFlashMessage(string $message): void
+    {
+        $this->flashContainer['message'] = $message;
+    }
+
+    protected function getFlashMessage(bool $persist = false): ?string
+    {
+        /** @var string|null $message */
+        $message = $this->flashContainer['message'] ?? null;
+        unset($this->flashContainer['message']);
+
+        if ($message !== null && $persist) {
+            $this->setFlashMessage($message);
+        }
+
+        return $message;
+    }
+
+    protected function notFound(): EmptyResponse
+    {
+        return $this->responseFactory
+            ->notFoundResponse();
     }
 }

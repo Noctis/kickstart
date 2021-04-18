@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing;
 
 use FastRoute\Dispatcher;
+use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Noctis\KickStart\Http\Routing\Handler\FoundHandlerInterface;
 use Noctis\KickStart\Http\Routing\Handler\MethodNotAllowedHandlerInterface;
 use Noctis\KickStart\Http\Routing\Handler\NotFoundHandlerInterface;
@@ -17,18 +18,21 @@ final class Router
     private FoundHandlerInterface $foundHandler;
     private NotFoundHandlerInterface $notFoundHandler;
     private MethodNotAllowedHandlerInterface $methodNotAllowedHandler;
+    private EmitterInterface $responseEmitter;
 
     public function __construct(
         HttpInfoProviderInterface $httpInfoProvider,
         FoundHandlerInterface $foundHandler,
         NotFoundHandlerInterface $notFoundHandler,
-        MethodNotAllowedHandlerInterface $methodNotAllowedHandler
+        MethodNotAllowedHandlerInterface $methodNotAllowedHandler,
+        EmitterInterface $responseEmitter
     ) {
         $this->dispatcher = null;
         $this->httpInfoProvider = $httpInfoProvider;
         $this->foundHandler = $foundHandler;
         $this->notFoundHandler = $notFoundHandler;
         $this->methodNotAllowedHandler = $methodNotAllowedHandler;
+        $this->responseEmitter = $responseEmitter;
     }
 
     public function setDispatcher(Dispatcher $dispatcher): void
@@ -46,7 +50,9 @@ final class Router
             Dispatcher::METHOD_NOT_ALLOWED => $this->methodNotAllowedHandler->handle($routeInfo),   // ... 405
             default                        => throw new RuntimeException(),
         };
-        $response->send();
+
+        $this->responseEmitter
+            ->emit($response);
     }
 
     private function determineRouteInfo(): array

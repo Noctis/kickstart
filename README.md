@@ -47,7 +47,8 @@ that's an extremely simple application example, but I think you get the idea.
 
 * routing, with optional and/or required named request params - based on 
   [FastRoute](https://github.com/nikic/FastRoute), 
-  by [Nikita Popov](https://github.com/nikic),
+  by [Nikita Popov](https://github.com/nikic)
+  and my own implementation of [PSR-15's Request Handler](https://www.php-fig.org/psr/psr-15/#11-request-handlers),
 * dependency-injection - based on 
   [PHP-DI](https://php-di.org/) 
   by [Matthieu Napoli](https://github.com/mnapoli),
@@ -55,14 +56,16 @@ that's an extremely simple application example, but I think you get the idea.
   [EasyDB](https://github.com/paragonie/easydb) 
   by the [Paragon Initiative Enterprises](https://paragonie.com/),
 * HTTP requests & responses handling - based on 
-  [Symfony's](https://symfony.com/) 
-  [HttpFoundation](https://symfony.com/doc/5.2/components/http_foundation.html) 
-  component,
+  [Laminas'](https://symfony.com/) 
+  [Diactoros](https://docs.laminas.dev/laminas-diactoros/), 
+  [HTTP Request Handler Runner](https://docs.laminas.dev/laminas-httphandlerrunner/) and 
+  [Session](https://docs.laminas.dev/laminas-session/)
+  components, in accordance with [PSR-7](https://www.php-fig.org/psr/psr-7/)
 * HTTP middleware - my own implementation, in accordance with the 
-  [middleware part](https://www.php-fig.org/psr/psr-15/#12-middleware) of 
+  [middleware specification](https://www.php-fig.org/psr/psr-15/#12-middleware) of 
   [PSR-15](https://www.php-fig.org/psr/psr-15/)
 * template engine - based on Symfony's [Twig 3](https://twig.symfony.com/doc/3.x/),
-* CLI (console) - based on Symfony's 
+* CLI (console) commands - based on Symfony's 
   [Console](https://symfony.com/doc/5.2/components/console.html) component,
 * configuration - based on the ever popular 
   [PHP dotenv](https://github.com/vlucas/phpdotenv) 
@@ -128,7 +131,7 @@ And that's how `noctis/kickstart` and `noctis/kickstart-app` packages were creat
 Well, if you need to update the base system package, i.e. `noctis/kickstart`, all you need to do is run 
 
 ```shell
-composer update noctis/kickstart`
+composer update noctis/kickstart
 ```
 
 If you need to update the skeleton application, i.e. `noctis/kickstart-app` - you will have to perform the update 

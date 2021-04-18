@@ -6,16 +6,19 @@ namespace Tests\Acceptance\Http\Routing\RequestHandler;
 
 use DI\Container;
 use DI\ContainerBuilder;
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\Response\TextResponse;
 use Noctis\KickStart\Configuration\ConfigurationInterface;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
+use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
 use Noctis\KickStart\Http\Routing\RequestHandler;
-use Noctis\KickStart\Http\Routing\RequestHandlerInterface;
 use Noctis\KickStart\Service\TemplateRendererInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Tests\Helper\MiddlewareGuard;
 
 /**
  * @covers \Noctis\KickStart\Http\Routing\RequestHandler::handle()
@@ -33,9 +36,11 @@ final class HandleTests extends TestCase
     }
 
     /**
+     * @group doMe
+     *
      * This test actually does three things:
      *  1) it tests that if one of the middleware guards generated a response, the subsequent guards were not called,
-     *  2) tests that given middleware guards are executed in the expected order, and
+     *  2) tests that the given middleware guards are executed in the expected order, and
      *  3) tests that the given action has not been called,
      */
     public function test_further_guards_are_not_executed_if_one_of_them_generated_their_own_response(): void
@@ -55,7 +60,8 @@ final class HandleTests extends TestCase
 
         $this->assertSame(
             'first guard response',
-            $response->getContent()
+            $response->getBody()
+                ->getContents()
         );
     }
 
@@ -87,7 +93,7 @@ final class HandleTests extends TestCase
         $containerBuilder->addDefinitions([
             ConfigurationInterface::class => $this->getConfiguration(),
             TemplateRendererInterface::class => $this->getTemplateRenderer(),
-            Request::class => $this->getRequest(),
+            ServerRequestInterface::class => $this->getRequest(),
         ]);
 
         return $containerBuilder->build();
@@ -112,38 +118,30 @@ final class HandleTests extends TestCase
 
     private function getMiddlewareGuard(): AbstractMiddleware
     {
-        return new class extends AbstractMiddleware {
-            private ?Response $response = null;
-
-            public function setResponse(Response $response): self
-            {
-                $this->response = $response;
-
-                return $this;
-            }
-
-            public function process(Request $request, RequestHandlerInterface $handler): Response
-            {
-                if ($this->response !== null) {
-                    return $this->response;
-                }
-
-                return parent::process($request, $handler);
-            }
-        };
+        return new MiddlewareGuard(
+            $this->getResponseFactory()
+        );
     }
 
     /** @noinspection PhpIncompatibleReturnTypeInspection */
-    private function getRequest(): Request
+    private function getResponseFactory(): ResponseFactoryInterface
     {
-        $request = $this->prophesize(Request::class);
+        $responseFactory = $this->prophesize(ResponseFactoryInterface::class);
+
+        return $responseFactory->reveal();
+    }
+
+    /** @noinspection PhpIncompatibleReturnTypeInspection */
+    private function getRequest(): ServerRequestInterface
+    {
+        $request = $this->prophesize(ServerRequestInterface::class);
 
         return $request->reveal();
     }
 
-    private function getResponse(string $content = ''): Response
+    private function getResponse(string $content = ''): ResponseInterface
     {
-        return new Response($content);
+        return new TextResponse($content);
     }
 
     /** @noinspection PhpIncompatibleReturnTypeInspection */

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Http\Routing\Router;
 
 use FastRoute\Dispatcher;
+use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Noctis\KickStart\Http\Routing\Handler\FoundHandlerInterface;
 use Noctis\KickStart\Http\Routing\Handler\MethodNotAllowedHandlerInterface;
 use Noctis\KickStart\Http\Routing\Handler\NotFoundHandlerInterface;
@@ -30,7 +31,8 @@ final class RouteTests extends TestCase
             $this->getHttpInfoProvider('GET', '/'),
             $this->getRouteFoundHandler(false),
             $this->getRouteNotFoundHandler(false),
-            $this->getMethodNotAllowedHandler(false)
+            $this->getMethodNotAllowedHandler(false),
+            $this->getResponseEmitter()
         );
 
         $router->route();
@@ -45,7 +47,8 @@ final class RouteTests extends TestCase
             $this->getHttpInfoProvider('GET', '/'),
             $this->getRouteFoundHandler(true),
             $this->getRouteNotFoundHandler(false),
-            $this->getMethodNotAllowedHandler(false)
+            $this->getMethodNotAllowedHandler(false),
+            $this->getResponseEmitter()
         );
         $router->setDispatcher(
             $this->getDispatcher(Dispatcher::FOUND)
@@ -60,7 +63,8 @@ final class RouteTests extends TestCase
             $this->getHttpInfoProvider('GET', '/'),
             $this->getRouteFoundHandler(false),
             $this->getRouteNotFoundHandler(true),
-            $this->getMethodNotAllowedHandler(false)
+            $this->getMethodNotAllowedHandler(false),
+            $this->getResponseEmitter()
         );
         $router->setDispatcher(
             $this->getDispatcher(Dispatcher::NOT_FOUND)
@@ -75,7 +79,8 @@ final class RouteTests extends TestCase
             $this->getHttpInfoProvider('GET', '/'),
             $this->getRouteFoundHandler(false),
             $this->getRouteNotFoundHandler(false),
-            $this->getMethodNotAllowedHandler(true)
+            $this->getMethodNotAllowedHandler(true),
+            $this->getResponseEmitter()
         );
         $router->setDispatcher(
             $this->getDispatcher(Dispatcher::METHOD_NOT_ALLOWED)
@@ -92,7 +97,8 @@ final class RouteTests extends TestCase
             $this->getHttpInfoProvider('GET', '/'),
             $this->getRouteFoundHandler(false),
             $this->getRouteNotFoundHandler(false),
-            $this->getMethodNotAllowedHandler(false)
+            $this->getMethodNotAllowedHandler(false),
+            $this->getResponseEmitter()
         );
         $router->setDispatcher(
             $this->getDispatcher(-1)
@@ -114,7 +120,8 @@ final class RouteTests extends TestCase
             $this->getHttpInfoProvider($httpMethod, $uri),
             $this->getRouteFoundHandler(false),
             $this->getRouteNotFoundHandler(false),
-            $this->getMethodNotAllowedHandler(false)
+            $this->getMethodNotAllowedHandler(false),
+            $this->getResponseEmitter()
         );
         $router->setDispatcher(
             $this->getDispatcher(-1)
@@ -213,5 +220,20 @@ final class RouteTests extends TestCase
         }
 
         return $handler->reveal();
+    }
+
+    /** @noinspection PhpUndefinedMethodInspection */
+    private function getResponseEmitter(): EmitterInterface
+    {
+        /** @var EmitterInterface $emitter */
+        $emitter = $this->prophesize(EmitterInterface::class);
+
+        $emitter
+            ->emit(
+                Argument::any()
+            )
+            ->willReturn(true);
+
+        return $emitter->reveal();
     }
 }

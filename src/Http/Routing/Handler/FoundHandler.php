@@ -9,8 +9,8 @@ use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Routing\RequestHandler;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class FoundHandler implements FoundHandlerInterface
 {
@@ -21,7 +21,7 @@ final class FoundHandler implements FoundHandlerInterface
         $this->container = $container;
     }
 
-    public function handle(array $routeInfo): Response
+    public function handle(array $routeInfo): ResponseInterface
     {
         $routeInfo = FoundRouteInfo::createFromArray($routeInfo);
         $this->container
@@ -43,7 +43,7 @@ final class FoundHandler implements FoundHandlerInterface
 
         return $requestHandler->handle(
             $this->container
-                ->get(Request::class)
+                ->get(ServerRequestInterface::class)
         );
     }
 

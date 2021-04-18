@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing;
 
 use FastRoute\RouteCollector;
+use Fig\Http\Message\RequestMethodInterface;
 use InvalidArgumentException;
 use Noctis\KickStart\Configuration\ConfigurationInterface;
 use Noctis\KickStart\Http\Action\AbstractAction;
@@ -54,17 +55,17 @@ final class RoutesLoader implements RoutesLoaderInterface
     }
 
     /**
-     * @param class-string<AbstractAction>                 $action
-     * @param list<class-string<AbstractMiddleware>>|empty $guards
+     * @param class-string<AbstractAction>           $action
+     * @param list<class-string<AbstractMiddleware>> $guards
      */
     private function addRoute(RouteCollector $r, string $method, string $url, string $action, array $guards): void
     {
-        switch (strtolower($method)) {
-            case 'get':
+        switch (strtoupper($method)) {
+            case RequestMethodInterface::METHOD_GET:
                 $r->get($url, [$action, $guards]);
                 break;
 
-            case 'post':
+            case RequestMethodInterface::METHOD_POST:
                 $r->post($url, [$action, $guards]);
                 break;
 

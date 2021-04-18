@@ -7,8 +7,9 @@ namespace Noctis\KickStart\Http\Routing;
 use DI\Container;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class RequestHandler implements RequestHandlerInterface
 {
@@ -28,12 +29,12 @@ final class RequestHandler implements RequestHandlerInterface
         $this->guards = $guards;
     }
 
-    public function handle(Request $request): Response
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if (empty($this->guards)) {
             /**
              * @psalm-suppress InvalidArgument
-             * @var Response
+             * @var ResponseInterface
              */
             return $this->container
                 ->call([$this->action, 'execute']);
