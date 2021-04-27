@@ -54,6 +54,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 * Copy the `Application.php` file from 
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Console/Application.php) to the
   `src/Console` directory.
+* Remove the reference to `App\Provider\DummyServicesProvider` from the `src/Console/Application.php` file.
   
 ### HTTP
 
@@ -62,6 +63,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   * those classes extend the `Noctis\KickStart\Http\Action\AbstractAction` abstract class,
   * their `execute()` methods type-hint returning either `HtmlResponse`, `RedirectResponse` or `EmptyResponse` from
     the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`,
+  * if given action sends an attachment (i.e. file) in response, you can use the `sendFile()` action. 
 * Delete the `src/Http/Factory`, `src/Http/Helper` directories.
 * Delete the `ActionInvoker.php`, `RequestHandlerInterface.php` and `RequestHandlerStack.php` files from the
   `src/Http/Middleware` directory.
@@ -136,6 +138,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 * Copy the `Application.php` file from
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Http/Application.php) to the `src/Http`
   directory.
+* Remove the reference to `App\Provider\DummyServicesProvider` from the `src/Http/Application.php` file.
 * Edit the `public/index.php` file. Replace the contents of this file with the
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/public/index.php).
 * Edit the `public/.htaccess` file and add the following lines:
@@ -192,6 +195,8 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
           true
       ),
   ```
+* If your application has additional service providers, make sure to add a reference to them (as required) to the
+  `src/Console/Application.php` and `src/Http/Application.php` files.
 
 ### Repositories
 
@@ -211,11 +216,13 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/tree/master/src/Database) into the project's root directory.
 * Delete the `src/Configuration.php` and `src/ContainerBuilder.php` files.
 * Replace the contents of the `templates/layout.html.twig` file with the 
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/templates/layout.html.twig)
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/templates/layout.html.twig). Be sure to check
+  its contents and restore any custom changes that were there beforehand!
 * Create the following directory path: `var/cache/templates` in the project's root directory.
 * Replace the contents of the `bootstrap.php` file in the project's root directory with the
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php). Modify the list of configuration
   options with the file appropriately.
+* Replace all calls to `getenv('BASEDIR')` and `$_ENV['BASEDIR']` in your application with calls to `$_ENV['basepath']`.
 * Rename the `basepath` option within `.env` file to `basehref`.
 * Add a `debug` option to `.env` with either `true` or `false` as its value.
 * Add the following line to `.gitignore`:
@@ -223,4 +230,4 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   /var/cache/templates/**
   ```
 * Replace the contents of the `psalm.xml` file in the project's root directory with the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/psalm.xml).
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/psalm.xml.dist).
