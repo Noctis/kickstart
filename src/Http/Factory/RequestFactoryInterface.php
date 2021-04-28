@@ -1,11 +1,21 @@
-<?php declare(strict_types=1);
-namespace App\Http\Factory;
+<?php
+
+declare(strict_types=1);
+
+namespace Noctis\KickStart\Http\Factory;
 
 use DI\Factory\RequestedEntry;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface RequestFactoryInterface
 {
-    public function createFromGlobals(RequestedEntry $entry, ContainerInterface $c, array $vars = []): Request;
+    /**
+     * @param array<string, string> $vars
+     */
+    public function createFromGlobals(
+        RequestedEntry $entry,
+        ContainerInterface $c,
+        array $vars = []
+    ): ServerRequestInterface;
 }

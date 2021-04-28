@@ -1,80 +1,61 @@
-<?php declare(strict_types=1);
-namespace App;
+<?php
 
-use App\Provider\DatabaseConnectionProvider;
-use App\Provider\DummyServicesProvider;
-use App\Provider\HttpMiddlewareProvider;
-use App\Provider\HttpServicesProvider;
-use App\Provider\ServicesProviderInterface;
-use App\Provider\TwigServiceProvider;
+declare(strict_types=1);
+
+namespace Noctis\KickStart;
+
+use DI\Container;
 use DI\ContainerBuilder as ActualContainerBuilder;
 use DI\Definition\Helper\DefinitionHelper;
-use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
+use Noctis\KickStart\Provider\ServicesProviderInterface;
+
 use function DI\autowire;
 
 final class ContainerBuilder
 {
-    public function build(string $path, string $env): ContainerInterface
+    /** @var ServicesProviderInterface[] */
+    private array $servicesProviders = [];
+
+    /**
+     * @param ServicesProviderInterface[] $providers
+     */
+    public function addServicesProviders(array $providers): void
+    {
+        array_map(
+            function (ServicesProviderInterface $servicesProvider): void {
+                $this->servicesProviders[] = $servicesProvider;
+            },
+            $providers
+        );
+    }
+
+    public function build(): Container
     {
         $builder = new ActualContainerBuilder();
         //$builder->useAnnotations(true);
 
-        $this->registerServices(
-            $builder,
-            new HttpServicesProvider(),
-            new HttpMiddlewareProvider(),
-            new TwigServiceProvider($path, $env),
-            new DatabaseConnectionProvider(),
-            new DummyServicesProvider()
-        );
+        $this->registerServices($builder, ...$this->servicesProviders);
 
         return $builder->build();
     }
 
-    private function registerServices(
-        ActualContainerBuilder $builder,
-        ServicesProviderInterface ...$providers
-    ): void {
-        $actualDefinitions = [];
-        foreach ($providers as $servicesProvider) {
-            foreach ($servicesProvider->getServicesDefinitions() as $name => $serviceDefinition) {
-                $actualDefinitions[$name] = $this->getActualDefinition($serviceDefinition);
-            }
-        }
-
-        $builder->addDefinitions($actualDefinitions);
-    }
-
-    /**
-     * @param string|array|callable|DefinitionHelper $serviceDefinition
-     *
-     * @return DefinitionHelper|string|callable
-     * @throws InvalidArgumentException
-     */
-    private function getActualDefinition($serviceDefinition)
+    private function registerServices(ActualContainerBuilder $builder, ServicesProviderInterface ...$providers): void
     {
-        /**
-         * @psalm-suppress RedundantConditionGivenDocblockType
-         * @psalm-suppress LessSpecificReturnStatement
-         */
-        if (is_callable($serviceDefinition)) {
-            return $serviceDefinition;
-        } elseif (is_string($serviceDefinition)) {
-            return autowire($serviceDefinition);
-        } elseif (is_array($serviceDefinition)) {
-            [$serviceDefinition, $constructorArguments] = $serviceDefinition;
+        foreach ($providers as $servicesProvider) {
+            $builder->addDefinitions(
+                array_map(
+                    /** @psalm-suppress MixedReturnTypeCoercion */
+                    function (string | callable | DefinitionHelper $definition): callable | DefinitionHelper {
+                        if (is_string($definition)) {
+                            $definition = autowire($definition);
+                        }
 
-            $autowiredDefinition = autowire($serviceDefinition);
-            foreach ($constructorArguments as $argument => $value) {
-                $autowiredDefinition->constructorParameter($argument, $value);
-            }
-
-            return $autowiredDefinition;
-        } elseif ($serviceDefinition instanceof DefinitionHelper) {
-            return $serviceDefinition;
+                        /** @psalm-suppress MixedReturnTypeCoercion */
+                        return $definition;
+                    },
+                    $servicesProvider->getServicesDefinitions()
+                )
+            );
         }
-
-        throw new InvalidArgumentException('Unknown service definition type given.');
     }
 }

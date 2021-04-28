@@ -1,29 +1,28 @@
-<?php declare(strict_types=1);
-namespace App\Http\Factory;
+<?php
+
+declare(strict_types=1);
+
+namespace Noctis\KickStart\Http\Factory;
 
 use DI\Factory\RequestedEntry;
+use Laminas\Diactoros\ServerRequestFactory;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class RequestFactory implements RequestFactoryInterface
 {
-    public function createFromGlobals(RequestedEntry $entry, ContainerInterface $c, array $vars = []): Request
-    {
-        $requestClassName = $entry->getName();
-        /**
-         * @psalm-suppress InvalidStringClass
-         * @var Request $requestClassName
-         */
-        $request = $requestClassName::createFromGlobals();
-        /** @var Request $request */
-        $request->setSession(
-            $c->get(Session::class)
-        );
+    /**
+     * @inheritDoc
+     */
+    public function createFromGlobals(
+        RequestedEntry $entry,
+        ContainerInterface $c,
+        array $vars = []
+    ): ServerRequestInterface {
+        $request = ServerRequestFactory::fromGlobals();
 
         foreach ($vars as $name => $value) {
-            $request->attributes
-                ->set($name, $value);
+            $request = $request->withAttribute($name, $value);
         }
 
         return $request;
