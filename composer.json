@@ -49,11 +49,6 @@
             "Tests\\Unit\\": "tests/unit/"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-future/v2": "2.0-dev"
-        }
-    },
     "scripts": {
         "phpunit": "phpunit --configuration phpunit.xml.dist",
         "psalm": "psalm --config=psalm.xml.dist --shepherd",
