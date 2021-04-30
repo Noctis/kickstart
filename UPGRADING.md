@@ -30,6 +30,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   composer update symfony/service-contracts symfony/polyfill-mbstring
   composer require --ignore-platform-reqs \
   php:^8.0 \
+  composer-runtime-api:^2 \
   php-di/php-di:^6.3 \
   symfony/console:^5.2 \
   symfony/http-foundation:^5.2 \
