@@ -1,6 +1,9 @@
 # Kickstart Base
 
+[![Latest Stable Version](https://poser.pugx.org/noctis/kickstart/v)](//packagist.org/packages/noctis/kickstart)
+[![Latest Unstable Version](https://poser.pugx.org/noctis/kickstart/v/unstable)](//packagist.org/packages/noctis/kickstart)
 [![Type Coverage](https://shepherd.dev/github/Noctis/kickstart/coverage.svg)](https://shepherd.dev/github/Noctis/kickstart)
+[![License](https://poser.pugx.org/noctis/kickstart/license)](//packagist.org/packages/noctis/kickstart)
 
 ## What is it?
 

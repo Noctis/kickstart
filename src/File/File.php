@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Noctis\KickStart\File;
 
 use InvalidArgumentException;
+use Laminas\Diactoros\StreamFactory;
+use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 use SplFileInfo;
 
 class File implements FileInterface
 {
-    private string $fileName;
-    private string $filePath;
-    private string $mimeContentType;
+    protected string $fileName;
+    protected string $filePath;
+    protected string $mimeContentType;
 
     public function __construct(string $filePath, string $mimeContentType)
     {
@@ -53,5 +55,11 @@ class File implements FileInterface
     public function getMimeContentType(): string
     {
         return $this->mimeContentType;
+    }
+
+    public function getStream(): StreamInterface
+    {
+        return (new StreamFactory())
+            ->createStreamFromFile($this->filePath);
     }
 }
