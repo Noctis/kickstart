@@ -6,7 +6,6 @@ namespace Noctis\KickStart\Http\Response;
 
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response;
-use Laminas\Diactoros\Stream;
 use Noctis\KickStart\File\FileInterface;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -15,11 +14,6 @@ final class FileResponse extends Response
 {
     public function __construct(FileInterface $file, array $headers = [])
     {
-        $stream = new Stream(
-            $file->getFilePath(),
-            'r'
-        );
-
         $headers['Content-Encoding'] = 'none';
         $headers['Content-Type'] = $file->getMimeContentType();
         $headers['Content-Disposition'] = $this->getDisposition(
@@ -28,7 +22,11 @@ final class FileResponse extends Response
         );
         $headers['Content-Description'] = 'File Transfer';
 
-        parent::__construct($stream, StatusCodeInterface::STATUS_OK, $headers);
+        parent::__construct(
+            $file->getStream(),
+            StatusCodeInterface::STATUS_OK,
+            $headers
+        );
     }
 
     private function getDisposition(string $fileName, string $fallbackFileName): string
