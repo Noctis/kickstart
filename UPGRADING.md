@@ -140,6 +140,8 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Http/Application.php) to the `src/Http`
   directory.
 * Remove the reference to `App\Provider\DummyServicesProvider` from the `src/Http/Application.php` file.
+* Edit the `src/Http/Application.php` file and add any missing references to service provides - you can find a list of
+  them in the `src/ContainerBuilder.php` file.
 * Edit the `public/index.php` file. Replace the contents of this file with the
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/public/index.php).
 * Edit the `public/.htaccess` file and add the following lines:
@@ -176,9 +178,9 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/DatabaseConnectionProvider.php).
   If there were additional database connections defined there, you will need to transpose the appropriately, based on
   the primary database connection definition.
-* If the `src/Provider/HttpMiddlewareProvider.php` file exists and contains definitions, they may need to be modified
-  appropriately as the definition format changed in `2.0.0`. For example, the following definition, where a constructor
-  parameter value is explicitly defined:
+* Check your service providers to see if the definitions inside them need to be updated appropriately for the definition 
+  format change in `2.0.0`. For example, the following definition, where a constructor parameter value is explicitly 
+  defined:
   ```php
   DummyGuard::class => [
       null, [
