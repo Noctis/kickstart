@@ -230,18 +230,20 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/tree/master/src/Database) into the project's root directory.
 * Replace the contents of the `bootstrap.php` file in the project's root directory with the
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php). Copy the list of configuration 
-  options from the `src/Configuration.php` file.
+  options from the `src/Configuration.php` file. Remember that the `basepath` option has been renamed to `basehref`!
 * Delete the `src/Configuration.php` and `src/ContainerBuilder.php` files.
 * Replace the contents of the `templates/layout.html.twig` file with the 
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/templates/layout.html.twig). Be sure to check
   its contents and restore any custom changes that were there beforehand!
-* Create the following directory path: `var/cache/templates` in the project's root directory.
+* Create the following directory path: `var/cache/templates` in the project's root directory. Create an empty file
+  called `.empty` inside it so that the directory can be commited into the VCS.
 * Replace all calls to `getenv('BASEDIR')` and `$_ENV['BASEDIR']` in your application with calls to `$_ENV['basepath']`.
 * Rename the `basepath` option within `.env` file to `basehref`.
 * Add a `debug` option to `.env` with either `true` or `false` as its value.
-* Add the following line to `.gitignore`:
+* Add the following lines to `.gitignore`:
   ```gitignore
   /var/cache/templates/**
+  !/var/cache/templates/.empty
   ```
 * Replace the contents of the `psalm.xml` file in the project's root directory with the
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/psalm.xml.dist).
