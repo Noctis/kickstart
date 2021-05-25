@@ -164,7 +164,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 
 ### Service Providers
 
-* Delete the `src/Provider/HttpServices.php`, `src/Provider/ServicesProviderInterface.php` and 
+* Delete the `src/Provider/HttpServicesProvider.php`, `src/Provider/ServicesProviderInterface.php` and 
   `src/Provider/TwigServiceProvider.php` files.
 * Edit any Service Provider files within `src/Provider` directory and make sure those classes implement the
   `Noctis\KickStart\Provider\ServicesProviderInterface` interface.
