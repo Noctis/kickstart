@@ -103,38 +103,49 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   * those classes extend the `Noctis\KickStart\Http\Request\Request` class,
   * replace reference to `Symfony\Component\HttpFoundation\Request` with a reference to 
     `Psr\Http\Message\ServerRequestInterface`
-* Create a directory named `Routing` inside the `src/Http` directory. Inside it, create a file called
-  `routes.php`, with the following contents:
+* Move the `src/Http/Routes/StandardRoutes.php` file to `src/Http/Routing/routes.php`.
+* Modify the `src/Http/Routing/routes.php` appropriately. For example, if the file originally looked like this:
+  ```php
+  <?php declare(strict_types=1);
+  namespace App\Http\Routes;
+
+  use App\Http\Action\DummyAction;
+  use App\Http\Middleware\Guard\DummyGuard;
+  use FastRoute\RouteCollector;
+
+  final class StandardRoutes
+  {
+      public function get(): callable
+      {
+          return function (RouteCollector $r): void {
+              $r->addGroup(
+                  getenv('basepath'),
+                  function (RouteCollector $r) {
+                      $r->get('[{name}]', [
+                          DummyAction::class,
+                          [
+                              DummyGuard::class,
+                          ],
+                      ]);
+                  }
+              );
+          };
+      }
+  }
+  ```
+  it should now look like this:
   ```php
   <?php
 
   declare(strict_types=1);
 
+  use App\Http\Action\DummyAction;
+  use App\Http\Middleware\Guard\DummyGuard;
+
   return [
+      ['GET', '[{name}]', DummyAction::class, [DummyGuard::class]],
   ];
   ```
-* Modify the `src/Http/Routing/routes.php` file by copying over routes defined in the 
-  `src/Http/Routes/StandardRoutes.php` file. For example, a route such as this:
-  ```php
-  use App\Http\Action\DummyAction;
-  use App\Http\Middleware\Guard\DummyGuard;
-  
-  $r->get('[{name}]', [
-      DummyAction::class,
-      [
-          DummyGuard::class,
-      ],
-  ]);
-  ```
-  should be transformed into the following route definition:
-  ```php
-  use App\Http\Action\DummyAction;
-  use App\Http\Middleware\Guard\DummyGuard;
-  
-  ['GET', '/[{name}]', DummyAction::class, [DummyGuard::class]],
-  ```
-* Once you're done transposing the routes from `StandardRoutes.php` to `routes.php`, delete the `src/Http/Routes` 
-  directory, along with the `StandardRoutes.php` file inside.
 * Delete the `src/Http/Router.php` file.
 * Copy the `Application.php` file from
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Http/Application.php) to the `src/Http`
@@ -217,14 +228,14 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   directory.
 * Copy the `src/Database` directory from the
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/tree/master/src/Database) into the project's root directory.
+* Replace the contents of the `bootstrap.php` file in the project's root directory with the
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php). Copy the list of configuration 
+  options from the `src/Configuration.php` file.
 * Delete the `src/Configuration.php` and `src/ContainerBuilder.php` files.
 * Replace the contents of the `templates/layout.html.twig` file with the 
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/templates/layout.html.twig). Be sure to check
   its contents and restore any custom changes that were there beforehand!
 * Create the following directory path: `var/cache/templates` in the project's root directory.
-* Replace the contents of the `bootstrap.php` file in the project's root directory with the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php). Modify the list of configuration
-  options with the file appropriately.
 * Replace all calls to `getenv('BASEDIR')` and `$_ENV['BASEDIR']` in your application with calls to `$_ENV['basepath']`.
 * Rename the `basepath` option within `.env` file to `basehref`.
 * Add a `debug` option to `.env` with either `true` or `false` as its value.
