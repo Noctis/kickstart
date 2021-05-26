@@ -2,18 +2,18 @@
 
 This document talks about upgrading between different versions of Kickstart.
 
-## From 1.4.2 to 2.0.0
+## From 1.4.2 to 2.0.3
 
 Starting with version 2.0, Kickstart has been split into two packages - the system and user parts. That means that
 some files were moved to a different location, while some were changed.
 
-Upgrade process from `1.4.2` to `2.0.0` is pretty straightforward, but there are a couple of files that need to be 
-modified by hand, i.e. it's not possible to just copy over their contents from the `2.0.0` branch.
+Upgrade process from `1.4.2` to `2.0.3` is pretty straightforward, but there are a couple of files that need to be 
+modified by hand, i.e. it's not possible to just copy over their contents from the `2.0.3` branch.
 
 ### Dependencies
 
 * Remove the reference to the `git@bitbucket.org:NoctisPL/database-lib.git` repository in `composer.json`.
-* Run the following command to remove some packages:
+* Run the following commands to remove packages:
   ```shell
   composer remove \
   ext-pdo \
@@ -21,26 +21,39 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   noctis/database-lib \
   php-di/php-di \
   psr/http-server-middleware \
+  symfony/console \
+  symfony/http-foundation \
   twig/twig \
-  vlucas/phpdotenv \
+  vlucas/phpdotenv
+  
+  composer remove --dev \
+  symfony/var-dumper \
   vimeo/psalm
   ```
-* Run the following commands to install new packages & update existing:
+* Run the following commands to install new packages:
   ```shell
-  composer update symfony/service-contracts symfony/polyfill-mbstring
-  composer require --ignore-platform-reqs \
+  composer require \
   php:^8.0 \
   composer-runtime-api:^2 \
+  laminas/laminas-diactoros:^2.5 \
+  noctis/kickstart:^2.0 \
+  paragonie/easydb:^2.11 \
   php-di/php-di:^6.3 \
-  symfony/console:^5.2 \
-  symfony/http-foundation:^5.2 \
+  psr/container:^1.0 \
   psr/http-message:^1.0 \
-  psr/http-server-handler:^1.0
-  composer require --ignore-platform-reqs --dev squizlabs/php_codesniffer:^3.5 symfony/var-dumper:^5.2 vimeo/psalm:^4.4
+  psr/http-server-handler:^1.0 \
+  symfony/console:^5.2 \
+  symfony/http-foundation:^5.2
+  
+  composer require --dev \
+  symfony/var-dumper:^5.2 \
+  vimeo/psalm:^4.4
   ```
-* Run the following command to install the `noctis/kickstart` base package:
+* Since Psalm has been updated from 3.x to 4.x, and the new version's configuration file (`psalm.xml`) has a different
+  format, run the following commands to recreate it:
   ```shell
-  composer require noctis/kickstart:^2.0
+  mv psalm.xml psalm.xml.bak
+  vendor/bin/psalm --init
   ```
 
 ### Console Commands
@@ -190,8 +203,8 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   If there were additional database connections defined there, you will need to transpose the appropriately, based on
   the primary database connection definition.
 * Check your service providers to see if the definitions inside them need to be updated appropriately for the definition 
-  format change in `2.0.0`. For example, the following definition, where a constructor parameter value is explicitly 
-  defined:
+  format change in Kickstart `2.x`. For example, the following definition, where a constructor parameter value is 
+  explicitly defined:
   ```php
   DummyGuard::class => [
       null, [
