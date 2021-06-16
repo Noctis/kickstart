@@ -10,7 +10,7 @@ some files were moved to a different location, while some were changed.
 Upgrade process from `1.4.2` to `2.0.3` is pretty straightforward, but there are a couple of files that need to be 
 modified by hand, i.e. it's not possible to just copy over their contents from the `2.0.3` branch.
 
-### Dependencies
+### 1. Dependencies
 
 * Remove the reference to the `git@bitbucket.org:NoctisPL/database-lib.git` repository in `composer.json`.
 * Run the following commands to remove packages:
@@ -55,39 +55,77 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   mv psalm.xml psalm.xml.bak
   vendor/bin/psalm --init
   ```
-
-### Console Commands
-
-* Edit the `bin/console` file. Replace the contents of the file with contents of the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bin/console). Make sure to copy over any
-  references to console commands classes (classes from the `App/Console/Command` namespace) from the original file,
-  so that those commands can still be called from the CLI.
-* Remove the `src/Console/Command/BaseCommand.php` file. 
-* Edit any `*Command.php` files within `src/Console/Command` directory and make sure those classes extend the
-  `Noctis\KickStart\Console\Command\AbstractCommand` abstract class.
-* Copy the `Application.php` file from 
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Console/Application.php) to the
-  `src/Console` directory.
-* Remove the reference to `App\Provider\DummyServicesProvider` from the `src/Console/Application.php` file.
   
-### HTTP
+### 2. The basics
 
-* Delete the `src/Http/Action/BaseAction.php` file.
-* Edit any `*Action.php` files within `src/Http/Action` directory and make sure:
-  * those classes extend the `Noctis\KickStart\Http\Action\AbstractAction` abstract class,
-  * their `execute()` methods type-hint returning either `HtmlResponse`, `RedirectResponse` or `EmptyResponse` from
-    the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`,
-  * if given action sends an attachment (i.e. file) in response, you can use the `sendFile()` action. 
-* Delete the `src/Http/Factory`, `src/Http/Helper` directories.
-* Delete the `ActionInvoker.php`, `RequestHandlerInterface.php` and `RequestHandlerStack.php` files from the
-  `src/Http/Middleware` directory.
-* Delete the `src/Http/Middleware/Guard/GuardMiddlewareInterface.php` file.
+* Add a `debug` option to `.env` with either `true` or `false` as its value. Add `debug=false` line to the 
+  `.env-example` file.
+* Rename the `basepath` option in your `.env` and `.env-example` files to `basehref`.
+* Replace the contents of the `bootstrap.php` file in the project's root directory with the
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php). Copy the list of configuration
+  options from the `src/Configuration.php` file. Remember to include the `'debug' => 'required,bool'` and
+  `'basehref' => 'required'` lines in the list there. Remember that the `basepath` option has been renamed to
+  `basehref`.
+* Delete the `src/Configuration.php` file.
+* Replace all the calls to `getenv('BASEDIR')` and `$_ENV['BASEDIR']` in your application with calls to 
+  `$_ENV['basepath']`.
+* Copy the `src/Configuration` directory from the
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/tree/master/src/Configuration) into the project's root
+  directory.
+* Copy the `src/Database` directory from the
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/tree/master/src/Database) into the project's root directory.
+  
+### 3. Service Providers
+
+* Delete the `src/Provider/HttpServicesProvider.php`, `src/Provider/ServicesProviderInterface.php` and
+  `src/Provider/TwigServiceProvider.php` files.
+* Edit any Service Provider files within `src/Provider` directory and make sure those classes implement the
+  `Noctis\KickStart\Provider\ServicesProviderInterface` interface.
+* Check your service providers to see if the definitions inside them need to be updated appropriately for the definition
+  format change in Kickstart `2.x`. For example, the following definition, where a constructor parameter value is
+  explicitly defined:
+  ```php
+  DummyGuard::class => [
+      null, [
+          'dummyParam' => getenv('dummy_param') === 'true',
+      ]
+  ],
+  ```
+  needs to be replaced with:
+  ```php
+  use function DI\autowire;
+  
+  DummyGuard::class => autowire(DummyGuard::class)
+      ->constructorParameter(
+          'dummyParam',
+          true
+      ),
+  ```
+* Replace the contents of the `src/Provider/DatabaseConnectionProvider.php` file with contents of the
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/DatabaseConnectionProvider.php).
+  If there were additional database connections defined there, you will need to transpose the appropriately, based on
+  the primary database connection definition.
+* Copy the [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/ConfigurationProvider.php)
+  of the `ConfigurationProvider.php` file into the `src/Provider` directory.
+
+### 4. HTTP Related Things
+
+* Replace the contents of the `templates/layout.html.twig` file with the
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/templates/layout.html.twig). Be sure to check
+  its contents and restore any custom changes that were there beforehand!
+* Create the following directory path: `var/cache/templates` in the project's root directory. Create an empty file
+  called `.empty` inside it so that the directory can be committed into the VCS.
+* Add the following lines to `.gitignore`:
+  ```gitignore
+  /var/cache/templates/**
+  !/var/cache/templates/.empty
+  ```
 * Edit any `*Guard.php` files in the `src/Http/Middleware/Guard` directory and:
-  * make sure those classes extend (not implement!) the `Noctis\KickStart\Http\Middleware\AbstractMiddleware` abstract 
+  * make sure those classes extend (not implement!) the `Noctis\KickStart\Http\Middleware\AbstractMiddleware` abstract
     class,
   * remove the reference to the `App\Http\Helper\HttpRedirectionTrait` trait,
-  * if the guard has its own constructor declared, make sure their parent's class, i.e. 
-    `Noctis\KickStart\Http\Middleware\AbstractMiddleware` constructor gets an instance of 
+  * if the guard has its own constructor declared, make sure their parent's class, i.e.
+    `Noctis\KickStart\Http\Middleware\AbstractMiddleware` constructor gets an instance of
     `Noctis\KickStart\Http\Response\ResponseFactoryInterface`
   * change the signature of the `process()` method from:
   ```php
@@ -111,12 +149,8 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
       //...
   }
   ```
-* Delete the `src/Http/Request/AbstractRequest.php` file.
-* Edit any `*Request.php` files in the `src/Http/Request` directory and make sure:
-  * those classes extend the `Noctis\KickStart\Http\Request\Request` class,
-  * replace reference to `Symfony\Component\HttpFoundation\Request` with a reference to 
-    `Psr\Http\Message\ServerRequestInterface`
-* Move the `src/Http/Routes/StandardRoutes.php` file to `src/Http/Routing/routes.php`.
+* Delete the `src/Http/Middleware/Guard/GuardMiddlewareInterface.php` file.
+* Rename & move the `src/Http/Routes/StandardRoutes.php` file to `src/Http/Routing/routes.php`.
 * Modify the `src/Http/Routing/routes.php` appropriately. For example, if the file originally looked like this:
   ```php
   <?php declare(strict_types=1);
@@ -163,9 +197,11 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 * Copy the `Application.php` file from
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Http/Application.php) to the `src/Http`
   directory.
-* Remove the reference to `App\Provider\DummyServicesProvider` from the `src/Http/Application.php` file.
-* Edit the `src/Http/Application.php` file and add any missing references to service provides - you can find a list of
-  them in the `src/ContainerBuilder.php` file.
+* Edit the `src/Http/Application.php` file:
+  * copy over list of service provides from the `src/ContainerBuilder.php` file,
+  * remove `App\Provider\HttpServicesProvider` from the list and any other service provider (e.g. 
+    `App\Provider\DummyServicesProvider`) that does not exist,
+  * make sure `App\Provider\ConfigurationProvider` is on the list.
 * Edit the `public/index.php` file. Replace the contents of this file with the
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/public/index.php).
 * Edit the `public/.htaccess` file and add the following lines:
@@ -185,78 +221,49 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^ index.php [QSA,L]
   ```
+* Delete the `src/Http/Request/AbstractRequest.php` file.
+* Edit any `*Request.php` files in the `src/Http/Request` directory and make sure:
+  * those classes extend the `Noctis\KickStart\Http\Request\Request` class,
+  * replace reference to `Symfony\Component\HttpFoundation\Request` with a reference to
+    `Psr\Http\Message\ServerRequestInterface`
+* Edit any `*Action.php` files within `src/Http/Action` directory (except `BaseAction.php`) and make sure:
+  * those classes extend the `Noctis\KickStart\Http\Action\AbstractAction` abstract class,
+  * their `execute()` methods type-hint returning either `HtmlResponse`, `RedirectResponse`, `JsonResponse` or 
+    `EmptyResponse` from the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`,
+  * if given action sends an attachment (i.e. file) in response, you can use the `sendFile()` action.
+* If there are no custom methods inside, delete the `src/Http/Action/BaseAction.php` file.
+* Delete the `src/Http/Factory`, `src/Http/Helper` directories.
+* Delete the `ActionInvoker.php`, `RequestHandlerInterface.php` and `RequestHandlerStack.php` files from the
+  `src/Http/Middleware` directory.
 
-### Service Providers
+### 5. Console Related Things
 
-* Delete the `src/Provider/HttpServicesProvider.php`, `src/Provider/ServicesProviderInterface.php` and 
-  `src/Provider/TwigServiceProvider.php` files.
-* Edit any Service Provider files within `src/Provider` directory and make sure those classes implement the
-  `Noctis\KickStart\Provider\ServicesProviderInterface` interface.
-* Copy the [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/ConfigurationProvider.php)
-  of the `ConfigurationProvider.php` file into the `src/Provider` directory.
-* If your application makes use of Repositories (in the `src/Repository` directory), copy the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/RepositoryProvider.php) of the
-  `RepositoryProvider.php` file into the `src/Provider` directory and edit it appropriately, moving over repository
-  definitions from other Service Provider classes (e.g. `src/Provider/DummyServiceProvider.php`).
-* Replace the contents of the `src/Provider/DatabaseConnectionProvider.php` file with contents of the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/DatabaseConnectionProvider.php).
-  If there were additional database connections defined there, you will need to transpose the appropriately, based on
-  the primary database connection definition.
-* Check your service providers to see if the definitions inside them need to be updated appropriately for the definition 
-  format change in Kickstart `2.x`. For example, the following definition, where a constructor parameter value is 
-  explicitly defined:
-  ```php
-  DummyGuard::class => [
-      null, [
-          'dummyParam' => getenv('dummy_param') === 'true',
-      ]
-  ],
-  ```
-  needs to be replaced with:
-  ```php
-  use function DI\autowire;
-  
-  DummyGuard::class => autowire(DummyGuard::class)
-      ->constructorParameter(
-          'dummyParam',
-          true
-      ),
-  ```
-* If your application has additional service providers, make sure to add a reference to them (as required) to the
-  `src/Console/Application.php` and `src/Http/Application.php` files.
+* Copy the `Application.php` file from
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Console/Application.php) to the
+  `src/Console` directory.
+* Edit the `src/Console/Application.php` file:
+  * copy over list of service provides from the `src/ContainerBuilder.php` file,
+  * remove `App\Provider\HttpServicesProvider`, `App\Provider\HttpMiddlewareProvider` and 
+    `App\Provider\TwigServiceProvider` from the list, and any other service provider (e.g.
+    `App\Provider\DummyServicesProvider`) that does not exist,
+  * make sure `App\Provider\ConfigurationProvider` is on the list.
+* Edit the `bin/console` file. Replace the contents of the file with contents of the
+  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bin/console). Make sure to copy over any
+  references to console commands classes (classes from the `App/Console/Command` namespace) from the original file,
+  so that those commands can still be called from the CLI.  
+* Edit any `*Command.php` files within `src/Console/Command` directory and make sure those classes extend the
+  `Noctis\KickStart\Console\Command\AbstractCommand` abstract class.
+* Remove the `src/Console/Command/BaseCommand.php` file.
 
-### Repositories
+### 6. Repositories
 
-* Delete the `src/Repository/DatabaseRepository.php` file.
-* Copy the `AbstractDatabaseRepository.php` file from the 
+* Rename the `DatabaseRepository` class from the `src/Repository` directory to `AbstractDatabaseRepository` and replace
+  its contents with the contents of its 
   [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Repository/AbstractDatabaseRepository.php)
-  to the `src/Repository` directory.
+  version.
 * Edit any `*Repository.php` files inside the `src/Repository` directory and make sure those classes extend the local
   `AbstractDatabaseRepository` abstract class.
-  
-### Other
 
-* Copy the `src/Configuration` directory from the 
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/tree/master/src/Configuration) into the project's root
-  directory.
-* Copy the `src/Database` directory from the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/tree/master/src/Database) into the project's root directory.
-* Replace the contents of the `bootstrap.php` file in the project's root directory with the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php). Copy the list of configuration 
-  options from the `src/Configuration.php` file. Remember that the `basepath` option has been renamed to `basehref`!
+### 7. What's Left
+
 * Delete the `src/Configuration.php` and `src/ContainerBuilder.php` files.
-* Replace the contents of the `templates/layout.html.twig` file with the 
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/templates/layout.html.twig). Be sure to check
-  its contents and restore any custom changes that were there beforehand!
-* Create the following directory path: `var/cache/templates` in the project's root directory. Create an empty file
-  called `.empty` inside it so that the directory can be commited into the VCS.
-* Replace all calls to `getenv('BASEDIR')` and `$_ENV['BASEDIR']` in your application with calls to `$_ENV['basepath']`.
-* Rename the `basepath` option within `.env` file to `basehref`.
-* Add a `debug` option to `.env` with either `true` or `false` as its value.
-* Add the following lines to `.gitignore`:
-  ```gitignore
-  /var/cache/templates/**
-  !/var/cache/templates/.empty
-  ```
-* Replace the contents of the `psalm.xml` file in the project's root directory with the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/psalm.xml.dist).
