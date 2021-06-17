@@ -10,6 +10,8 @@ use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\Session\Container;
 use Noctis\KickStart\Configuration\ConfigurationInterface;
 use Noctis\KickStart\File\FileInterface;
+use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
+use Noctis\KickStart\Http\Response\AttachmentResponse;
 use Noctis\KickStart\Http\Response\FileResponse;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -72,10 +74,22 @@ abstract class AbstractAction
             ->redirectionResponse($uri, $params);
     }
 
+    /**
+     * @deprecated since version 2.1.0 (will be removed in 3.0.0)
+     * @see AbstractAction::sendAttachment()
+     * @psalm-suppress DeprecatedClass
+     */
     protected function sendFile(FileInterface $file): FileResponse
     {
+        /** @psalm-suppress DeprecatedMethod */
         return $this->responseFactory
             ->fileResponse($file);
+    }
+
+    protected function sendAttachment(AttachmentInterface $attachment): AttachmentResponse
+    {
+        return $this->responseFactory
+            ->attachmentResponse($attachment);
     }
 
     protected function setFlashMessage(string $message): void

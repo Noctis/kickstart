@@ -230,7 +230,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   * those classes extend the `Noctis\KickStart\Http\Action\AbstractAction` abstract class,
   * their `execute()` methods type-hint returning either `HtmlResponse`, `RedirectResponse`, `JsonResponse` or 
     `EmptyResponse` from the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`,
-  * if given action sends an attachment (i.e. file) in response, you can use the `sendFile()` action.
+  * if given action sends an attachment (i.e. file) in response, you can use the `sendAttachment()` action.
 * If there are no custom methods inside, delete the `src/Http/Action/BaseAction.php` file.
 * Delete the `src/Http/Factory`, `src/Http/Helper` directories.
 * Delete the `ActionInvoker.php`, `RequestHandlerInterface.php` and `RequestHandlerStack.php` files from the
