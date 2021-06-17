@@ -10,8 +10,13 @@ use Noctis\KickStart\File\FileInterface;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
+/**
+ * @deprecated since version 2.1.0 (will be removed in 3.0.0)
+ * @see \Noctis\KickStart\Http\Response\AttachmentResponse
+ */
 final class FileResponse extends Response
 {
+    /** @psalm-suppress DeprecatedClass */
     public function __construct(FileInterface $file, array $headers = [])
     {
         $headers['Content-Encoding'] = 'none';
