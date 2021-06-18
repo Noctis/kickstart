@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Service;
 
 use Twig\Environment as Twig;
+use Twig\TwigFunction;
 
 final class TwigRenderer implements TemplateRendererInterface
 {
@@ -19,5 +20,13 @@ final class TwigRenderer implements TemplateRendererInterface
     {
         return $this->twig
             ->render($template, $params);
+    }
+
+    public function registerFunction(string $name, callable $function): void
+    {
+        $this->twig
+            ->addFunction(
+                new TwigFunction($name, $function)
+            );
     }
 }
