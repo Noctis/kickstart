@@ -42,8 +42,7 @@ abstract class AbstractAction
      */
     protected function render(string $view, array $params = []): HtmlResponse
     {
-        $baseHref = $this->request
-            ->getRequestTarget();
+        $baseHref = $this->getBaseHref();
 
         return $this->responseFactory
             ->htmlResponse($view, $baseHref, $params);
@@ -101,5 +100,21 @@ abstract class AbstractAction
     {
         return $this->responseFactory
             ->notFoundResponse();
+    }
+
+    protected function getBaseHref(): string
+    {
+        $uri = $this->request
+            ->getUri();
+
+        $portPart = $uri->getPort() !== null
+            ? ':' . (string)$uri->getPort()
+            : '';
+
+        return sprintf(
+            '%s://%s/',
+            $uri->getScheme(),
+            $uri->getHost() . $portPart . $this->configuration->getBaseHref()
+        );
     }
 }
