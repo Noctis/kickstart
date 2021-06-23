@@ -8,7 +8,7 @@ use FastRoute\Dispatcher;
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\TextResponse;
-use Noctis\KickStart\Http\Action\AbstractAction;
+use Noctis\KickStart\Http\Action\ActionInterface;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo;
@@ -107,11 +107,11 @@ final class RequestHandler implements RequestHandlerInterface
     }
 
     /**
-     * @param class-string<AbstractAction> $actionClassName
+     * @param class-string<ActionInterface> $actionClassName
      */
-    private function getAction(string $actionClassName): AbstractAction
+    private function getAction(string $actionClassName): ActionInterface
     {
-        /** @var AbstractAction */
+        /** @var ActionInterface */
         return $this->container
             ->get($actionClassName);
     }

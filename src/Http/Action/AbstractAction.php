@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Action;
 
 use Laminas\Diactoros\Response\EmptyResponse;
-use Laminas\Diactoros\Response\HtmlResponse;
-use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\Session\Container;
-use Noctis\KickStart\Configuration\Configuration;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriFactoryInterface;
 
 abstract class AbstractAction
 {
@@ -21,52 +17,12 @@ abstract class AbstractAction
     protected Container $flashContainer;
 
     private ResponseFactoryInterface $responseFactory;
-    private UriFactoryInterface $uriFactory;
 
-    public function __construct(
-        ResponseFactoryInterface $responseFactory,
-        UriFactoryInterface $uriFactory,
-        ServerRequestInterface $request
-    ) {
+    public function __construct(ResponseFactoryInterface $responseFactory, ServerRequestInterface $request)
+    {
         $this->responseFactory = $responseFactory;
-        $this->uriFactory = $uriFactory;
         $this->request = $request;
         $this->flashContainer = new Container('flash');
-    }
-
-    /**
-     * @param array<string, mixed> $params
-     */
-    protected function render(string $view, array $params = []): HtmlResponse
-    {
-        $baseHref = $this->getBaseHref();
-
-        return $this->responseFactory
-            ->htmlResponse($view, $baseHref, $params);
-    }
-
-    /**
-     * @param array<string, string> $params
-     */
-    protected function redirect(string $path, array $params = []): RedirectResponse
-    {
-        if (preg_match('/:\/\//', $path) === 1) {
-            $uri = $this->uriFactory
-                ->createUri($path);
-        } else {
-            $uri = $this->request
-                ->getUri()
-                ->withPath(
-                    sprintf(
-                        '%s/%s',
-                        Configuration::getBaseHref(),
-                        $path
-                    )
-                );
-        }
-
-        return $this->responseFactory
-            ->redirectionResponse($uri, $params);
     }
 
     protected function sendAttachment(AttachmentInterface $attachment): AttachmentResponse
@@ -97,21 +53,5 @@ abstract class AbstractAction
     {
         return $this->responseFactory
             ->notFoundResponse();
-    }
-
-    protected function getBaseHref(): string
-    {
-        $uri = $this->request
-            ->getUri();
-
-        $portPart = $uri->getPort() !== null
-            ? ':' . (string)$uri->getPort()
-            : '';
-
-        return sprintf(
-            '%s://%s/',
-            $uri->getScheme(),
-            $uri->getHost() . $portPart . Configuration::getBaseHref()
-        );
     }
 }

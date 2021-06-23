@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing\Handler;
 
 use DI\Container;
-use Noctis\KickStart\Http\Action\AbstractAction;
+use Noctis\KickStart\Http\Action\ActionInterface;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class ActionInvoker implements ActionInvokerInterface
 {
     private Container $container;
-    private ?AbstractAction $action;
+    private ?ActionInterface $action;
 
     /** @var list<AbstractMiddleware> */
     private array $guards;
@@ -25,10 +25,7 @@ final class ActionInvoker implements ActionInvokerInterface
         $this->guards = [];
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function setAction(AbstractAction $action): self
+    public function setAction(ActionInterface $action): self
     {
         $this->action = $action;
 
@@ -52,11 +49,11 @@ final class ActionInvoker implements ActionInvokerInterface
 
         if (empty($this->guards)) {
             /**
-             * @psalm-suppress UndefinedMethod
+             * @psalm-suppress PossiblyNullReference
              * @var ResponseInterface
              */
-            return $this->container
-                ->call([$this->action, 'execute']);
+            return $this->action
+                ->process($request, $this);
         }
 
         $guard = array_shift($this->guards);
