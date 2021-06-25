@@ -54,11 +54,6 @@
         "psalm": "psalm --config=psalm.xml.dist --shepherd",
         "phpcs": "phpcs --standard=PSR12"
     },
-    "extra": {
-        "branch-alias": {
-            "dev-dev": "2.1-dev"
-        }
-    },
     "config": {
         "sort-packages": true
     },
