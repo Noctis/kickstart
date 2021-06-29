@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c89b18aab9e3e045fea51acd22dfa57",
+    "content-hash": "212b9a8a6630bf221e165e186438f478",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -2838,6 +2838,9 @@
             "require": {
                 "php": "^7.1 || ^8.0"
             },
+            "replace": {
+                "myclabs/deep-copy": "self.version"
+            },
             "require-dev": {
                 "doctrine/collections": "^1.0",
                 "doctrine/common": "^2.6",
@@ -4748,6 +4751,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": true,
             "time": "2020-09-28T06:45:17+00:00"
         },
         {
@@ -5259,7 +5263,6 @@
                 "issues": "https://github.com/webmozart/path-util/issues",
                 "source": "https://github.com/webmozart/path-util/tree/2.3.0"
             },
-            "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
@@ -5269,10 +5272,10 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~8.0.0",
+        "php": "^8.0",
         "ext-filter": "*",
         "composer-runtime-api": "^2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.0.0"
 }
