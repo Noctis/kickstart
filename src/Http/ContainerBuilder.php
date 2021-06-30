@@ -7,6 +7,7 @@ namespace Noctis\KickStart\Http;
 use DI\ContainerBuilder as ActualContainerBuilder;
 use DI\Definition\Helper\DefinitionHelper;
 use DI\Definition\Reference;
+use Noctis\KickStart\ContainerBuilderInterface;
 use Noctis\KickStart\Provider\ConfigurationProvider;
 use Noctis\KickStart\Provider\HttpServicesProvider;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
@@ -16,13 +17,10 @@ use Psr\Container\ContainerInterface;
 
 use function DI\autowire;
 
-final class ContainerBuilder
+final class ContainerBuilder implements ContainerBuilderInterface
 {
     private ActualContainerBuilder $containerBuilder;
 
-    /**
-     * ContainerBuilder constructor.
-     */
     public function __construct()
     {
         $this->containerBuilder = new ActualContainerBuilder();
