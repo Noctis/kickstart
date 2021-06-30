@@ -11,23 +11,29 @@ use Noctis\KickStart\Http\Routing\Handler\MethodNotAllowedHandlerInterface;
 use Noctis\KickStart\Http\Routing\Handler\NotFoundHandlerInterface;
 use RuntimeException;
 
-final class Router
+use function FastRoute\simpleDispatcher;
+
+final class Router implements RouterInterface
 {
-    private ?Dispatcher $dispatcher;
+    private RoutesLoaderInterface $routesLoader;
     private HttpInfoProviderInterface $httpInfoProvider;
     private FoundHandlerInterface $foundHandler;
     private NotFoundHandlerInterface $notFoundHandler;
     private MethodNotAllowedHandlerInterface $methodNotAllowedHandler;
     private EmitterInterface $responseEmitter;
 
+    /** @var list<array> */
+    private array $routes = [];
+
     public function __construct(
+        RoutesLoaderInterface $routesLoader,
         HttpInfoProviderInterface $httpInfoProvider,
         FoundHandlerInterface $foundHandler,
         NotFoundHandlerInterface $notFoundHandler,
         MethodNotAllowedHandlerInterface $methodNotAllowedHandler,
         EmitterInterface $responseEmitter
     ) {
-        $this->dispatcher = null;
+        $this->routesLoader = $routesLoader;
         $this->httpInfoProvider = $httpInfoProvider;
         $this->foundHandler = $foundHandler;
         $this->notFoundHandler = $notFoundHandler;
@@ -35,9 +41,12 @@ final class Router
         $this->responseEmitter = $responseEmitter;
     }
 
-    public function setDispatcher(Dispatcher $dispatcher): void
+    /**
+     * @param list<array> $routes
+     */
+    public function setRoutes(array $routes): void
     {
-        $this->dispatcher = $dispatcher;
+        $this->routes = $routes;
     }
 
     public function route(): void
@@ -57,9 +66,10 @@ final class Router
 
     private function determineRouteInfo(): array
     {
-        if (!isset($this->dispatcher)) {
-            throw new RuntimeException('Router dispatcher not set. Did you forget to call setDispatcher()?');
-        }
+        $dispatcher = simpleDispatcher(
+            $this->routesLoader
+                ->load($this->routes)
+        );
 
         $httpMethod = $this->httpInfoProvider
             ->getMethod();
@@ -72,7 +82,6 @@ final class Router
             );
         }
 
-        return $this->dispatcher
-            ->dispatch($httpMethod, $uri);
+        return $dispatcher->dispatch($httpMethod, $uri);
     }
 }

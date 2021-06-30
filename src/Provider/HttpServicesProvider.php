@@ -18,6 +18,8 @@ use Noctis\KickStart\Http\Routing\Handler\NotFoundHandler;
 use Noctis\KickStart\Http\Routing\Handler\NotFoundHandlerInterface;
 use Noctis\KickStart\Http\Routing\HttpInfoProvider;
 use Noctis\KickStart\Http\Routing\HttpInfoProviderInterface;
+use Noctis\KickStart\Http\Routing\Router;
+use Noctis\KickStart\Http\Routing\RouterInterface;
 use Noctis\KickStart\Http\Routing\RoutesLoader;
 use Noctis\KickStart\Http\Routing\RoutesLoaderInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -40,6 +42,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
             MethodNotAllowedHandlerInterface::class => MethodNotAllowedHandler::class,
             NotFoundHandlerInterface::class => NotFoundHandler::class,
             ResponseFactoryInterface::class => ResponseFactory::class,
+            RouterInterface::class => Router::class,
             RoutesLoaderInterface::class => RoutesLoader::class,
             ServerRequestInterface::class => factory([RequestFactory::class, 'createFromGlobals'])
                 ->parameter(
