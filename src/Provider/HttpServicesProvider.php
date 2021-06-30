@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Provider;
 
+use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\UriFactory;
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
-use Noctis\KickStart\Http\Factory\RequestFactory;
 use Noctis\KickStart\Http\Response\ResponseFactory;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
 use Noctis\KickStart\Http\Routing\Handler\FoundHandler;
@@ -24,11 +24,9 @@ use Noctis\KickStart\Http\Routing\RoutesLoader;
 use Noctis\KickStart\Http\Routing\RoutesLoaderInterface;
 use Noctis\KickStart\Http\Routing\RoutesParser;
 use Noctis\KickStart\Http\Routing\RoutesParserInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
-
-use function DI\factory;
-use function DI\get;
 
 final class HttpServicesProvider implements ServicesProviderInterface
 {
@@ -47,11 +45,17 @@ final class HttpServicesProvider implements ServicesProviderInterface
             RouterInterface::class => Router::class,
             RoutesLoaderInterface::class => RoutesLoader::class,
             RoutesParserInterface::class => RoutesParser::class,
-            ServerRequestInterface::class => factory([RequestFactory::class, 'createFromGlobals'])
-                ->parameter(
-                    'vars',
-                    get('request.vars')
-                ),
+            ServerRequestInterface::class => function (ContainerInterface $container): ServerRequestInterface {
+                $request = ServerRequestFactory::fromGlobals();
+
+                /** @var array<string, string> $vars */
+                $vars = $container->get('request.vars');
+                foreach ($vars as $name => $value) {
+                    $request = $request->withAttribute($name, $value);
+                }
+
+                return $request;
+            },
             UriFactoryInterface::class => UriFactory::class,
         ];
     }
