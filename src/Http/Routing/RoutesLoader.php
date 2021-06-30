@@ -20,38 +20,28 @@ final class RoutesLoader implements RoutesLoaderInterface
         $this->configuration = $configuration;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function load(array $routes): callable
     {
         return function (RouteCollector $r) use ($routes): void {
-            /** @var list<array> $routes */
             $r->addGroup(
                 $this->configuration
                     ->getBaseHref(),
                 function (RouteCollector $r) use ($routes) {
                     foreach ($routes as $definition) {
-                        $this->loadRouteDefinition($r, $definition);
+                        $this->addRoute(
+                            $r,
+                            $definition->getMethod(),
+                            $definition->getPath(),
+                            $definition->getAction(),
+                            $definition->getGuards()
+                        );
                     }
                 }
             );
         };
-    }
-
-    private function loadRouteDefinition(RouteCollector $r, array $definition): void
-    {
-        /**
-         * @var string $method
-         * @var string $url
-         * @var class-string<AbstractAction> $action
-         */
-        [$method, $url, $action] = $definition;
-        if (count($definition) === 4) {
-            /** @var list<class-string<AbstractMiddleware>> $guards */
-            $guards = $definition[3];
-        } else {
-            $guards = [];
-        }
-
-        $this->addRoute($r, $method, $url, $action, $guards);
     }
 
     /**

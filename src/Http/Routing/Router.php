@@ -15,6 +15,7 @@ use function FastRoute\simpleDispatcher;
 
 final class Router implements RouterInterface
 {
+    private RoutesParserInterface $routesParser;
     private RoutesLoaderInterface $routesLoader;
     private HttpInfoProviderInterface $httpInfoProvider;
     private FoundHandlerInterface $foundHandler;
@@ -26,6 +27,7 @@ final class Router implements RouterInterface
     private array $routes = [];
 
     public function __construct(
+        RoutesParserInterface $routesParser,
         RoutesLoaderInterface $routesLoader,
         HttpInfoProviderInterface $httpInfoProvider,
         FoundHandlerInterface $foundHandler,
@@ -33,6 +35,7 @@ final class Router implements RouterInterface
         MethodNotAllowedHandlerInterface $methodNotAllowedHandler,
         EmitterInterface $responseEmitter
     ) {
+        $this->routesParser = $routesParser;
         $this->routesLoader = $routesLoader;
         $this->httpInfoProvider = $httpInfoProvider;
         $this->foundHandler = $foundHandler;
@@ -57,7 +60,7 @@ final class Router implements RouterInterface
             Dispatcher::FOUND              => $this->foundHandler->handle($routeInfo),              // ... 200
             Dispatcher::NOT_FOUND          => $this->notFoundHandler->handle($routeInfo),           // ... 404
             Dispatcher::METHOD_NOT_ALLOWED => $this->methodNotAllowedHandler->handle($routeInfo),   // ... 405
-            default                        => throw new RuntimeException(),
+            default => throw new RuntimeException(),
         };
 
         $this->responseEmitter
@@ -66,11 +69,6 @@ final class Router implements RouterInterface
 
     private function determineRouteInfo(): array
     {
-        $dispatcher = simpleDispatcher(
-            $this->routesLoader
-                ->load($this->routes)
-        );
-
         $httpMethod = $this->httpInfoProvider
             ->getMethod();
         $uri = $this->httpInfoProvider
@@ -82,6 +80,18 @@ final class Router implements RouterInterface
             );
         }
 
-        return $dispatcher->dispatch($httpMethod, $uri);
+        return $this->getDispatcher()
+            ->dispatch($httpMethod, $uri);
+    }
+
+    private function getDispatcher(): Dispatcher
+    {
+        return simpleDispatcher(
+            $this->routesLoader
+                ->load(
+                    $this->routesParser
+                        ->parse($this->routes)
+                )
+        );
     }
 }
