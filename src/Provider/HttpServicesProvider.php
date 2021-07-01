@@ -12,8 +12,6 @@ use Noctis\KickStart\Http\Response\ResponseFactory;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvoker;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
-use Noctis\KickStart\Http\Routing\HttpInfoProvider;
-use Noctis\KickStart\Http\Routing\HttpInfoProviderInterface;
 use Noctis\KickStart\Http\Routing\Router;
 use Noctis\KickStart\Http\Routing\RoutesLoader;
 use Noctis\KickStart\Http\Routing\RoutesLoaderInterface;
@@ -33,7 +31,6 @@ final class HttpServicesProvider implements ServicesProviderInterface
         return [
             ActionInvokerInterface::class => ActionInvoker::class,
             EmitterInterface::class => SapiEmitter::class,
-            HttpInfoProviderInterface::class => HttpInfoProvider::class,
             RequestHandlerInterface::class => Router::class,
             ResponseFactoryInterface::class => ResponseFactory::class,
             RoutesLoaderInterface::class => RoutesLoader::class,

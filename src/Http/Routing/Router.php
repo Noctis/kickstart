@@ -24,7 +24,6 @@ use function FastRoute\simpleDispatcher;
 final class Router implements RequestHandlerInterface
 {
     private ContainerInterface $container;
-    private HttpInfoProviderInterface $httpInfoProvider;
     private RoutesParserInterface $routesParser;
     private RoutesLoaderInterface $routesLoader;
     private ActionInvokerInterface $actionInvoker;
@@ -34,13 +33,11 @@ final class Router implements RequestHandlerInterface
 
     public function __construct(
         ContainerInterface $container,
-        HttpInfoProviderInterface $httpInfoProvider,
         RoutesParserInterface $routesParser,
         RoutesLoaderInterface $routesLoader,
         ActionInvokerInterface $actionInvoker
     ) {
         $this->container = $container;
-        $this->httpInfoProvider = $httpInfoProvider;
         $this->routesParser = $routesParser;
         $this->routesLoader = $routesLoader;
         $this->actionInvoker = $actionInvoker;
@@ -56,13 +53,11 @@ final class Router implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $uri = $this->httpInfoProvider
-            ->getUri();
-
         $dispatchInfo = $this->getDispatcher()
             ->dispatch(
                 $request->getMethod(),
-                $uri
+                $request->getUri()
+                    ->getPath()
             );
 
         switch ($dispatchInfo[0]) {
