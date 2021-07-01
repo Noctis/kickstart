@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Provider;
 
+use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\UriFactory;
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
-use Noctis\KickStart\Http\Request\ServerRequestFactory;
 use Noctis\KickStart\Http\Response\ResponseFactory;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvoker;
@@ -29,8 +29,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-use function DI\factory;
-
 final class HttpServicesProvider implements ServicesProviderInterface
 {
     /**
@@ -49,7 +47,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
             ResponseFactoryInterface::class => ResponseFactory::class,
             RoutesLoaderInterface::class => RoutesLoader::class,
             RoutesParserInterface::class => RoutesParser::class,
-            ServerRequestInterface::class => factory([ServerRequestFactory::class, 'createFromGlobals']),
+            ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
             UriFactoryInterface::class => UriFactory::class,
         ];
     }
