@@ -7,7 +7,6 @@ namespace Noctis\KickStart\Http\Routing\Handler;
 use DI\Container;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
-use Noctis\KickStart\Http\Routing\RequestHandler;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,17 +30,20 @@ final class FoundHandler implements FoundHandlerInterface
             );
 
         $routeHandlerInfo = $routeInfo->getRouteHandlerInfo();
-        $requestHandler = new RequestHandler(
-            $this->container,
-            $this->getAction(
-                $routeHandlerInfo->getActionClassName()
-            ),
-            $this->getGuards(
-                $routeHandlerInfo->getGuardNames()
+        $actionInvoker = new ActionInvoker($this->container);
+        $actionInvoker = $actionInvoker
+            ->setAction(
+                $this->getAction(
+                    $routeHandlerInfo->getActionClassName()
+                )
             )
-        );
+            ->setGuards(
+                $this->getGuards(
+                    $routeHandlerInfo->getGuardNames()
+                )
+            );
 
-        return $requestHandler->handle(
+        return $actionInvoker->handle(
             $this->container
                 ->get(ServerRequestInterface::class)
         );
