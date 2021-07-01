@@ -6,17 +6,17 @@ namespace Noctis\KickStart\Http;
 
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Noctis\KickStart\ApplicationInterface;
-use Noctis\KickStart\Http\Routing\NewRequestHandler;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 final class WebApplication implements ApplicationInterface
 {
-    private NewRequestHandler $requestHandler;
+    private RequestHandlerInterface $requestHandler;
     private EmitterInterface $responseEmitter;
     private ServerRequestInterface $request;
 
     public function __construct(
-        NewRequestHandler $requestHandler,
+        RequestHandlerInterface $requestHandler,
         EmitterInterface $responseEmitter,
         ServerRequestInterface $request
     ) {

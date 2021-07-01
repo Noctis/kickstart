@@ -5,43 +5,45 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing;
 
 use FastRoute\Dispatcher;
-use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
-use Noctis\KickStart\Http\Routing\Handler\FoundHandlerInterface;
-use Noctis\KickStart\Http\Routing\Handler\MethodNotAllowedHandlerInterface;
-use Noctis\KickStart\Http\Routing\Handler\NotFoundHandlerInterface;
+use Fig\Http\Message\StatusCodeInterface;
+use Laminas\Diactoros\Response\EmptyResponse;
+use Laminas\Diactoros\Response\TextResponse;
+use Noctis\KickStart\Http\Action\AbstractAction;
+use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
+use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
+use Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
+use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfoInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
 
 use function FastRoute\simpleDispatcher;
 
-final class Router implements RouterInterface
+final class Router implements RequestHandlerInterface
 {
+    private ContainerInterface $container;
+    private HttpInfoProviderInterface $httpInfoProvider;
     private RoutesParserInterface $routesParser;
     private RoutesLoaderInterface $routesLoader;
-    private HttpInfoProviderInterface $httpInfoProvider;
-    private FoundHandlerInterface $foundHandler;
-    private NotFoundHandlerInterface $notFoundHandler;
-    private MethodNotAllowedHandlerInterface $methodNotAllowedHandler;
-    private EmitterInterface $responseEmitter;
+    private ActionInvokerInterface $actionInvoker;
 
     /** @var list<array> */
     private array $routes = [];
 
     public function __construct(
+        ContainerInterface $container,
+        HttpInfoProviderInterface $httpInfoProvider,
         RoutesParserInterface $routesParser,
         RoutesLoaderInterface $routesLoader,
-        HttpInfoProviderInterface $httpInfoProvider,
-        FoundHandlerInterface $foundHandler,
-        NotFoundHandlerInterface $notFoundHandler,
-        MethodNotAllowedHandlerInterface $methodNotAllowedHandler,
-        EmitterInterface $responseEmitter
+        ActionInvokerInterface $actionInvoker
     ) {
+        $this->container = $container;
+        $this->httpInfoProvider = $httpInfoProvider;
         $this->routesParser = $routesParser;
         $this->routesLoader = $routesLoader;
-        $this->httpInfoProvider = $httpInfoProvider;
-        $this->foundHandler = $foundHandler;
-        $this->notFoundHandler = $notFoundHandler;
-        $this->methodNotAllowedHandler = $methodNotAllowedHandler;
-        $this->responseEmitter = $responseEmitter;
+        $this->actionInvoker = $actionInvoker;
     }
 
     /**
@@ -52,36 +54,36 @@ final class Router implements RouterInterface
         $this->routes = $routes;
     }
 
-    public function route(): void
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $routeInfo = $this->determineRouteInfo();
-
-        $response = match ($routeInfo[0]) {
-            Dispatcher::FOUND              => $this->foundHandler->handle($routeInfo),              // ... 200
-            Dispatcher::NOT_FOUND          => $this->notFoundHandler->handle($routeInfo),           // ... 404
-            Dispatcher::METHOD_NOT_ALLOWED => $this->methodNotAllowedHandler->handle($routeInfo),   // ... 405
-            default => throw new RuntimeException(),
-        };
-
-        $this->responseEmitter
-            ->emit($response);
-    }
-
-    private function determineRouteInfo(): array
-    {
-        $httpMethod = $this->httpInfoProvider
-            ->getMethod();
         $uri = $this->httpInfoProvider
             ->getUri();
 
-        if ($httpMethod === null || $uri === null) {
-            throw new RuntimeException(
-                'Could not determine HTTP method and/or URI. Are you running in CLI?'
+        $dispatchInfo = $this->getDispatcher()
+            ->dispatch(
+                $request->getMethod(),
+                $uri
             );
+
+        switch ($dispatchInfo[0]) {
+            case Dispatcher::FOUND:
+                $routeInfo = FoundRouteInfo::createFromArray($dispatchInfo);
+                $response = $this->found($request, $routeInfo);
+                break;
+
+            case Dispatcher::NOT_FOUND:
+                $response = $this->notFound();
+                break;
+
+            case Dispatcher::METHOD_NOT_ALLOWED:
+                $response = $this->methodNotAllowed($dispatchInfo[1]);
+                break;
+
+            default:
+                throw new RuntimeException();
         }
 
-        return $this->getDispatcher()
-            ->dispatch($httpMethod, $uri);
+        return $response;
     }
 
     private function getDispatcher(): Dispatcher
@@ -92,6 +94,75 @@ final class Router implements RouterInterface
                     $this->routesParser
                         ->parse($this->routes)
                 )
+        );
+    }
+
+    private function found(ServerRequestInterface $request, RouteInfoInterface $routeInfo): ResponseInterface
+    {
+        $vars = $routeInfo->getRequestVars();
+        foreach ($vars as $name => $value) {
+            $request = $request->withAttribute($name, $value);
+        }
+
+        $routeHandlerInfo = $routeInfo->getRouteHandlerInfo();
+        $action = $this->getAction(
+            $routeHandlerInfo->getActionClassName()
+        );
+        $guards = $this->getGuards(
+            $routeHandlerInfo->getGuardNames()
+        );
+
+        $this->actionInvoker
+            ->setAction($action)
+            ->setGuards($guards);
+
+        return $this->actionInvoker
+            ->handle($request);
+    }
+
+    private function notFound(): ResponseInterface
+    {
+        return new EmptyResponse(StatusCodeInterface::STATUS_NOT_FOUND);
+    }
+
+    /**
+     * @param list<string> $allowedMethods
+     */
+    private function methodNotAllowed(array $allowedMethods): ResponseInterface
+    {
+        return new TextResponse(
+            sprintf(
+                'Allowed methods: %s.',
+                implode(', ', $allowedMethods)
+            ),
+            StatusCodeInterface::STATUS_METHOD_NOT_ALLOWED
+        );
+    }
+
+    /**
+     * @param class-string<AbstractAction> $actionClassName
+     */
+    private function getAction(string $actionClassName): AbstractAction
+    {
+        /** @var AbstractAction */
+        return $this->container
+            ->get($actionClassName);
+    }
+
+    /**
+     * @param list<class-string<AbstractMiddleware>> $guardsNames
+     *
+     * @return list<AbstractMiddleware>
+     */
+    private function getGuards(array $guardsNames): array
+    {
+        return array_map(
+            function (string $guardClassName): AbstractMiddleware {
+                /** @var AbstractMiddleware */
+                return $this->container
+                    ->get($guardClassName);
+            },
+            $guardsNames
         );
     }
 }
