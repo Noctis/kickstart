@@ -11,7 +11,7 @@ use Laminas\Diactoros\Response\TextResponse;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
-use Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
+use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfoInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -50,7 +50,7 @@ final class RequestHandler implements RequestHandlerInterface
 
         switch ($dispatchInfo[0]) {
             case Dispatcher::FOUND:
-                $routeInfo = FoundRouteInfo::createFromArray($dispatchInfo);
+                $routeInfo = RouteInfo::createFromArray($dispatchInfo);
                 $response = $this->found($request, $routeInfo);
                 break;
 

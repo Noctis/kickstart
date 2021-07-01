@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
-namespace Tests\Acceptance\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
+namespace Tests\Acceptance\Http\Routing\Handler\RouteInfo\RouteInfo;
 
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfoInterface;
-use Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
+use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfosds
+ * @covers \Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo
  */
 final class CreateFromArrayTests extends TestCase
 {
@@ -17,7 +17,7 @@ final class CreateFromArrayTests extends TestCase
             'foo' => 'bar',
         ];
 
-        $routeInfo = FoundRouteInfo::createFromArray([
+        $routeInfo = RouteInfo::createFromArray([
             1 => AbstractAction::class,
             2 => $requestVars,
         ]);
@@ -34,7 +34,7 @@ final class CreateFromArrayTests extends TestCase
 
     public function test_it_is_created_with_no_request_variables_given(): void
     {
-        $routeInfo = FoundRouteInfo::createFromArray([
+        $routeInfo = RouteInfo::createFromArray([
             1 => AbstractAction::class,
             2 => [],
         ]);

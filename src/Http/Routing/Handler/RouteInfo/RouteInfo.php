@@ -7,7 +7,7 @@ namespace Noctis\KickStart\Http\Routing\Handler\RouteInfo;
 use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfo;
 use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfoInterface;
 
-final class FoundRouteInfo implements RouteInfoInterface
+final class RouteInfo implements RouteInfoInterface
 {
     private RouteHandlerInfoInterface $routeHandlerDefinition;
 
