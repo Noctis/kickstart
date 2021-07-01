@@ -30,14 +30,14 @@ final class FoundHandler implements FoundHandlerInterface
                 $routeInfo->getRequestVars()
             );
 
-        $routeHandlerDefinition = $routeInfo->getRouteHandlerDefinition();
+        $routeHandlerInfo = $routeInfo->getRouteHandlerInfo();
         $requestHandler = new RequestHandler(
             $this->container,
             $this->getAction(
-                $routeHandlerDefinition->getActionClassName()
+                $routeHandlerInfo->getActionClassName()
             ),
             $this->getGuards(
-                $routeHandlerDefinition->getGuardNames()
+                $routeHandlerInfo->getGuardNames()
             )
         );
 

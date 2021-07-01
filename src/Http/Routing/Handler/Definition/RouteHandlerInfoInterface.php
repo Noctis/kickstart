@@ -7,7 +7,7 @@ namespace Noctis\KickStart\Http\Routing\Handler\Definition;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
-interface RouteHandlerDefinitionInterface
+interface RouteHandlerInfoInterface
 {
     /**
      * @return class-string<AbstractAction>

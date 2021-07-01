@@ -2,7 +2,7 @@
 namespace Tests\Acceptance\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
 
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerDefinitionInterface;
+use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfoInterface;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
 use PHPUnit\Framework\TestCase;
 
@@ -23,8 +23,8 @@ final class CreateFromArrayTests extends TestCase
         ]);
 
         $this->assertInstanceOf(
-            RouteHandlerDefinitionInterface::class,
-            $routeInfo->getRouteHandlerDefinition()
+            RouteHandlerInfoInterface::class,
+            $routeInfo->getRouteHandlerInfo()
         );
         $this->assertSame(
             $requestVars,
@@ -40,8 +40,8 @@ final class CreateFromArrayTests extends TestCase
         ]);
 
         $this->assertInstanceOf(
-            RouteHandlerDefinitionInterface::class,
-            $routeInfo->getRouteHandlerDefinition()
+            RouteHandlerInfoInterface::class,
+            $routeInfo->getRouteHandlerInfo()
         );
         $this->assertSame(
             [],

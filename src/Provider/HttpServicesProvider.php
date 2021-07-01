@@ -10,6 +10,8 @@ use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use Noctis\KickStart\Http\Request\ServerRequestFactory;
 use Noctis\KickStart\Http\Response\ResponseFactory;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
+use Noctis\KickStart\Http\Routing\Handler\ActionInvoker;
+use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
 use Noctis\KickStart\Http\Routing\Handler\FoundHandler;
 use Noctis\KickStart\Http\Routing\Handler\FoundHandlerInterface;
 use Noctis\KickStart\Http\Routing\Handler\MethodNotAllowedHandler;
@@ -37,6 +39,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
     public function getServicesDefinitions(): array
     {
         return [
+            ActionInvokerInterface::class => ActionInvoker::class,
             EmitterInterface::class => SapiEmitter::class,
             FoundHandlerInterface::class => FoundHandler::class,
             HttpInfoProviderInterface::class => HttpInfoProvider::class,

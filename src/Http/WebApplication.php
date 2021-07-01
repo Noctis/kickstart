@@ -4,22 +4,34 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http;
 
+use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Noctis\KickStart\ApplicationInterface;
-use Noctis\KickStart\Http\Routing\RouterInterface;
+use Noctis\KickStart\Http\Routing\NewRequestHandler;
+use Psr\Http\Message\ServerRequestInterface;
 
 final class WebApplication implements ApplicationInterface
 {
-    private RouterInterface $router;
+    private NewRequestHandler $requestHandler;
+    private EmitterInterface $responseEmitter;
+    private ServerRequestInterface $request;
 
-    public function __construct(RouterInterface $router)
-    {
-        $this->router = $router;
+    public function __construct(
+        NewRequestHandler $requestHandler,
+        EmitterInterface $responseEmitter,
+        ServerRequestInterface $request
+    ) {
+        $this->requestHandler = $requestHandler;
+        $this->responseEmitter = $responseEmitter;
+        $this->request = $request;
     }
 
     public function run(): void
     {
-        $this->router
-            ->route();
+        $response = $this->requestHandler
+            ->handle($this->request);
+
+        $this->responseEmitter
+            ->emit($response);
     }
 
     /**
@@ -27,7 +39,7 @@ final class WebApplication implements ApplicationInterface
      */
     public function setRoutes(array $routes): void
     {
-        $this->router
+        $this->requestHandler
             ->setRoutes($routes);
     }
 }
