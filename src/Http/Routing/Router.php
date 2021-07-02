@@ -15,22 +15,16 @@ final class Router implements RouterInterface
     private RoutesLoaderInterface $routesLoader;
 
     /** @var list<array> */
-    private array $routes = [];
+    private array $routes;
 
-    public function __construct(RoutesParserInterface $routesParser, RoutesLoaderInterface $routesLoader)
+    /**
+     * @param list<array> $routes
+     */
+    public function __construct(RoutesParserInterface $routesParser, RoutesLoaderInterface $routesLoader, array $routes)
     {
         $this->routesParser = $routesParser;
         $this->routesLoader = $routesLoader;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setRoutes(array $routes): RouterInterface
-    {
         $this->routes = $routes;
-
-        return $this;
     }
 
     /**

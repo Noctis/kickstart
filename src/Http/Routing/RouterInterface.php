@@ -9,11 +9,6 @@ use Psr\Http\Message\ServerRequestInterface;
 interface RouterInterface
 {
     /**
-     * @param list<array> $routes
-     */
-    public function setRoutes(array $routes): self;
-
-    /**
      * @return array
      */
     public function getDispatchInfo(ServerRequestInterface $request): array;

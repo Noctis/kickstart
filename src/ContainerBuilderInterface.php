@@ -11,5 +11,7 @@ interface ContainerBuilderInterface
 {
     public function registerServicesProvider(ServicesProviderInterface $servicesProvider): self;
 
+    public function set(string $name, mixed $value): self;
+
     public function build(): ContainerInterface;
 }

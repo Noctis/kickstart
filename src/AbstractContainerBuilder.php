@@ -44,6 +44,14 @@ abstract class AbstractContainerBuilder implements ContainerBuilderInterface
         return $this;
     }
 
+    public function set(string $name, mixed $value): ContainerBuilderInterface
+    {
+        $this->containerBuilder
+            ->addDefinitions([$name => $value]);
+
+        return $this;
+    }
+
     public function build(): ContainerInterface
     {
         return $this->containerBuilder

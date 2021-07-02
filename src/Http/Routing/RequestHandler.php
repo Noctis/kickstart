@@ -22,29 +22,21 @@ use RuntimeException;
 final class RequestHandler implements RequestHandlerInterface
 {
     private ContainerInterface $container;
+    private RouterInterface $router;
     private ActionInvokerInterface $actionInvoker;
-    private ?RouterInterface $router;
 
-    public function __construct(ContainerInterface $container, ActionInvokerInterface $actionInvoker)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        RouterInterface $router,
+        ActionInvokerInterface $actionInvoker
+    ) {
         $this->container = $container;
-        $this->actionInvoker = $actionInvoker;
-        $this->router = null;
-    }
-
-    public function setRouter(RouterInterface $router): void
-    {
         $this->router = $router;
+        $this->actionInvoker = $actionInvoker;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if ($this->router === null) {
-            throw new RuntimeException(
-                'Router has not been set. Did you forget to call RequestHandler::setRouter()?'
-            );
-        }
-
         $dispatchInfo = $this->router
             ->getDispatchInfo($request);
 

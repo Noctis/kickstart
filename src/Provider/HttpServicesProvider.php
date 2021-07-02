@@ -23,6 +23,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function DI\autowire;
+use function DI\get;
+
 final class HttpServicesProvider implements ServicesProviderInterface
 {
     /**
@@ -35,7 +38,11 @@ final class HttpServicesProvider implements ServicesProviderInterface
             EmitterInterface::class => SapiEmitter::class,
             RequestHandlerInterface::class => RequestHandler::class,
             ResponseFactoryInterface::class => ResponseFactory::class,
-            RouterInterface::class => Router::class,
+            RouterInterface::class => autowire(Router::class)
+                ->constructorParameter(
+                    'routes',
+                    get('routes')
+                ),
             RoutesLoaderInterface::class => RoutesLoader::class,
             RoutesParserInterface::class => RoutesParser::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
