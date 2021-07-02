@@ -2,13 +2,13 @@
 
 This document talks about upgrading between different versions of Kickstart.
 
-## From 1.4.2 to 2.0.3
+## From 1.4.2 to 2.0.4
 
 Starting with version 2.0, Kickstart has been split into two packages - the system and user parts. That means that
 some files were moved to a different location, while some were changed.
 
-Upgrade process from `1.4.2` to `2.0.3` is pretty straightforward, but there are a couple of files that need to be 
-modified by hand, i.e. it's not possible to just copy over their contents from the `2.0.3` branch.
+Upgrade process from `1.4.2` to `2.0.4` is pretty straightforward, but there are a couple of files that need to be 
+modified by hand, i.e. it's not possible to just copy over their contents from the `2.0.4` branch.
 
 ### 1. Dependencies
 
