@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Provider;
 
+use Noctis\KickStart\Configuration\Configuration;
 use Noctis\KickStart\Configuration\ConfigurationInterface;
 use Psr\Container\ContainerInterface;
 use Twig\Environment as Twig;
@@ -12,13 +13,6 @@ use Twig\Loader\FilesystemLoader;
 
 final class TwigServiceProvider implements ServicesProviderInterface
 {
-    private string $basePath;
-
-    public function __construct(string $basePath)
-    {
-        $this->basePath = $basePath;
-    }
-
     /**
      * @inheritDoc
      */
@@ -27,13 +21,15 @@ final class TwigServiceProvider implements ServicesProviderInterface
         return [
             Twig::class => function (ContainerInterface $container): Twig {
                 $configuration = $container->get(ConfigurationInterface::class);
-                $debugMode = $configuration->get('debug') === true;
+                /** @var string $basePath */
+                $basePath = $configuration->get('basepath');
+                $debugMode = !Configuration::isProduction();
 
-                $loader = new FilesystemLoader($this->basePath . '/templates');
+                $loader = new FilesystemLoader($basePath . '/templates');
                 $twig = new Twig($loader, [
                     'cache'            => $debugMode === true
                                             ? false
-                                            : $this->basePath . '/var/cache/templates',
+                                            : $basePath . '/var/cache/templates',
                     'debug'            => $debugMode,
                     'strict_variables' => $debugMode,
                 ]);

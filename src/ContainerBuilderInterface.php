@@ -13,5 +13,7 @@ interface ContainerBuilderInterface
 
     public function set(string $name, mixed $value): self;
 
+    public function enableCompilation(string $path): self;
+
     public function build(): ContainerInterface;
 }

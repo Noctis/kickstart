@@ -9,6 +9,11 @@ final class Configuration implements ConfigurationInterface
     /** @var array<string, mixed> */
     private array $values = [];
 
+    public static function isProduction(): bool
+    {
+        return $_ENV['debug'] === 'false';
+    }
+
     public function getBaseHref(): string
     {
         /** @var string $baseHref */

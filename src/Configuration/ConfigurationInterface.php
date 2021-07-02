@@ -6,6 +6,8 @@ namespace Noctis\KickStart\Configuration;
 
 interface ConfigurationInterface
 {
+    public static function isProduction(): bool;
+
     public function getBaseHref(): string;
 
     public function get(string $name, mixed $default = null): mixed;

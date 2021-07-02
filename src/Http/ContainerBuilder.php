@@ -20,9 +20,7 @@ final class ContainerBuilder extends AbstractContainerBuilder implements Contain
         $this
             ->registerServicesProvider(new ConfigurationProvider())
             ->registerServicesProvider(new HttpServicesProvider())
-            ->registerServicesProvider(new TwigServiceProvider(
-                (string)$_ENV['basepath']
-            ))
+            ->registerServicesProvider(new TwigServiceProvider())
             ->registerServicesProvider(new StandardServicesProvider())
         ;
     }

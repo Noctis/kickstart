@@ -22,21 +22,16 @@ final class ConfigurationProvider implements ServicesProviderInterface
                 foreach ($_ENV as $name => $value) {
                     $configuration->set(
                         (string)$name,
-                        $this->normalizeValue($value)
+                        match ($value) {
+                            'true' => true,
+                            'false' => false,
+                            default => $value
+                        }
                     );
                 }
 
                 return $configuration;
             },
         ];
-    }
-
-    private function normalizeValue(mixed $value): mixed
-    {
-        return match ($value) {
-            'true'  => true,
-            'false' => false,
-            default => $value
-        };
     }
 }

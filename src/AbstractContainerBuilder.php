@@ -52,6 +52,14 @@ abstract class AbstractContainerBuilder implements ContainerBuilderInterface
         return $this;
     }
 
+    public function enableCompilation(string $path): ContainerBuilderInterface
+    {
+        $this->containerBuilder
+            ->enableCompilation($path);
+
+        return $this;
+    }
+
     public function build(): ContainerInterface
     {
         return $this->containerBuilder
