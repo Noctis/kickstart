@@ -8,7 +8,6 @@ use DI\Container;
 use DI\ContainerBuilder;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\Response\TextResponse;
-use Noctis\KickStart\Configuration\ConfigurationInterface;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
@@ -95,7 +94,6 @@ final class HandleTests extends TestCase
     {
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions([
-            ConfigurationInterface::class => $this->getConfiguration(),
             TemplateRendererInterface::class => $this->getTemplateRenderer(),
             ServerRequestInterface::class => $this->getRequest(),
         ]);
@@ -146,14 +144,6 @@ final class HandleTests extends TestCase
     private function getResponse(string $content = ''): ResponseInterface
     {
         return new TextResponse($content);
-    }
-
-    /** @noinspection PhpIncompatibleReturnTypeInspection */
-    private function getConfiguration(): ConfigurationInterface
-    {
-        $configuration = $this->prophesize(ConfigurationInterface::class);
-
-        return $configuration->reveal();
     }
 
     /** @noinspection PhpIncompatibleReturnTypeInspection */

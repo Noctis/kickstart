@@ -7,19 +7,12 @@ namespace Noctis\KickStart\Http\Routing;
 use FastRoute\RouteCollector;
 use Fig\Http\Message\RequestMethodInterface;
 use InvalidArgumentException;
-use Noctis\KickStart\Configuration\ConfigurationInterface;
+use Noctis\KickStart\Configuration\Configuration;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
 final class RoutesLoader implements RoutesLoaderInterface
 {
-    private ConfigurationInterface $configuration;
-
-    public function __construct(ConfigurationInterface $configuration)
-    {
-        $this->configuration = $configuration;
-    }
-
     /**
      * @inheritDoc
      */
@@ -27,8 +20,7 @@ final class RoutesLoader implements RoutesLoaderInterface
     {
         return function (RouteCollector $r) use ($routes): void {
             $r->addGroup(
-                $this->configuration
-                    ->getBaseHref(),
+                Configuration::getBaseHref(),
                 function (RouteCollector $r) use ($routes) {
                     foreach ($routes as $definition) {
                         $this->addRoute(

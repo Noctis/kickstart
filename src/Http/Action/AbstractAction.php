@@ -8,7 +8,7 @@ use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\Session\Container;
-use Noctis\KickStart\Configuration\ConfigurationInterface;
+use Noctis\KickStart\Configuration\Configuration;
 use Noctis\KickStart\File\FileInterface;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
@@ -24,17 +24,14 @@ abstract class AbstractAction
 
     private ResponseFactoryInterface $responseFactory;
     private UriFactoryInterface $uriFactory;
-    private ConfigurationInterface $configuration;
 
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         UriFactoryInterface $uriFactory,
-        ConfigurationInterface $configuration,
         ServerRequestInterface $request
     ) {
         $this->responseFactory = $responseFactory;
         $this->uriFactory = $uriFactory;
-        $this->configuration = $configuration;
         $this->request = $request;
         $this->flashContainer = new Container('flash');
     }
@@ -64,7 +61,7 @@ abstract class AbstractAction
                 ->withPath(
                     sprintf(
                         '%s/%s',
-                        $this->configuration->getBaseHref(),
+                        Configuration::getBaseHref(),
                         $path
                     )
                 );
@@ -128,7 +125,7 @@ abstract class AbstractAction
         return sprintf(
             '%s://%s/',
             $uri->getScheme(),
-            $uri->getHost() . $portPart . $this->configuration->getBaseHref()
+            $uri->getHost() . $portPart . Configuration::getBaseHref()
         );
     }
 }

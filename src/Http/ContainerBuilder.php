@@ -6,7 +6,6 @@ namespace Noctis\KickStart\Http;
 
 use Noctis\KickStart\AbstractContainerBuilder;
 use Noctis\KickStart\ContainerBuilderInterface;
-use Noctis\KickStart\Provider\ConfigurationProvider;
 use Noctis\KickStart\Provider\HttpServicesProvider;
 use Noctis\KickStart\Provider\StandardServicesProvider;
 use Noctis\KickStart\Provider\TwigServiceProvider;
@@ -18,7 +17,6 @@ final class ContainerBuilder extends AbstractContainerBuilder implements Contain
         parent::__construct();
 
         $this
-            ->registerServicesProvider(new ConfigurationProvider())
             ->registerServicesProvider(new HttpServicesProvider())
             ->registerServicesProvider(new TwigServiceProvider())
             ->registerServicesProvider(new StandardServicesProvider())
