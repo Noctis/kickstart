@@ -10,11 +10,11 @@ use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use Noctis\KickStart\Http\Response\ResponseFactory;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
+use Noctis\KickStart\Http\Routing\DispatcherFactory;
+use Noctis\KickStart\Http\Routing\DispatcherFactoryInterface;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvoker;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
 use Noctis\KickStart\Http\Routing\RequestHandler;
-use Noctis\KickStart\Http\Routing\RoutesLoader;
-use Noctis\KickStart\Http\Routing\RoutesLoaderInterface;
 use Noctis\KickStart\Http\Routing\RoutesParser;
 use Noctis\KickStart\Http\Routing\RoutesParserInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,10 +30,10 @@ final class HttpServicesProvider implements ServicesProviderInterface
     {
         return [
             ActionInvokerInterface::class => ActionInvoker::class,
+            DispatcherFactoryInterface::class => DispatcherFactory::class,
             EmitterInterface::class => SapiEmitter::class,
             RequestHandlerInterface::class => RequestHandler::class,
             ResponseFactoryInterface::class => ResponseFactory::class,
-            RoutesLoaderInterface::class => RoutesLoader::class,
             RoutesParserInterface::class => RoutesParser::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
             UriFactoryInterface::class => UriFactory::class,

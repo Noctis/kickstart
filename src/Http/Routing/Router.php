@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
-use FastRoute\Dispatcher;
 use Psr\Http\Message\ServerRequestInterface;
-
-use function FastRoute\simpleDispatcher;
 
 final class Router implements RouterInterface
 {
     private RoutesParserInterface $routesParser;
-    private RoutesLoaderInterface $routesLoader;
+    private DispatcherFactoryInterface $dispatcherFactory;
 
     /** @var list<array> */
     private array $routes;
@@ -20,10 +17,13 @@ final class Router implements RouterInterface
     /**
      * @param list<array> $routes
      */
-    public function __construct(RoutesParserInterface $routesParser, RoutesLoaderInterface $routesLoader, array $routes)
-    {
+    public function __construct(
+        RoutesParserInterface $routesParser,
+        DispatcherFactoryInterface $dispatcherFactory,
+        array $routes
+    ) {
         $this->routesParser = $routesParser;
-        $this->routesLoader = $routesLoader;
+        $this->dispatcherFactory = $dispatcherFactory;
         $this->routes = $routes;
     }
 
@@ -32,22 +32,16 @@ final class Router implements RouterInterface
      */
     public function getDispatchInfo(ServerRequestInterface $request): array
     {
-        return $this->getDispatcher()
-            ->dispatch(
-                $request->getMethod(),
-                $request->getUri()
-                    ->getPath()
+        $dispatcher = $this->dispatcherFactory
+            ->createFromArray(
+                $this->routesParser
+                    ->parse($this->routes)
             );
-    }
 
-    private function getDispatcher(): Dispatcher
-    {
-        return simpleDispatcher(
-            $this->routesLoader
-                ->load(
-                    $this->routesParser
-                        ->parse($this->routes)
-                )
+        return $dispatcher->dispatch(
+            $request->getMethod(),
+            $request->getUri()
+                ->getPath()
         );
     }
 }

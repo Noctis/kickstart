@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
+use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use Fig\Http\Message\RequestMethodInterface;
 use InvalidArgumentException;
@@ -11,29 +12,33 @@ use Noctis\KickStart\Configuration\Configuration;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
-final class RoutesLoader implements RoutesLoaderInterface
+use function FastRoute\simpleDispatcher;
+
+final class DispatcherFactory implements DispatcherFactoryInterface
 {
     /**
      * @inheritDoc
      */
-    public function load(array $routes): callable
+    public function createFromArray(array $routeDefinitions): Dispatcher
     {
-        return function (RouteCollector $r) use ($routes): void {
-            $r->addGroup(
-                Configuration::getBaseHref(),
-                function (RouteCollector $r) use ($routes) {
-                    foreach ($routes as $definition) {
-                        $this->addRoute(
-                            $r,
-                            $definition->getMethod(),
-                            $definition->getPath(),
-                            $definition->getAction(),
-                            $definition->getGuards()
-                        );
+        return simpleDispatcher(
+            function (RouteCollector $r) use ($routeDefinitions): void {
+                $r->addGroup(
+                    Configuration::getBaseHref(),
+                    function (RouteCollector $r) use ($routeDefinitions) {
+                        foreach ($routeDefinitions as $definition) {
+                            $this->addRoute(
+                                $r,
+                                $definition->getMethod(),
+                                $definition->getPath(),
+                                $definition->getAction(),
+                                $definition->getGuards()
+                            );
+                        }
                     }
-                }
-            );
-        };
+                );
+            }
+        );
     }
 
     /**
