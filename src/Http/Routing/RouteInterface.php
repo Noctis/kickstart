@@ -7,7 +7,7 @@ namespace Noctis\KickStart\Http\Routing;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
-interface RouteDefinitionInterface
+interface RouteInterface
 {
     public function getMethod(): string;
 

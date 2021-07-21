@@ -19,20 +19,20 @@ final class DispatcherFactory implements DispatcherFactoryInterface
     /**
      * @inheritDoc
      */
-    public function createFromArray(array $routeDefinitions): Dispatcher
+    public function createFromArray(array $routes): Dispatcher
     {
         return simpleDispatcher(
-            function (RouteCollector $r) use ($routeDefinitions): void {
+            function (RouteCollector $r) use ($routes): void {
                 $r->addGroup(
                     Configuration::getBaseHref(),
-                    function (RouteCollector $r) use ($routeDefinitions) {
-                        foreach ($routeDefinitions as $definition) {
+                    function (RouteCollector $r) use ($routes) {
+                        foreach ($routes as $route) {
                             $this->addRoute(
                                 $r,
-                                $definition->getMethod(),
-                                $definition->getPath(),
-                                $definition->getAction(),
-                                $definition->getGuards()
+                                $route->getMethod(),
+                                $route->getPath(),
+                                $route->getAction(),
+                                $route->getGuards()
                             );
                         }
                     }

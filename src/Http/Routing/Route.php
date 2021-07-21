@@ -7,7 +7,7 @@ namespace Noctis\KickStart\Http\Routing;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
-final class RouteDefinition implements RouteDefinitionInterface
+final class Route implements RouteInterface
 {
     private string $method;
     private string $path;

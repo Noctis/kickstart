@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Http\Routing\RoutesParser;
 
-use Noctis\KickStart\Http\Routing\RouteDefinitionInterface;
+use Noctis\KickStart\Http\Routing\RouteInterface;
 use Noctis\KickStart\Http\Routing\RoutesParser;
 use PHPUnit\Framework\TestCase;
 
@@ -18,23 +18,23 @@ final class ParseTests extends TestCase
         $route = ['GET', '/foo', 'App\Http\Action\FooAction'];
         $parser = new RoutesParser();
 
-        $definitions = $parser->parse([$route]);
+        $routes = $parser->parse([$route]);
 
         $this->assertSame(
             'GET',
-            $definitions[0]->getMethod()
+            $routes[0]->getMethod()
         );
         $this->assertSame(
             '/foo',
-            $definitions[0]->getPath(),
+            $routes[0]->getPath(),
         );
         $this->assertSame(
             'App\Http\Action\FooAction',
-            $definitions[0]->getAction()
+            $routes[0]->getAction()
         );
         $this->assertSame(
             [],
-            $definitions[0]->getGuards()
+            $routes[0]->getGuards()
         );
     }
 
@@ -50,23 +50,23 @@ final class ParseTests extends TestCase
         $route = ['GET', '/foo', 'App\Http\Action\FooAction', $guards];
         $parser = new RoutesParser();
 
-        $definitions = $parser->parse([$route]);
+        $routes = $parser->parse([$route]);
 
         $this->assertSame(
             'GET',
-            $definitions[0]->getMethod()
+            $routes[0]->getMethod()
         );
         $this->assertSame(
             '/foo',
-            $definitions[0]->getPath(),
+            $routes[0]->getPath(),
         );
         $this->assertSame(
             'App\Http\Action\FooAction',
-            $definitions[0]->getAction()
+            $routes[0]->getAction()
         );
         $this->assertSame(
             $guards,
-            $definitions[0]->getGuards()
+            $routes[0]->getGuards()
         );
     }
 
@@ -75,21 +75,21 @@ final class ParseTests extends TestCase
      */
     public function test_it_returns_a_list_of_route_definitions_from_given_list_of_routes(): void
     {
-        $routes = [
+        $routesArray = [
             ['GET', '/foo', 'App\Http\Action\FooAction'],
             ['POST', '/bar', 'App\Http\Action\BarAction']
         ];
         $parser = new RoutesParser();
 
-        $definitions = $parser->parse($routes);
+        $routes = $parser->parse($routesArray);
 
         $this->assertContainsOnlyInstancesOf(
-            RouteDefinitionInterface::class,
-            $definitions
+            RouteInterface::class,
+            $routes
         );
         $this->assertCount(
-            count($routes),
-            $definitions
+            count($routesArray),
+            $routes
         );
     }
 }

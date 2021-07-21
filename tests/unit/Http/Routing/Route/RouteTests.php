@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Routing\RouteDefinition;
+namespace Tests\Unit\Http\Routing\Route;
 
-use Noctis\KickStart\Http\Routing\RouteDefinition;
+use Noctis\KickStart\Http\Routing\Route;
 use PHPUnit\Framework\TestCase;
 
-final class RouteDefinitionTests extends TestCase
+final class RouteTests extends TestCase
 {
     /**
-     * @covers \Noctis\KickStart\Http\Routing\RouteDefinition
+     * @covers \Noctis\KickStart\Http\Routing\Route
      */
     public function test_it_returns_correct_information(): void
     {
@@ -19,48 +19,48 @@ final class RouteDefinitionTests extends TestCase
             'App\Http\Middleware\Guard\SecondGuard'
         ];
 
-        $routeDefinition = new RouteDefinition('GET', '/foo', 'App\Http\Action\FooAction', $guards);
+        $route = new Route('GET', '/foo', 'App\Http\Action\FooAction', $guards);
 
         $this->assertSame(
             'GET',
-            $routeDefinition->getMethod()
+            $route->getMethod()
         );
         $this->assertSame(
             '/foo',
-            $routeDefinition->getPath()
+            $route->getPath()
         );
         $this->assertSame(
             'App\Http\Action\FooAction',
-            $routeDefinition->getAction()
+            $route->getAction()
         );
         $this->assertSame(
             $guards,
-            $routeDefinition->getGuards()
+            $route->getGuards()
         );
     }
 
     /**
-     * @covers \Noctis\KickStart\Http\Routing\RouteDefinition
+     * @covers \Noctis\KickStart\Http\Routing\Route
      */
     public function test_it_can_be_created_with_no_guards(): void
     {
-        $routeDefinition = new RouteDefinition('GET', '/foo', 'App\Http\Action\FooAction', []);
+        $route = new Route('GET', '/foo', 'App\Http\Action\FooAction', []);
 
         $this->assertSame(
             'GET',
-            $routeDefinition->getMethod()
+            $route->getMethod()
         );
         $this->assertSame(
             '/foo',
-            $routeDefinition->getPath()
+            $route->getPath()
         );
         $this->assertSame(
             'App\Http\Action\FooAction',
-            $routeDefinition->getAction()
+            $route->getAction()
         );
         $this->assertSame(
             [],
-            $routeDefinition->getGuards()
+            $route->getGuards()
         );
     }
 }

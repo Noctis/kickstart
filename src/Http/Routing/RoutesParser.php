@@ -15,7 +15,7 @@ final class RoutesParser implements RoutesParserInterface
     public function parse(array $routes): array
     {
         return array_map(
-            function (array $route): RouteDefinitionInterface {
+            function (array $route): RouteInterface {
                 /**
                  * @var string                       $method
                  * @var string                       $path
@@ -29,7 +29,7 @@ final class RoutesParser implements RoutesParserInterface
                     $guards = $route[3];
                 }
 
-                return new RouteDefinition($method, $path, $action, $guards);
+                return new Route($method, $path, $action, $guards);
             },
             $routes
         );

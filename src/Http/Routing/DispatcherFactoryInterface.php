@@ -9,7 +9,7 @@ use FastRoute\Dispatcher;
 interface DispatcherFactoryInterface
 {
     /**
-     * @param list<RouteDefinitionInterface> $routeDefinitions
+     * @param list<RouteInterface> $routes
      */
-    public function createFromArray(array $routeDefinitions): Dispatcher;
+    public function createFromArray(array $routes): Dispatcher;
 }

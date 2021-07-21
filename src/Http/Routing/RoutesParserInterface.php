@@ -9,7 +9,7 @@ interface RoutesParserInterface
     /**
      * @param list<array> $routes
      *
-     * @return list<RouteDefinitionInterface>
+     * @return list<RouteInterface>
      */
     public function parse(array $routes): array;
 }
