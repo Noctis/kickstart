@@ -22,7 +22,7 @@ final class Route implements RouteInterface
      * @param class-string<AbstractAction>           $action
      * @param list<class-string<AbstractMiddleware>> $guards
      */
-    public function __construct(string $method, string $path, string $action, array $guards)
+    public function __construct(string $method, string $path, string $action, array $guards = [])
     {
         $this->method = $method;
         $this->path = $path;

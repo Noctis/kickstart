@@ -15,8 +15,6 @@ use Noctis\KickStart\Http\Routing\DispatcherFactoryInterface;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvoker;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
 use Noctis\KickStart\Http\Routing\RequestHandler;
-use Noctis\KickStart\Http\Routing\RoutesParser;
-use Noctis\KickStart\Http\Routing\RoutesParserInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -34,7 +32,6 @@ final class HttpServicesProvider implements ServicesProviderInterface
             EmitterInterface::class => SapiEmitter::class,
             RequestHandlerInterface::class => RequestHandler::class,
             ResponseFactoryInterface::class => ResponseFactory::class,
-            RoutesParserInterface::class => RoutesParser::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
             UriFactoryInterface::class => UriFactory::class,
         ];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Provider;
 
+use Noctis\KickStart\Http\Routing\RouteInterface;
 use Noctis\KickStart\Http\Routing\Router;
 use Noctis\KickStart\Http\Routing\RouterInterface;
 
@@ -11,16 +12,16 @@ use function DI\autowire;
 
 final class RoutingProvider implements ServicesProviderInterface
 {
-    /** @var list<array> */
+    /** @var list<RouteInterface> */
     private array $routes;
 
     /**
-     * @param list<array> $routes
+     * @param list<RouteInterface> $routes
      */
     public function __construct(array $routes)
     {
         $this->routes = array_map(
-            fn (array $route): array => $route,
+            fn (RouteInterface $route): RouteInterface => $route,
             $routes
         );
     }
