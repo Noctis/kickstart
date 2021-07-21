@@ -1,50 +1,37 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Tests\Acceptance\Http\Routing\Handler\RouteInfo\RouteInfo;
 
-use Noctis\KickStart\Http\Action\AbstractAction;
+use FastRoute\Dispatcher;
 use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfoInterface;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo
- */
 final class CreateFromArrayTests extends TestCase
 {
-    public function test_it_is_created_with_given_request_variables(): void
+    /**
+     * @covers \Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo::createFromArray
+     */
+    public function test_it_is_created_properly(): void
     {
-        $requestVars = [
-            'foo' => 'bar',
+        $requestVars = ['foo' => 'bar', 'moo' => 'baz'];
+        $handlerInfo = [
+            Dispatcher::FOUND,
+            ['App\Http\Action\FooAction', []],
+            $requestVars
         ];
 
-        $routeInfo = RouteInfo::createFromArray([
-            1 => AbstractAction::class,
-            2 => $requestVars,
-        ]);
+        $routeInfo = RouteInfo::createFromArray($handlerInfo);
 
+        $this->assertInstanceOf(RouteInfo::class, $routeInfo);
         $this->assertInstanceOf(
             RouteHandlerInfoInterface::class,
             $routeInfo->getRouteHandlerInfo()
         );
         $this->assertSame(
             $requestVars,
-            $routeInfo->getRequestVars()
-        );
-    }
-
-    public function test_it_is_created_with_no_request_variables_given(): void
-    {
-        $routeInfo = RouteInfo::createFromArray([
-            1 => AbstractAction::class,
-            2 => [],
-        ]);
-
-        $this->assertInstanceOf(
-            RouteHandlerInfoInterface::class,
-            $routeInfo->getRouteHandlerInfo()
-        );
-        $this->assertSame(
-            [],
             $routeInfo->getRequestVars()
         );
     }
