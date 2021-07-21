@@ -188,9 +188,10 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 
   use App\Http\Action\DummyAction;
   use App\Http\Middleware\Guard\DummyGuard;
+  use Noctis\KickStart\Http\Routing\Route;
 
   return [
-      ['GET', '[{name}]', DummyAction::class, [DummyGuard::class]],
+      new Route('GET', '[{name}]', DummyAction::class, [DummyGuard::class]),
   ];
   ```
 * Delete the `src/Http/Router.php` file.

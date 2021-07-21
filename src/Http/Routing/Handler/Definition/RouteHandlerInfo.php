@@ -7,7 +7,7 @@ namespace Noctis\KickStart\Http\Routing\Handler\Definition;
 use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
-final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
+final class RouteHandlerInfo implements RouteHandlerInfoInterface
 {
     /** @var class-string<AbstractAction> */
     private string $actionClassName;
