@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Tests\Unit\Http\Routing\Handler\Definition\RouteHandlerDefinition;
 
 use Noctis\KickStart\Http\Action\AbstractAction;

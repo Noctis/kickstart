@@ -14,6 +14,9 @@ final class RouteInfo implements RouteInfoInterface
     /** @var array<string, string> */
     private array $requestVars;
 
+    /**
+     * @param array{0: int, 1: array, 2: array} $routeInfo
+     */
     public static function createFromArray(array $routeInfo): self
     {
         /** @var array{0: string, 1: array} $handlerInfo */
