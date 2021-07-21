@@ -38,6 +38,7 @@ final class Configuration implements ConfigurationInterface
 
     public static function set(string $name, mixed $value): void
     {
+        /** @psalm-suppress MixedAssignment */
         $_ENV[$name] = $value;
     }
 

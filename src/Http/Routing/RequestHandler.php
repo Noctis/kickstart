@@ -42,6 +42,7 @@ final class RequestHandler implements RequestHandlerInterface
 
         switch ($dispatchInfo[0]) {
             case Dispatcher::FOUND:
+                /** @var array{0: int, 1: array, 2: array} $dispatchInfo */
                 $routeInfo = RouteInfo::createFromArray($dispatchInfo);
                 $response = $this->found($request, $routeInfo);
                 break;
@@ -51,7 +52,9 @@ final class RequestHandler implements RequestHandlerInterface
                 break;
 
             case Dispatcher::METHOD_NOT_ALLOWED:
-                $response = $this->methodNotAllowed($dispatchInfo[1]);
+                /** @var list<string> $allowedMethods */
+                $allowedMethods = $dispatchInfo[1];
+                $response = $this->methodNotAllowed($allowedMethods);
                 break;
 
             default:

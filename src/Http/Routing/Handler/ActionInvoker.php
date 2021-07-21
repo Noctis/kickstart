@@ -52,7 +52,7 @@ final class ActionInvoker implements ActionInvokerInterface
 
         if (empty($this->guards)) {
             /**
-             * @psalm-suppress InvalidArgument
+             * @psalm-suppress UndefinedMethod
              * @var ResponseInterface
              */
             return $this->container
