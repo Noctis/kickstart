@@ -4,38 +4,41 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing\Handler\RouteInfo;
 
-use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerDefinition;
-use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerDefinitionInterface;
+use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfo;
+use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfoInterface;
 
-final class FoundRouteInfo implements RouteInfoInterface
+final class RouteInfo implements RouteInfoInterface
 {
-    private RouteHandlerDefinitionInterface $routeHandlerDefinition;
+    private RouteHandlerInfoInterface $routeHandlerDefinition;
 
     /** @var array<string, string> */
     private array $requestVars;
 
+    /**
+     * @param array{0: int, 1: array, 2: array} $routeInfo
+     */
     public static function createFromArray(array $routeInfo): self
     {
         /** @var array{0: string, 1: array} $handlerInfo */
         $handlerInfo = $routeInfo[1];
-        $routeHandlerDefinition = RouteHandlerDefinition::createFromValue($handlerInfo);
+        $routeHandlerInfo = RouteHandlerInfo::createFromValue($handlerInfo);
 
         /** @var array<string, string> $requestVars */
         $requestVars = $routeInfo[2];
 
-        return new self($routeHandlerDefinition, $requestVars);
+        return new self($routeHandlerInfo, $requestVars);
     }
 
     /**
      * @param array<string, string> $requestVars
      */
-    public function __construct(RouteHandlerDefinitionInterface $routeHandlerDefinition, array $requestVars)
+    public function __construct(RouteHandlerInfoInterface $routeHandlerDefinition, array $requestVars)
     {
         $this->routeHandlerDefinition = $routeHandlerDefinition;
         $this->requestVars = $requestVars;
     }
 
-    public function getRouteHandlerDefinition(): RouteHandlerDefinitionInterface
+    public function getRouteHandlerInfo(): RouteHandlerInfoInterface
     {
         return $this->routeHandlerDefinition;
     }

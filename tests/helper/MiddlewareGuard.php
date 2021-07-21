@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Helper;
 
-use Laminas\Diactoros\Response;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,9 +11,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class MiddlewareGuard extends AbstractMiddleware
 {
-    private ?Response $response = null;
+    private ?ResponseInterface $response = null;
 
-    public function setResponse(Response $response): self
+    public function setResponse(ResponseInterface $response): self
     {
         $this->response = $response;
 

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing\Handler\Definition;
 
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
+use Psr\Http\Server\MiddlewareInterface;
 
-final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
+final class RouteHandlerInfo implements RouteHandlerInfoInterface
 {
     /**
      * @var class-string<AbstractAction>
@@ -15,7 +15,7 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
      */
     private string $actionClassName;
 
-    /** @var list<class-string<AbstractMiddleware>> */
+    /** @var list<class-string<MiddlewareInterface>> */
     private array $guardNames;
 
     /**
@@ -35,7 +35,7 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
 
             $guardNames = [];
             if (count($value) === 2) {
-                /** @var list<class-string<AbstractMiddleware>> $guardNames */
+                /** @var list<class-string<MiddlewareInterface>> $guardNames */
                 $guardNames = $value[1];
             }
 
@@ -44,8 +44,8 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
     }
 
     /**
-     * @param class-string<AbstractAction>           $actionClassName
-     * @param list<class-string<AbstractMiddleware>> $guardNames
+     * @param class-string<AbstractAction>            $actionClassName
+     * @param list<class-string<MiddlewareInterface>> $guardNames
      * @psalm-suppress DeprecatedClass
      */
     public function __construct(string $actionClassName, array $guardNames)
