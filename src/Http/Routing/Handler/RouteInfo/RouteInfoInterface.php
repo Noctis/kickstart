@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing\Handler\RouteInfo;
 
-use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerDefinitionInterface;
+use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfoInterface;
 
 interface RouteInfoInterface
 {
-    public function getRouteHandlerDefinition(): RouteHandlerDefinitionInterface;
+    public function getRouteHandlerInfo(): RouteHandlerInfoInterface;
 
     /**
      * @return array<string, string>

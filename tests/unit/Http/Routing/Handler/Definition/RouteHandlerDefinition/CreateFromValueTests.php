@@ -1,13 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Tests\Unit\Http\Routing\Handler\Definition\RouteHandlerDefinition;
 
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
-use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerDefinition;
+use Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfo;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Server\MiddlewareInterface;
 
 /**
- * @covers \Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerDefinition
+ * @covers \Noctis\KickStart\Http\Routing\Handler\Definition\RouteHandlerInfo
  */
 final class CreateFromValueTests extends TestCase
 {
@@ -15,15 +18,15 @@ final class CreateFromValueTests extends TestCase
     {
         $value = [AbstractAction::class];
 
-        $handlerDefinition = RouteHandlerDefinition::createFromValue($value);
+        $handlerInfo = RouteHandlerInfo::createFromValue($value);
 
         $this->assertSame(
             AbstractAction::class,
-            $handlerDefinition->getActionClassName()
+            $handlerInfo->getActionClassName()
         );
         $this->assertSame(
             [],
-            $handlerDefinition->getGuardNames()
+            $handlerInfo->getGuardNames()
         );
     }
 
@@ -31,33 +34,33 @@ final class CreateFromValueTests extends TestCase
     {
         $value = AbstractAction::class;
 
-        $handlerDefinition = RouteHandlerDefinition::createFromValue($value);
+        $handlerInfo = RouteHandlerInfo::createFromValue($value);
 
         $this->assertSame(
             AbstractAction::class,
-            $handlerDefinition->getActionClassName()
+            $handlerInfo->getActionClassName()
         );
         $this->assertSame(
             [],
-            $handlerDefinition->getGuardNames()
+            $handlerInfo->getGuardNames()
         );
     }
 
     public function test_it_is_correctly_created_from_an_array_of_action_class_name_and_guard_classes_names(): void
     {
         $value = [AbstractAction::class, [
-            AbstractMiddleware::class,
+            MiddlewareInterface::class,
         ]];
 
-        $handlerDefinition = RouteHandlerDefinition::createFromValue($value);
+        $handlerInfo = RouteHandlerInfo::createFromValue($value);
 
         $this->assertSame(
             AbstractAction::class,
-            $handlerDefinition->getActionClassName()
+            $handlerInfo->getActionClassName()
         );
         $this->assertSame(
-            [AbstractMiddleware::class],
-            $handlerDefinition->getGuardNames()
+            [MiddlewareInterface::class],
+            $handlerInfo->getGuardNames()
         );
     }
 }

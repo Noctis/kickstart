@@ -2,26 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Tests\Acceptance\Http\Routing\RequestHandler;
+namespace Tests\Acceptance\Http\Routing\Handler\ActionInvoker;
 
 use DI\Container;
 use DI\ContainerBuilder;
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\Response\TextResponse;
-use Noctis\KickStart\Configuration\ConfigurationInterface;
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
-use Noctis\KickStart\Http\Routing\RequestHandler;
+use Noctis\KickStart\Http\Routing\Handler\ActionInvoker;
 use Noctis\KickStart\Service\TemplateRendererInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Tests\Helper\MiddlewareGuard;
 
 /**
- * @covers \Noctis\KickStart\Http\Routing\RequestHandler::handle()
+ * @covers \Noctis\KickStart\Http\Routing\Handler\ActionInvoker::handle()
  */
 final class HandleTests extends TestCase
 {
@@ -76,22 +75,25 @@ final class HandleTests extends TestCase
     }
 
     /**
-     * @param list<AbstractMiddleware> $guards
+     * @param list<MiddlewareInterface> $guards
      */
-    private function getRequestHandlerStack(array $guards, bool $actionShouldBeCalled = true): RequestHandler
+    private function getRequestHandlerStack(array $guards, bool $actionShouldBeCalled = true): ActionInvoker
     {
-        return new RequestHandler(
-            $this->getContainer(),
-            $this->getHttpAction($actionShouldBeCalled),
-            $guards
+        $actionInvoker = new ActionInvoker(
+            $this->getContainer()
         );
+
+        return $actionInvoker
+            ->setAction(
+                $this->getHttpAction($actionShouldBeCalled)
+            )
+            ->setGuards($guards);
     }
 
     private function getContainer(): Container
     {
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions([
-            ConfigurationInterface::class => $this->getConfiguration(),
             TemplateRendererInterface::class => $this->getTemplateRenderer(),
             ServerRequestInterface::class => $this->getRequest(),
         ]);
@@ -116,7 +118,7 @@ final class HandleTests extends TestCase
         return $action->reveal();
     }
 
-    private function getMiddlewareGuard(): AbstractMiddleware
+    private function getMiddlewareGuard(): MiddlewareInterface
     {
         return new MiddlewareGuard(
             $this->getResponseFactory()
@@ -142,14 +144,6 @@ final class HandleTests extends TestCase
     private function getResponse(string $content = ''): ResponseInterface
     {
         return new TextResponse($content);
-    }
-
-    /** @noinspection PhpIncompatibleReturnTypeInspection */
-    private function getConfiguration(): ConfigurationInterface
-    {
-        $configuration = $this->prophesize(ConfigurationInterface::class);
-
-        return $configuration->reveal();
     }
 
     /** @noinspection PhpIncompatibleReturnTypeInspection */
