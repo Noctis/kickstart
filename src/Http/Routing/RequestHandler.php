@@ -9,8 +9,6 @@ use FastRoute\Dispatcher;
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\TextResponse;
-use Noctis\KickStart\Http\Action\ActionInterface;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfoInterface;
@@ -74,16 +72,10 @@ final class RequestHandler implements RequestHandlerInterface
             ->set(ServerRequestInterface::class, $request);
 
         $routeHandlerInfo = $routeInfo->getRouteHandlerInfo();
-        $action = $this->getAction(
-            $routeHandlerInfo->getActionClassName()
-        );
-        $guards = $this->getGuards(
-            $routeHandlerInfo->getGuardNames()
-        );
-
+        $stack = $routeHandlerInfo->getGuardNames();
+        $stack[] = $routeHandlerInfo->getActionClassName();
         $this->actionInvoker
-            ->setAction($action)
-            ->setGuards($guards);
+            ->setStack($stack);
 
         return $this->actionInvoker
             ->handle($request);
@@ -105,33 +97,6 @@ final class RequestHandler implements RequestHandlerInterface
                 implode(', ', $allowedMethods)
             ),
             StatusCodeInterface::STATUS_METHOD_NOT_ALLOWED
-        );
-    }
-
-    /**
-     * @param class-string<ActionInterface> $actionClassName
-     */
-    private function getAction(string $actionClassName): ActionInterface
-    {
-        /** @var ActionInterface */
-        return $this->container
-            ->get($actionClassName);
-    }
-
-    /**
-     * @param list<class-string<AbstractMiddleware>> $guardsNames
-     *
-     * @return list<AbstractMiddleware>
-     */
-    private function getGuards(array $guardsNames): array
-    {
-        return array_map(
-            function (string $guardClassName): AbstractMiddleware {
-                /** @var AbstractMiddleware */
-                return $this->container
-                    ->get($guardClassName);
-            },
-            $guardsNames
         );
     }
 }
