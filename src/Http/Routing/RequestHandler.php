@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
+use DI\Container;
 use FastRoute\Dispatcher;
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\EmptyResponse;
@@ -13,7 +14,6 @@ use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfoInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -21,12 +21,12 @@ use RuntimeException;
 
 final class RequestHandler implements RequestHandlerInterface
 {
-    private ContainerInterface $container;
+    private Container $container;
     private RouterInterface $router;
     private ActionInvokerInterface $actionInvoker;
 
     public function __construct(
-        ContainerInterface $container,
+        Container $container,
         RouterInterface $router,
         ActionInvokerInterface $actionInvoker
     ) {
@@ -70,6 +70,8 @@ final class RequestHandler implements RequestHandlerInterface
         foreach ($vars as $name => $value) {
             $request = $request->withAttribute($name, $value);
         }
+        $this->container
+            ->set(ServerRequestInterface::class, $request);
 
         $routeHandlerInfo = $routeInfo->getRouteHandlerInfo();
         $action = $this->getAction(
