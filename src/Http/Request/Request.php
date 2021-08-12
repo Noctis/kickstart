@@ -25,6 +25,13 @@ class Request
             return $value;
         }
 
+        $parsedBody = $this->request
+            ->getParsedBody();
+
+        if (is_array($parsedBody) && array_key_exists($key, $parsedBody)) {
+            return $parsedBody[$key];
+        }
+
         $queryParams = $this->request
             ->getQueryParams();
 
