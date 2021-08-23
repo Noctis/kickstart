@@ -20,10 +20,8 @@ final class MiddlewareGuard extends AbstractMiddleware
         return $this;
     }
 
-    public function process(
-        ServerRequestInterface $request,
-        RequestHandlerInterface $handler
-    ): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
         if ($this->response !== null) {
             return $this->response;
         }
