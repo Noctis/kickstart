@@ -9,7 +9,7 @@ use FastRoute\RouteCollector;
 use Fig\Http\Message\RequestMethodInterface;
 use InvalidArgumentException;
 use Noctis\KickStart\Configuration\Configuration;
-use Noctis\KickStart\Http\Action\AbstractAction;
+use Noctis\KickStart\Http\Action\ActionInterface;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
 use function FastRoute\simpleDispatcher;
@@ -42,7 +42,7 @@ final class DispatcherFactory implements DispatcherFactoryInterface
     }
 
     /**
-     * @param class-string<AbstractAction>           $action
+     * @param class-string<ActionInterface>          $action
      * @param list<class-string<AbstractMiddleware>> $guards
      */
     private function addRoute(RouteCollector $r, string $method, string $url, string $action, array $guards): void

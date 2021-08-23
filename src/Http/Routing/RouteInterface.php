@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
-use Noctis\KickStart\Http\Action\AbstractAction;
+use Noctis\KickStart\Http\Action\ActionInterface;
 use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
 interface RouteInterface
@@ -14,7 +14,7 @@ interface RouteInterface
     public function getPath(): string;
 
     /**
-     * @return class-string<AbstractAction>
+     * @return class-string<ActionInterface>
      */
     public function getAction(): string;
 
