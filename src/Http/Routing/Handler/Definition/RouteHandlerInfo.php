@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing\Handler\Definition;
 
 use Noctis\KickStart\Http\Action\ActionInterface;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
+use Psr\Http\Server\MiddlewareInterface;
 
 final class RouteHandlerInfo implements RouteHandlerInfoInterface
 {
     /** @var class-string<ActionInterface> */
     private string $actionClassName;
 
-    /** @var list<class-string<AbstractMiddleware>> */
-    private array $guardNames;
+    /** @var list<class-string<MiddlewareInterface>> */
+    private array $middlewareNames;
 
     /**
      * @param class-string<ActionInterface>|array $value
@@ -28,7 +28,7 @@ final class RouteHandlerInfo implements RouteHandlerInfoInterface
 
             $guardNames = [];
             if (count($value) === 2) {
-                /** @var list<class-string<AbstractMiddleware>> $guardNames */
+                /** @var list<class-string<MiddlewareInterface>> $guardNames */
                 $guardNames = $value[1];
             }
 
@@ -38,12 +38,12 @@ final class RouteHandlerInfo implements RouteHandlerInfoInterface
 
     /**
      * @param class-string<ActionInterface>           $actionClassName
-     * @param list<class-string<AbstractMiddleware>> $guardNames
+     * @param list<class-string<MiddlewareInterface>> $guardNames
      */
     public function __construct(string $actionClassName, array $guardNames)
     {
         $this->actionClassName = $actionClassName;
-        $this->guardNames = $guardNames;
+        $this->middlewareNames = $guardNames;
     }
 
     /**
@@ -57,8 +57,8 @@ final class RouteHandlerInfo implements RouteHandlerInfoInterface
     /**
      * @inheritDoc
      */
-    public function getGuardNames(): array
+    public function getMiddlewareNames(): array
     {
-        return $this->guardNames;
+        return $this->middlewareNames;
     }
 }

@@ -72,7 +72,7 @@ final class RequestHandler implements RequestHandlerInterface
             ->set(ServerRequestInterface::class, $request);
 
         $routeHandlerInfo = $routeInfo->getRouteHandlerInfo();
-        $stack = $routeHandlerInfo->getGuardNames();
+        $stack = $routeHandlerInfo->getMiddlewareNames();
         $stack[] = $routeHandlerInfo->getActionClassName();
         $this->actionInvoker
             ->setStack($stack);

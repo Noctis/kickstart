@@ -7,11 +7,11 @@ namespace Tests\Acceptance\Http\Routing\Handler\ActionInvoker;
 use DI\Container;
 use DI\ContainerBuilder;
 use Noctis\KickStart\Http\Action\ActionInterface;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvoker;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Tests\Helper\HttpAction;
 use Tests\Helper\PassThroughMiddleware;
 use Tests\Helper\TextResponseMiddleware;
@@ -85,8 +85,8 @@ final class HandleTests extends TestCase
     }
 
     /**
-     * @param list<class-string<AbstractMiddleware>> $guards
-     * @param class-string<ActionInterface>          $actionClass
+     * @param list<class-string<MiddlewareInterface>> $guards
+     * @param class-string<ActionInterface>           $actionClass
      */
     private function getActionInvoker(array $guards, string $actionClass): ActionInvoker
     {

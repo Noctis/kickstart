@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing;
 
 use Noctis\KickStart\Http\Action\ActionInterface;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
+use Psr\Http\Server\MiddlewareInterface;
 
 interface RouteInterface
 {
@@ -19,7 +19,7 @@ interface RouteInterface
     public function getAction(): string;
 
     /**
-     * @return list<class-string<AbstractMiddleware>>
+     * @return list<class-string<MiddlewareInterface>>
      */
-    public function getGuards(): array;
+    public function getMiddlewareNames(): array;
 }

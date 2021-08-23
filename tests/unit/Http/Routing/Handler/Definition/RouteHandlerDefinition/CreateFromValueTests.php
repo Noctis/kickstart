@@ -26,7 +26,7 @@ final class CreateFromValueTests extends TestCase
         );
         $this->assertSame(
             [],
-            $handlerInfo->getGuardNames()
+            $handlerInfo->getMiddlewareNames()
         );
     }
 
@@ -42,7 +42,7 @@ final class CreateFromValueTests extends TestCase
         );
         $this->assertSame(
             [],
-            $handlerInfo->getGuardNames()
+            $handlerInfo->getMiddlewareNames()
         );
     }
 
@@ -60,7 +60,7 @@ final class CreateFromValueTests extends TestCase
         );
         $this->assertSame(
             [AbstractMiddleware::class],
-            $handlerInfo->getGuardNames()
+            $handlerInfo->getMiddlewareNames()
         );
     }
 }
