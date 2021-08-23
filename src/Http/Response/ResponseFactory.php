@@ -9,7 +9,6 @@ use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
-use Noctis\KickStart\File\FileInterface;
 use Noctis\KickStart\Service\TemplateRendererInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -48,15 +47,6 @@ final class ResponseFactory implements ResponseFactoryInterface
         );
 
         return new RedirectResponse((string)$uri);
-    }
-
-    /**
-     * @inheritDoc
-     * @psalm-suppress DeprecatedClass
-     */
-    public function fileResponse(FileInterface $file): FileResponse
-    {
-        return new FileResponse($file);
     }
 
     /**
