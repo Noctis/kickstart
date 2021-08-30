@@ -8,6 +8,8 @@ use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\UriFactory;
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use Noctis\KickStart\Http\Helpers\FlashMessageHelper;
+use Noctis\KickStart\Http\Helpers\FlashMessageHelperInterface;
 use Noctis\KickStart\Http\Response\ResponseFactory;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
 use Noctis\KickStart\Http\Routing\DispatcherFactory;
@@ -30,6 +32,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
             ActionInvokerInterface::class => ActionInvoker::class,
             DispatcherFactoryInterface::class => DispatcherFactory::class,
             EmitterInterface::class => SapiEmitter::class,
+            FlashMessageHelperInterface::class => FlashMessageHelper::class,
             RequestHandlerInterface::class => RequestHandler::class,
             ResponseFactoryInterface::class => ResponseFactory::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),

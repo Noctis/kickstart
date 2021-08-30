@@ -4,30 +4,30 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
-use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
+use Noctis\KickStart\Http\Action\ActionInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 final class Route implements RouteInterface
 {
     private string $method;
     private string $path;
 
-    /** @var class-string<AbstractAction> */
+    /** @var class-string<ActionInterface> */
     private string $action;
 
-    /** @var list<class-string<AbstractMiddleware>> */
-    private array $guards;
+    /** @var list<class-string<MiddlewareInterface>> */
+    private array $middlewareNames;
 
     /**
-     * @param class-string<AbstractAction>           $action
-     * @param list<class-string<AbstractMiddleware>> $guards
+     * @param class-string<ActionInterface>           $action
+     * @param list<class-string<MiddlewareInterface>> $middlewareNames
      */
-    public function __construct(string $method, string $path, string $action, array $guards = [])
+    public function __construct(string $method, string $path, string $action, array $middlewareNames = [])
     {
         $this->method = $method;
         $this->path = $path;
         $this->action = $action;
-        $this->guards = $guards;
+        $this->middlewareNames = $middlewareNames;
     }
 
     public function getMethod(): string
@@ -51,8 +51,8 @@ final class Route implements RouteInterface
     /**
      * @inheritDoc
      */
-    public function getGuards(): array
+    public function getMiddlewareNames(): array
     {
-        return $this->guards;
+        return $this->middlewareNames;
     }
 }

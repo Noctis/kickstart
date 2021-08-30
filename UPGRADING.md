@@ -227,11 +227,44 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   * those classes extend the `Noctis\KickStart\Http\Request\Request` class,
   * replace reference to `Symfony\Component\HttpFoundation\Request` with a reference to
     `Psr\Http\Message\ServerRequestInterface`
-* Edit any `*Action.php` files within `src/Http/Action` directory (except `BaseAction.php`) and make sure:
-  * those classes extend the `Noctis\KickStart\Http\Action\AbstractAction` abstract class,
-  * their `execute()` methods type-hint returning either `HtmlResponse`, `RedirectResponse`, `JsonResponse` or 
-    `EmptyResponse` from the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`,
-  * if given action sends an attachment (i.e. file) in response, you can use the `sendAttachment()` action.
+* Edit any `*Action.php` files within `src/Http/Action` directory (except `BaseAction.php`) and:
+  * make sure those classes implement the `Noctis\KickStart\Http\Action\ActionInterface` interface,
+  * give them the following constructor:
+    ```php
+    use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
+    
+    // ...
+    
+    private ResponseFactoryInterface $responseFactory;
+
+    public function __construct(ResponseFactoryInterface $responseFactory)
+    {
+        $this->responseFactory = $responseFactory;
+    }
+    ```
+  * rename their `execute()` methods to `process()` with the following signature:
+    ```php
+    use Psr\Http\Message\ResponseInterface;
+    use Psr\Http\Message\ServerRequestInterface;
+    use Psr\Http\Server\RequestHandlerInterface;
+    
+    // ...
+    
+    /**
+     * @inheritDoc
+     */
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        // ...
+    }
+    ```,
+  * if an `execute()` method had dependencies injected into it, move them to the action's constructor,
+  * if an action uses the `$this->render()` method, replace it with a call to `$this->responseFactory->htmlResponse()`,
+  * if an action uses the `$this->redirect()` method, replace it with a call to 
+    `$this->responseFactory->redirectionResponse()`,
+  * if given action sends an attachment (i.e. file) in response, you can use the `sendAttachment()` action,
+  * make sure `process()` method type-hints returning either `HtmlResponse`, `RedirectResponse`, `JsonResponse` or
+    `EmptyResponse` from the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`.
 * If there are no custom methods inside, delete the `src/Http/Action/BaseAction.php` file.
 * Delete the `src/Http/Factory`, `src/Http/Helper` directories.
 * Delete the `ActionInvoker.php`, `RequestHandlerInterface.php` and `RequestHandlerStack.php` files from the

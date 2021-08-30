@@ -9,8 +9,8 @@ use FastRoute\RouteCollector;
 use Fig\Http\Message\RequestMethodInterface;
 use InvalidArgumentException;
 use Noctis\KickStart\Configuration\Configuration;
-use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
+use Noctis\KickStart\Http\Action\ActionInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 use function FastRoute\simpleDispatcher;
 
@@ -32,7 +32,7 @@ final class DispatcherFactory implements DispatcherFactoryInterface
                                 $route->getMethod(),
                                 $route->getPath(),
                                 $route->getAction(),
-                                $route->getGuards()
+                                $route->getMiddlewareNames()
                             );
                         }
                     }
@@ -42,18 +42,23 @@ final class DispatcherFactory implements DispatcherFactoryInterface
     }
 
     /**
-     * @param class-string<AbstractAction>           $action
-     * @param list<class-string<AbstractMiddleware>> $guards
+     * @param class-string<ActionInterface>           $action
+     * @param list<class-string<MiddlewareInterface>> $middlewareNames
      */
-    private function addRoute(RouteCollector $r, string $method, string $url, string $action, array $guards): void
-    {
+    private function addRoute(
+        RouteCollector $r,
+        string $method,
+        string $url,
+        string $action,
+        array $middlewareNames
+    ): void {
         switch (strtoupper($method)) {
             case RequestMethodInterface::METHOD_GET:
-                $r->get($url, [$action, $guards]);
+                $r->get($url, [$action, $middlewareNames]);
                 break;
 
             case RequestMethodInterface::METHOD_POST:
-                $r->post($url, [$action, $guards]);
+                $r->post($url, [$action, $middlewareNames]);
                 break;
 
             default:

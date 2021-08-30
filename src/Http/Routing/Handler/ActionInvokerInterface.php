@@ -4,19 +4,13 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing\Handler;
 
-use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 interface ActionInvokerInterface extends RequestHandlerInterface
 {
     /**
-     * @param AbstractAction $action
+     * @param array<class-string<MiddlewareInterface>> $stack
      */
-    public function setAction(AbstractAction $action): self;
-
-    /**
-     * @param list<AbstractMiddleware> $guards
-     */
-    public function setGuards(array $guards): self;
+    public function setStack(array $stack): void;
 }

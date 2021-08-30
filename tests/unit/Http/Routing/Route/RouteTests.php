@@ -14,12 +14,13 @@ final class RouteTests extends TestCase
      */
     public function test_it_returns_correct_information(): void
     {
-        $guards = [
+        $middlewares = [
             'App\Http\Middleware\Guard\FirstGuard',
             'App\Http\Middleware\Guard\SecondGuard'
         ];
 
-        $route = new Route('GET', '/foo', 'App\Http\Action\FooAction', $guards);
+        /** @psalm-suppress ArgumentTypeCoercion */
+        $route = new Route('GET', '/foo', 'App\Http\Action\FooAction', $middlewares);
 
         $this->assertSame(
             'GET',
@@ -34,15 +35,15 @@ final class RouteTests extends TestCase
             $route->getAction()
         );
         $this->assertSame(
-            $guards,
-            $route->getGuards()
+            $middlewares,
+            $route->getMiddlewareNames()
         );
     }
 
     /**
      * @covers \Noctis\KickStart\Http\Routing\Route
      */
-    public function test_it_can_be_created_with_no_guards(): void
+    public function test_it_can_be_created_with_no_middlewares(): void
     {
         $route = new Route('GET', '/foo', 'App\Http\Action\FooAction', []);
 
@@ -60,7 +61,7 @@ final class RouteTests extends TestCase
         );
         $this->assertSame(
             [],
-            $route->getGuards()
+            $route->getMiddlewareNames()
         );
     }
 }
