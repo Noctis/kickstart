@@ -4,29 +4,27 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
+use DI\Container;
 use FastRoute\Dispatcher;
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\TextResponse;
-use Noctis\KickStart\Http\Action\AbstractAction;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvokerInterface;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfo;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\RouteInfoInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
 
 final class RequestHandler implements RequestHandlerInterface
 {
-    private ContainerInterface $container;
+    private Container $container;
     private RouterInterface $router;
     private ActionInvokerInterface $actionInvoker;
 
     public function __construct(
-        ContainerInterface $container,
+        Container $container,
         RouterInterface $router,
         ActionInvokerInterface $actionInvoker
     ) {
@@ -70,18 +68,14 @@ final class RequestHandler implements RequestHandlerInterface
         foreach ($vars as $name => $value) {
             $request = $request->withAttribute($name, $value);
         }
+        $this->container
+            ->set(ServerRequestInterface::class, $request);
 
         $routeHandlerInfo = $routeInfo->getRouteHandlerInfo();
-        $action = $this->getAction(
-            $routeHandlerInfo->getActionClassName()
-        );
-        $guards = $this->getGuards(
-            $routeHandlerInfo->getGuardNames()
-        );
-
+        $stack = $routeHandlerInfo->getMiddlewareNames();
+        $stack[] = $routeHandlerInfo->getActionClassName();
         $this->actionInvoker
-            ->setAction($action)
-            ->setGuards($guards);
+            ->setStack($stack);
 
         return $this->actionInvoker
             ->handle($request);
@@ -103,34 +97,6 @@ final class RequestHandler implements RequestHandlerInterface
                 implode(', ', $allowedMethods)
             ),
             StatusCodeInterface::STATUS_METHOD_NOT_ALLOWED
-        );
-    }
-
-    /**
-     * @param class-string<AbstractAction> $actionClassName
-     * @psalm-suppress DeprecatedClass
-     */
-    private function getAction(string $actionClassName): AbstractAction
-    {
-        /** @var AbstractAction */
-        return $this->container
-            ->get($actionClassName);
-    }
-
-    /**
-     * @param list<class-string<MiddlewareInterface>> $guardsNames
-     *
-     * @return list<MiddlewareInterface>
-     */
-    private function getGuards(array $guardsNames): array
-    {
-        return array_map(
-            function (string $guardClassName): MiddlewareInterface {
-                /** @var MiddlewareInterface */
-                return $this->container
-                    ->get($guardClassName);
-            },
-            $guardsNames
         );
     }
 }
