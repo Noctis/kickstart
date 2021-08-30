@@ -4,54 +4,46 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing\Handler\Definition;
 
-use Noctis\KickStart\Http\Action\AbstractAction;
+use Noctis\KickStart\Http\Action\ActionInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
 final class RouteHandlerInfo implements RouteHandlerInfoInterface
 {
-    /**
-     * @var class-string<AbstractAction>
-     * @psalm-suppress DeprecatedClass
-     */
+    /** @var class-string<ActionInterface> */
     private string $actionClassName;
 
     /** @var list<class-string<MiddlewareInterface>> */
-    private array $guardNames;
+    private array $middlewareNames;
 
     /**
-     * @param class-string<AbstractAction>|array $value
-     * @psalm-suppress DeprecatedClass
+     * @param class-string<ActionInterface>|array $value
      */
     public static function createFromValue(string | array $value): self
     {
         if (is_string($value)) {
             return new self($value, []);
         } else {
-            /**
-             * @var class-string<AbstractAction> $actionClassName
-             * @psalm-suppress DeprecatedClass
-             */
+            /** @var class-string<ActionInterface> $actionClassName */
             $actionClassName = $value[0];
 
-            $guardNames = [];
+            $middlewareNames = [];
             if (count($value) === 2) {
-                /** @var list<class-string<MiddlewareInterface>> $guardNames */
-                $guardNames = $value[1];
+                /** @var list<class-string<MiddlewareInterface>> $middlewareNames */
+                $middlewareNames = $value[1];
             }
 
-            return new self($actionClassName, $guardNames);
+            return new self($actionClassName, $middlewareNames);
         }
     }
 
     /**
-     * @param class-string<AbstractAction>            $actionClassName
-     * @param list<class-string<MiddlewareInterface>> $guardNames
-     * @psalm-suppress DeprecatedClass
+     * @param class-string<ActionInterface>           $actionClassName
+     * @param list<class-string<MiddlewareInterface>> $middlewareNames
      */
-    public function __construct(string $actionClassName, array $guardNames)
+    public function __construct(string $actionClassName, array $middlewareNames)
     {
         $this->actionClassName = $actionClassName;
-        $this->guardNames = $guardNames;
+        $this->middlewareNames = $middlewareNames;
     }
 
     /**
@@ -65,8 +57,8 @@ final class RouteHandlerInfo implements RouteHandlerInfoInterface
     /**
      * @inheritDoc
      */
-    public function getGuardNames(): array
+    public function getMiddlewareNames(): array
     {
-        return $this->guardNames;
+        return $this->middlewareNames;
     }
 }
