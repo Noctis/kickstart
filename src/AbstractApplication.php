@@ -30,7 +30,7 @@ abstract class AbstractApplication
     }
 
     /**
-     * @return ServicesProviderInterface[]
+     * @return list<ServicesProviderInterface>
      */
     abstract protected function getServiceProviders(): array;
 }
