@@ -2,13 +2,13 @@
 
 This document talks about upgrading between different versions of Kickstart.
 
-## From 1.4.2 to 2.0.4
+## From 1.4.2 to 2.2.0
 
 Starting with version 2.0, Kickstart has been split into two packages - the system and user parts. That means that
 some files were moved to a different location, while some were changed.
 
-Upgrade process from `1.4.2` to `2.0.4` is pretty straightforward, but there are a couple of files that need to be 
-modified by hand, i.e. it's not possible to just copy over their contents from the `2.0.4` branch.
+Upgrade process from `1.4.2` to `2.2.0` is pretty straightforward, but there are a couple of files that need to be 
+modified by hand, i.e. it's not possible to just copy over their contents from the `2.2.0` branch.
 
 ### 1. Dependencies
 
@@ -62,7 +62,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   `.env-example` file.
 * Rename the `basepath` option in your `.env` and `.env-example` files to `basehref`.
 * Replace the contents of the `bootstrap.php` file in the project's root directory with the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php). Copy the list of configuration
+  [`2.x` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php). Copy the list of configuration
   options from the `src/Configuration.php` file. Remember to include the `'debug' => 'required,bool'` and
   `'basehref' => 'required'` lines in the list there. Remember that the `basepath` option has been renamed to
   `basehref`.
@@ -70,10 +70,10 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 * Replace all the calls to `getenv('BASEDIR')` and `$_ENV['BASEDIR']` in your application with calls to 
   `$_ENV['basepath']`.
 * Copy the `src/Configuration` directory from the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/tree/master/src/Configuration) into the project's root
+  [`2.x` version](https://github.com/Noctis/kickstart-app/tree/master/src/Configuration) into the project's root
   directory.
 * Copy the `src/Database` directory from the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/tree/master/src/Database) into the project's root directory.
+  [`2.x` version](https://github.com/Noctis/kickstart-app/tree/master/src/Database) into the project's root directory.
   
 ### 3. Service Providers
 
@@ -102,16 +102,16 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
       ),
   ```
 * Replace the contents of the `src/Provider/DatabaseConnectionProvider.php` file with contents of the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/DatabaseConnectionProvider.php).
+  [`2.x` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/DatabaseConnectionProvider.php).
   If there were additional database connections defined there, you will need to transpose the appropriately, based on
   the primary database connection definition.
-* Copy the [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/ConfigurationProvider.php)
+* Copy the [`2.x` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/ConfigurationProvider.php)
   of the `ConfigurationProvider.php` file into the `src/Provider` directory.
 
 ### 4. HTTP Related Things
 
 * Replace the contents of the `templates/layout.html.twig` file with the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/templates/layout.html.twig). Be sure to check
+  [`2.x` version](https://github.com/Noctis/kickstart-app/blob/master/templates/layout.html.twig). Be sure to check
   its contents and restore any custom changes that were there beforehand!
 * Create the following directory path: `var/cache/templates` in the project's root directory. Create an empty file
   called `.empty` inside it so that the directory can be committed into the VCS.
@@ -195,7 +195,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   ```
 * Delete the `src/Http/Router.php` file.
 * Copy the `Application.php` file from
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Http/Application.php) to the `src/Http`
+  [`2.x` version](https://github.com/Noctis/kickstart-app/blob/master/src/Http/Application.php) to the `src/Http`
   directory.
 * Edit the `src/Http/Application.php` file:
   * copy over list of service provides from the `src/ContainerBuilder.php` file,
@@ -203,7 +203,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
     `App\Provider\DummyServicesProvider`) that does not exist,
   * make sure `App\Provider\ConfigurationProvider` is on the list.
 * Edit the `public/index.php` file. Replace the contents of this file with the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/public/index.php).
+  [`2.x` version](https://github.com/Noctis/kickstart-app/blob/master/public/index.php).
 * Edit the `public/.htaccess` file and add the following lines:
   ```apacheconf
   RewriteCond %{REQUEST_FILENAME} !-d
@@ -239,7 +239,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 ### 5. Console Related Things
 
 * Copy the `Application.php` file from
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Console/Application.php) to the
+  [`2.x` version](https://github.com/Noctis/kickstart-app/blob/master/src/Console/Application.php) to the
   `src/Console` directory.
 * Edit the `src/Console/Application.php` file:
   * copy over list of service provides from the `src/ContainerBuilder.php` file,
@@ -248,7 +248,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
     `App\Provider\DummyServicesProvider`) that does not exist,
   * make sure `App\Provider\ConfigurationProvider` is on the list.
 * Edit the `bin/console` file. Replace the contents of the file with contents of the
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/bin/console). Make sure to copy over any
+  [`2.x` version](https://github.com/Noctis/kickstart-app/blob/master/bin/console). Make sure to copy over any
   references to console commands classes (classes from the `App/Console/Command` namespace) from the original file,
   so that those commands can still be called from the CLI.  
 * Edit any `*Command.php` files within `src/Console/Command` directory and make sure those classes extend the
@@ -259,7 +259,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 
 * Rename the `DatabaseRepository` class from the `src/Repository` directory to `AbstractDatabaseRepository` and replace
   its contents with the contents of its 
-  [`2.0.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Repository/AbstractDatabaseRepository.php)
+  [`2.x` version](https://github.com/Noctis/kickstart-app/blob/master/src/Repository/AbstractDatabaseRepository.php)
   version.
 * Edit any `*Repository.php` files inside the `src/Repository` directory and make sure those classes extend the local
   `AbstractDatabaseRepository` abstract class.
