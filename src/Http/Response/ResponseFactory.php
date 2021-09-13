@@ -13,6 +13,10 @@ use Noctis\KickStart\File\FileInterface;
 use Noctis\KickStart\Service\TemplateRendererInterface;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @deprecated since 2.3.0; will be removed in 3.0.0
+ * @psalm-suppress DeprecatedInterface
+ */
 final class ResponseFactory implements ResponseFactoryInterface
 {
     private TemplateRendererInterface $templateRenderer;
@@ -57,11 +61,17 @@ final class ResponseFactory implements ResponseFactoryInterface
         return new FileResponse($file);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function attachmentResponse(AttachmentInterface $attachment): AttachmentResponse
     {
         return new AttachmentResponse($attachment);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function notFoundResponse(): EmptyResponse
     {
         return new EmptyResponse(StatusCodeInterface::STATUS_NOT_FOUND);

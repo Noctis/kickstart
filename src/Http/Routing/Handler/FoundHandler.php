@@ -44,6 +44,7 @@ final class FoundHandler implements FoundHandlerInterface
 
     /**
      * @param class-string<AbstractAction> $actionClassName
+     * @psalm-suppress DeprecatedClass
      */
     private function getAction(string $actionClassName): AbstractAction
     {
