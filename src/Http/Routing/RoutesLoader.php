@@ -42,6 +42,7 @@ final class RoutesLoader implements RoutesLoaderInterface
          * @var string $method
          * @var string $url
          * @var class-string<AbstractAction> $action
+         * @psalm-suppress DeprecatedClass
          */
         [$method, $url, $action] = $definition;
         if (count($definition) === 4) {
@@ -57,6 +58,7 @@ final class RoutesLoader implements RoutesLoaderInterface
     /**
      * @param class-string<AbstractAction>           $action
      * @param list<class-string<AbstractMiddleware>> $guards
+     * @psalm-suppress DeprecatedClass
      */
     private function addRoute(RouteCollector $r, string $method, string $url, string $action, array $guards): void
     {

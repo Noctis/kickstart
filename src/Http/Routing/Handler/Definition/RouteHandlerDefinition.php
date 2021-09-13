@@ -9,7 +9,10 @@ use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 
 final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
 {
-    /** @var class-string<AbstractAction> */
+    /**
+     * @var class-string<AbstractAction>
+     * @psalm-suppress DeprecatedClass
+     */
     private string $actionClassName;
 
     /** @var list<class-string<AbstractMiddleware>> */
@@ -17,13 +20,17 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
 
     /**
      * @param class-string<AbstractAction>|array $value
+     * @psalm-suppress DeprecatedClass
      */
     public static function createFromValue(string | array $value): self
     {
         if (is_string($value)) {
             return new self($value, []);
         } else {
-            /** @var class-string<AbstractAction> $actionClassName */
+            /**
+             * @var class-string<AbstractAction> $actionClassName
+             * @psalm-suppress DeprecatedClass
+             */
             $actionClassName = $value[0];
 
             $guardNames = [];
@@ -39,6 +46,7 @@ final class RouteHandlerDefinition implements RouteHandlerDefinitionInterface
     /**
      * @param class-string<AbstractAction>           $actionClassName
      * @param list<class-string<AbstractMiddleware>> $guardNames
+     * @psalm-suppress DeprecatedClass
      */
     public function __construct(string $actionClassName, array $guardNames)
     {
