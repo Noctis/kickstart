@@ -7,6 +7,7 @@ namespace Noctis\KickStart\Provider;
 use Laminas\Diactoros\UriFactory;
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use Laminas\Session\Container as SessionContainer;
 use Noctis\KickStart\Http\Factory\RequestFactory;
 use Noctis\KickStart\Http\Response\ResponseFactory;
 use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
@@ -23,6 +24,7 @@ use Noctis\KickStart\Http\Routing\RoutesLoaderInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
+use function DI\autowire;
 use function DI\factory;
 
 final class HttpServicesProvider implements ServicesProviderInterface
@@ -41,6 +43,8 @@ final class HttpServicesProvider implements ServicesProviderInterface
             ResponseFactoryInterface::class => ResponseFactory::class,
             RoutesLoaderInterface::class => RoutesLoader::class,
             ServerRequestInterface::class => factory([RequestFactory::class, 'createFromGlobals']),
+            SessionContainer::class => autowire(SessionContainer::class)
+                ->constructorParameter('name', 'flash'),
             UriFactoryInterface::class => UriFactory::class,
         ];
     }
