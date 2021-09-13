@@ -14,6 +14,10 @@ use Psr\Http\Message\ServerRequestInterface;
 final class RequestHandler implements RequestHandlerInterface
 {
     private Container $container;
+
+    /**
+     * @psalm-suppress DeprecatedClass
+     */
     private AbstractAction $action;
 
     /** @var list<MiddlewareInterface> */
@@ -21,6 +25,7 @@ final class RequestHandler implements RequestHandlerInterface
 
     /**
      * @param list<MiddlewareInterface> $guards
+     * @psalm-suppress DeprecatedClass
      */
     public function __construct(Container $container, AbstractAction $action, array $guards)
     {

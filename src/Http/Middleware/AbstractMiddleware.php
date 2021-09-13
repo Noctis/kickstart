@@ -12,8 +12,14 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 abstract class AbstractMiddleware implements MiddlewareInterface
 {
+    /**
+     * @psalm-suppress DeprecatedClass
+     */
     protected ResponseFactoryInterface $responseFactory;
 
+    /**
+     * @psalm-suppress DeprecatedClass
+     */
     public function __construct(ResponseFactoryInterface $responseFactory)
     {
         $this->responseFactory = $responseFactory;

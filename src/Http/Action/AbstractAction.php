@@ -17,15 +17,23 @@ use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
+/**
+ * @deprecated since 2.3.0; will be removed in 3.0.0
+ */
 abstract class AbstractAction
 {
     protected ServerRequestInterface $request;
     protected Container $flashContainer;
 
+    /**
+     * @psalm-suppress DeprecatedClass
+     */
     private ResponseFactoryInterface $responseFactory;
+
     private UriFactoryInterface $uriFactory;
     private ConfigurationInterface $configuration;
 
+    /** @psalm-suppress DeprecatedClass */
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         UriFactoryInterface $uriFactory,
@@ -46,6 +54,7 @@ abstract class AbstractAction
     {
         $baseHref = $this->getBaseHref();
 
+        /** @psalm-suppress DeprecatedMethod */
         return $this->responseFactory
             ->htmlResponse($view, $baseHref, $params);
     }
@@ -70,6 +79,7 @@ abstract class AbstractAction
                 );
         }
 
+        /** @psalm-suppress DeprecatedMethod */
         return $this->responseFactory
             ->redirectionResponse($uri, $params);
     }
@@ -88,6 +98,7 @@ abstract class AbstractAction
 
     protected function sendAttachment(AttachmentInterface $attachment): AttachmentResponse
     {
+        /** @psalm-suppress DeprecatedMethod */
         return $this->responseFactory
             ->attachmentResponse($attachment);
     }
@@ -112,6 +123,7 @@ abstract class AbstractAction
 
     protected function notFound(): EmptyResponse
     {
+        /** @psalm-suppress DeprecatedMethod */
         return $this->responseFactory
             ->notFoundResponse();
     }
