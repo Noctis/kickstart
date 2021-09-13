@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Service;
 
 use Twig\Environment as Twig;
+use Twig\Extension\ExtensionInterface;
 use Twig\TwigFunction;
 
 final class TwigRenderer implements TemplateRendererInterface
@@ -28,5 +29,11 @@ final class TwigRenderer implements TemplateRendererInterface
             ->addFunction(
                 new TwigFunction($name, $function)
             );
+    }
+
+    public function registerExtension(ExtensionInterface $extension): void
+    {
+        $this->twig
+            ->addExtension($extension);
     }
 }
