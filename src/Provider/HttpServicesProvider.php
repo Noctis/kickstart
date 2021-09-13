@@ -24,7 +24,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
 use function DI\factory;
-use function DI\get;
 
 final class HttpServicesProvider implements ServicesProviderInterface
 {
@@ -41,11 +40,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
             NotFoundHandlerInterface::class => NotFoundHandler::class,
             ResponseFactoryInterface::class => ResponseFactory::class,
             RoutesLoaderInterface::class => RoutesLoader::class,
-            ServerRequestInterface::class => factory([RequestFactory::class, 'createFromGlobals'])
-                ->parameter(
-                    'vars',
-                    get('request.vars')
-                ),
+            ServerRequestInterface::class => factory([RequestFactory::class, 'createFromGlobals']),
             UriFactoryInterface::class => UriFactory::class,
         ];
     }

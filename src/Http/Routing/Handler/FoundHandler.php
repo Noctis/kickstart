@@ -6,11 +6,11 @@ namespace Noctis\KickStart\Http\Routing\Handler;
 
 use DI\Container;
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Noctis\KickStart\Http\Routing\RequestHandler;
 use Noctis\KickStart\Http\Routing\Handler\RouteInfo\FoundRouteInfo;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 final class FoundHandler implements FoundHandlerInterface
 {
@@ -24,12 +24,6 @@ final class FoundHandler implements FoundHandlerInterface
     public function handle(array $routeInfo): ResponseInterface
     {
         $routeInfo = FoundRouteInfo::createFromArray($routeInfo);
-        $this->container
-            ->set(
-                'request.vars',
-                $routeInfo->getRequestVars()
-            );
-
         $routeHandlerDefinition = $routeInfo->getRouteHandlerDefinition();
         $requestHandler = new RequestHandler(
             $this->container,
@@ -42,8 +36,9 @@ final class FoundHandler implements FoundHandlerInterface
         );
 
         return $requestHandler->handle(
-            $this->container
-                ->get(ServerRequestInterface::class)
+            $this->getRequest(
+                $routeInfo->getRequestVars()
+            )
         );
     }
 
@@ -58,19 +53,34 @@ final class FoundHandler implements FoundHandlerInterface
     }
 
     /**
-     * @param list<class-string<AbstractMiddleware>> $guardsNames
+     * @param list<class-string<MiddlewareInterface>> $guardsNames
      *
-     * @return list<AbstractMiddleware>
+     * @return list<MiddlewareInterface>
      */
     private function getGuards(array $guardsNames): array
     {
         return array_map(
-            function (string $guardClassName): AbstractMiddleware {
-                /** @var AbstractMiddleware */
+            function (string $guardClassName): MiddlewareInterface {
+                /** @var MiddlewareInterface */
                 return $this->container
                     ->get($guardClassName);
             },
             $guardsNames
         );
+    }
+
+    /**
+     * @param array<string, string> $requestVars
+     */
+    private function getRequest(array $requestVars): ServerRequestInterface
+    {
+        $request = $this->container
+            ->get(ServerRequestInterface::class);
+
+        foreach ($requestVars as $name => $value) {
+            $request = $request->withAttribute($name, $value);
+        }
+
+        return $request;
     }
 }

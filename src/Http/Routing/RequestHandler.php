@@ -6,7 +6,7 @@ namespace Noctis\KickStart\Http\Routing;
 
 use DI\Container;
 use Noctis\KickStart\Http\Action\AbstractAction;
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,11 +16,11 @@ final class RequestHandler implements RequestHandlerInterface
     private Container $container;
     private AbstractAction $action;
 
-    /** @var list<AbstractMiddleware> */
+    /** @var list<MiddlewareInterface> */
     private array $guards;
 
     /**
-     * @param list<AbstractMiddleware> $guards
+     * @param list<MiddlewareInterface> $guards
      */
     public function __construct(Container $container, AbstractAction $action, array $guards)
     {
@@ -32,6 +32,9 @@ final class RequestHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if (empty($this->guards)) {
+            $this->container
+                ->set(ServerRequestInterface::class, $request);
+
             /**
              * @psalm-suppress InvalidArgument
              * @var ResponseInterface
