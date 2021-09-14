@@ -16,7 +16,7 @@ final class RedirectResponseFactory implements RedirectResponseFactoryInterface
     private ConfigurationInterface $configuration;
 
     public function __construct(
-        UriFactoryInterface    $uriFactory,
+        UriFactoryInterface $uriFactory,
         ServerRequestInterface $request,
         ConfigurationInterface $configuration
     ) {
