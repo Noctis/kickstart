@@ -2,13 +2,13 @@
 
 This document talks about upgrading between different versions of Kickstart.
 
-## From 1.4.2 to 2.2.0
+## From 1.4.2 to 2.3.0
 
 Starting with version 2.0, Kickstart has been split into two packages - the system and user parts. That means that
 some files were moved to a different location, while some were changed.
 
-Upgrade process from `1.4.2` to `2.2.0` is pretty straightforward, but there are a couple of files that need to be 
-modified by hand, i.e. it's not possible to just copy over their contents from the `2.2.0` branch.
+Upgrade process from `1.4.2` to `2.3.0` is pretty straightforward, but there are a couple of files that need to be 
+modified by hand, i.e. it's not possible to just copy over their contents from the `2.3.0` branch.
 
 ### 1. Dependencies
 
@@ -36,7 +36,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   php:^8.0 \
   composer-runtime-api:^2 \
   laminas/laminas-diactoros:^2.5 \
-  noctis/kickstart:^2.0 \
+  noctis/kickstart:^2.3 \
   paragonie/easydb:^2.11 \
   php-di/php-di:^6.3 \
   psr/container:^1.0 \
