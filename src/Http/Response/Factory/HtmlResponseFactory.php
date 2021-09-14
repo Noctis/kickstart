@@ -16,8 +16,8 @@ final class HtmlResponseFactory implements HtmlResponseFactoryInterface
     private BaseHrefFactoryInterface $baseHrefFactory;
 
     public function __construct(
-        BaseHrefFactoryInterface  $baseHrefFactory,
-        ServerRequestInterface    $request,
+        BaseHrefFactoryInterface $baseHrefFactory,
+        ServerRequestInterface $request,
         TemplateRendererInterface $templateRenderer
     ) {
         $this->templateRenderer = $templateRenderer;
