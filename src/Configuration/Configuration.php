@@ -8,7 +8,7 @@ final class Configuration implements ConfigurationInterface
 {
     public static function isProduction(): bool
     {
-        return self::get('debug') === false;
+        return self::get('APP_ENV') === 'prod';
     }
 
     public static function getBaseHref(): string
