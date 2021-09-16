@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Configuration;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration
 {
+    private function __construct()
+    {
+    }
+
     public static function isProduction(): bool
     {
         return self::get('APP_ENV') === 'prod';
