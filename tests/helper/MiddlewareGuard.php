@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Helper;
 
-use Noctis\KickStart\Http\Middleware\AbstractMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class MiddlewareGuard extends AbstractMiddleware
+final class MiddlewareGuard implements MiddlewareInterface
 {
     private ?ResponseInterface $response = null;
 
@@ -26,6 +26,6 @@ final class MiddlewareGuard extends AbstractMiddleware
             return $this->response;
         }
 
-        return parent::process($request, $handler);
+        return $handler->handle($request);
     }
 }
