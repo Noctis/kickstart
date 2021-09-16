@@ -21,8 +21,6 @@ use Noctis\KickStart\Http\Response\Factory\NotFoundResponseFactory;
 use Noctis\KickStart\Http\Response\Factory\NotFoundResponseFactoryInterface;
 use Noctis\KickStart\Http\Response\Factory\RedirectResponseFactory;
 use Noctis\KickStart\Http\Response\Factory\RedirectResponseFactoryInterface;
-use Noctis\KickStart\Http\Response\ResponseFactory;
-use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
 use Noctis\KickStart\Http\Routing\DispatcherFactory;
 use Noctis\KickStart\Http\Routing\DispatcherFactoryInterface;
 use Noctis\KickStart\Http\Routing\Handler\ActionInvoker;
@@ -43,7 +41,6 @@ final class HttpServicesProvider implements ServicesProviderInterface
      */
     public function getServicesDefinitions(): array
     {
-        /** @psalm-suppress DeprecatedClass */
         return [
             ActionInvokerInterface::class => ActionInvoker::class,
             AttachmentResponseFactoryInterface::class => AttachmentResponseFactory::class,
@@ -56,7 +53,6 @@ final class HttpServicesProvider implements ServicesProviderInterface
             NotFoundResponseFactoryInterface::class => NotFoundResponseFactory::class,
             RedirectResponseFactoryInterface::class => RedirectResponseFactory::class,
             RequestHandlerInterface::class => RequestHandler::class,
-            ResponseFactoryInterface::class => ResponseFactory::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
             SessionContainer::class => autowire(SessionContainer::class)
                 ->constructorParameter('name', 'flash'),
