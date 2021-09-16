@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Request;
 
+use Laminas\Session\ManagerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UploadedFileInterface;
 
 class Request
 {
     protected ServerRequestInterface $request;
+    protected ManagerInterface $sessionManager;
 
-    public function __construct(ServerRequestInterface $request)
+    public function __construct(ServerRequestInterface $request, ManagerInterface $sessionManager)
     {
         $this->request = $request;
+        $this->sessionManager = $sessionManager;
     }
 
     public function get(string $key, mixed $default = null): mixed
@@ -52,9 +55,10 @@ class Request
             ->getUploadedFiles();
     }
 
-    public function getBaseHref(): string
+    public function getSessionID(): string
     {
-        return $this->request
-            ->getRequestTarget();
+        /** @var string */
+        return $this->sessionManager
+            ->getId();
     }
 }
