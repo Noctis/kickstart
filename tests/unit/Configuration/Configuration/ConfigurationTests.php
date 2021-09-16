@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace Tests\Unit\Configuration\Configuration;
 
 use Noctis\KickStart\Configuration\Configuration;
@@ -12,10 +15,8 @@ final class ConfigurationTests extends TestCase
 {
     public function test_it_is_empty_upon_initialization(): void
     {
-        $configuration = new Configuration();
-
         $this->assertNull(
-            $configuration->get('foo')
+            Configuration::get('foo')
         );
     }
 
@@ -24,12 +25,11 @@ final class ConfigurationTests extends TestCase
      */
     public function test_it_returns_set_value(mixed $value): void
     {
-        $configuration = new Configuration();
-        $configuration->set('option', $value);
+        Configuration::set('option', $value);
 
         $this->assertSame(
             $value,
-            $configuration->get('option')
+            Configuration::get('option')
         );
     }
 
@@ -48,24 +48,21 @@ final class ConfigurationTests extends TestCase
 
     public function test_it_tells_whether_it_has_given_value_or_not(): void
     {
-        $configuration = new Configuration();
-        $configuration->set('foo', 'bar');
+        Configuration::set('foo', 'bar');
 
         $this->assertTrue(
-            $configuration->has('foo')
+            Configuration::has('foo')
         );
         $this->assertFalse(
-            $configuration->has('bar')
+            Configuration::has('bar')
         );
     }
 
     public function test_it_returns_default_value_if_it_does_not_have_the_given_option(): void
     {
-        $configuration = new Configuration();
-
         $this->assertSame(
             'bar',
-            $configuration->get('foo', 'bar')
+            Configuration::get('foo', 'bar')
         );
     }
 }

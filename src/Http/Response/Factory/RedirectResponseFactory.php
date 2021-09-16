@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Response\Factory;
 
 use Laminas\Diactoros\Response\RedirectResponse;
-use Noctis\KickStart\Configuration\ConfigurationInterface;
+use Noctis\KickStart\Configuration\Configuration;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
@@ -13,16 +13,13 @@ final class RedirectResponseFactory implements RedirectResponseFactoryInterface
 {
     private UriFactoryInterface $uriFactory;
     private ServerRequestInterface $request;
-    private ConfigurationInterface $configuration;
 
     public function __construct(
         UriFactoryInterface $uriFactory,
-        ServerRequestInterface $request,
-        ConfigurationInterface $configuration
+        ServerRequestInterface $request
     ) {
         $this->uriFactory = $uriFactory;
         $this->request = $request;
-        $this->configuration = $configuration;
     }
 
     public function toPath(string $path, array $queryParams = []): RedirectResponse
@@ -36,8 +33,7 @@ final class RedirectResponseFactory implements RedirectResponseFactoryInterface
                 ->withPath(
                     sprintf(
                         '%s/%s',
-                        $this->configuration
-                            ->getBaseHref(),
+                        Configuration::getBaseHref(),
                         $path
                     )
                 );
