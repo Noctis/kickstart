@@ -423,6 +423,16 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 ### 7. What's Left
 
 * Delete the `src/ContainerBuilder.php` file.
+* Add the following section to your `composer.json`:
+  ```json
+  "extra": {
+      "app-version": "3.0.0"
+  }
+  ```
+  and run the following command to update your `composer.lock` file:
+  ```shell
+  composer update --lock
+  ```
 
 ## From 1.4.2 to 2.3.0
 
