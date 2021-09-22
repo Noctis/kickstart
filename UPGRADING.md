@@ -290,17 +290,6 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   RewriteRule ^ index.php [QSA,L]
   ```
 * Delete the `src/Http/Request/AbstractRequest.php` file.
-* Edit any `*Request.php` files in the `src/Http/Request` directory and make sure:
-  * those classes extend the `Noctis\KickStart\Http\Request\Request` class,
-  * replace reference to `Symfony\Component\HttpFoundation\Request` with a reference to
-    `Psr\Http\Message\ServerRequestInterface`
-  * make sure the parent class receives an instance of `Laminas\Session\ManagerInterface` through its constructor:
-    ```php
-    public function __construct(ServerRequestInterface $request, ManagerInterface $sessionManager)
-    {
-        parent::__construct($request, $sessionManager);
-    }
-    ```
 * Edit any `*Action.php` files within `src/Http/Action` directory (except `BaseAction.php`) and:
   * make sure those classes implement the `Noctis\KickStart\Http\Action\ActionInterface` interface,
   * rename their `execute()` methods to `process()` with the following signature:
@@ -330,12 +319,12 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
     <?php declare(strict_types=1);
     namespace App\Http\Action;
   
-    use App\Http\Request\DummyRequest;
+    use App\Service\DummyServiceInterface;
     use Symfony\Component\HttpFoundation\Response;
   
     final class DummyAction extends BaseAction
     {
-        public function execute(DummyRequest $request): Response
+        public function execute(DummyServiceInterface $dummyService): Response
         {
             // ...
         }
@@ -349,26 +338,26 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   
     namespace App\Http\Action;
   
-    use App\Http\Request\DummyRequest;
+    use App\Service\DummyServiceInterface;
     use Noctis\KickStart\Http\Action\ActionInterface;
-    // ...
   
     final class DummyAction implements ActionInterface
     {
-        private DummyRequest $request;
+        private DummyServiceInterface $dummyService;
 
-        public function __construct(DummyRequest $request)
+        public function __construct(DummyServiceInterface $dummyService)
         {
-            $this->request = $request;
+            $this->dummyService = $dummyService;
         }
     
         // ...
     }
     ```
-  * if the action has a custom HTTP request object injected into it, make sure to change all the calls to `$request` in
-    the `process()` method, to calls to `$this->request`,
   * make sure `process()` method type-hints returning either `HtmlResponse`, `RedirectResponse`, `JsonResponse` or 
-    `EmptyResponse` from the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`.
+    `EmptyResponse` from the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`,
+  * **if the action uses a custom request class, you must move that custom request's functionality elsewhere, as custom
+    requests functionality (including the `Noctis\KickStart\Http\Request\Request` class) has been removed in Kickstart
+    3.0.0**,
 * If the given action returns an HTML response, i.e. has the `return $this->render(...);` line:
   * make sure an instance of `Noctis\KickStart\Http\Response\Factory\HtmlResponseFactoryInterface` is injected into it,
   * replace the call to `$this->render()` with a call to the `HtmlResponseFactoryInterface::render()` method.

@@ -13,6 +13,8 @@ use Laminas\Session\ManagerInterface;
 use Laminas\Session\SessionManager;
 use Noctis\KickStart\Http\Factory\BaseHrefFactory;
 use Noctis\KickStart\Http\Factory\BaseHrefFactoryInterface;
+use Noctis\KickStart\Http\Helper\RequestHelper;
+use Noctis\KickStart\Http\Helper\RequestHelperInterface;
 use Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactory;
 use Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactoryInterface;
 use Noctis\KickStart\Http\Response\Factory\HtmlResponseFactory;
@@ -53,6 +55,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
             NotFoundResponseFactoryInterface::class => NotFoundResponseFactory::class,
             RedirectResponseFactoryInterface::class => RedirectResponseFactory::class,
             RequestHandlerInterface::class => RequestHandler::class,
+            RequestHelperInterface::class => RequestHelper::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
             SessionContainer::class => autowire(SessionContainer::class)
                 ->constructorParameter('name', 'flash'),
