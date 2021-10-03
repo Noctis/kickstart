@@ -8,5 +8,8 @@ use Laminas\Diactoros\Response\HtmlResponse;
 
 interface HtmlResponseFactoryInterface
 {
+    /**
+     * @param array<string, mixed> $params
+     */
     public function render(string $view, array $params = []): HtmlResponse;
 }

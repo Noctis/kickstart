@@ -25,6 +25,9 @@ final class HtmlResponseFactory implements HtmlResponseFactoryInterface
         $this->baseHrefFactory = $baseHrefFactory;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function render(string $view, array $params = []): HtmlResponse
     {
         $params['basehref'] = $this->baseHrefFactory

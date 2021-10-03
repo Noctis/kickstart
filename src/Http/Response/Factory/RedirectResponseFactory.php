@@ -22,6 +22,9 @@ final class RedirectResponseFactory implements RedirectResponseFactoryInterface
         $this->request = $request;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function toPath(string $path, array $queryParams = []): RedirectResponse
     {
         if (preg_match('/:\/\//', $path) === 1) {
