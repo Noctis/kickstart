@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing\Handler;
 
+use DI\Container;
 use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -13,12 +13,12 @@ use RuntimeException;
 
 final class ActionInvoker implements ActionInvokerInterface
 {
-    private ContainerInterface $container;
+    private Container $container;
 
     /** @var array<class-string<MiddlewareInterface>> */
     private array $stack = [];
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
@@ -50,6 +50,13 @@ final class ActionInvoker implements ActionInvokerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        /*
+         * Re-register the request object, as the previously-called middleware might've modified it, for example, by
+         * calling its `setAttribute()` method.
+         */
+        $this->container
+            ->set(ServerRequestInterface::class, $request);
+
         if ($this->stack === []) {
             throw new RuntimeException(
                 'Stack not found. Did you forget to call the `setStack()` method?'
