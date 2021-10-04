@@ -22,6 +22,24 @@ final class Route implements RouteInterface
      * @param class-string<ActionInterface>           $action
      * @param list<class-string<MiddlewareInterface>> $middlewareNames
      */
+    public static function get(string $path, string $action, array $middlewareNames = []): self
+    {
+        return new self('GET', $path, $action, $middlewareNames);
+    }
+
+    /**
+     * @param class-string<ActionInterface>           $action
+     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     */
+    public static function post(string $path, string $action, array $middlewareNames = []): self
+    {
+        return new self('POST', $path, $action, $middlewareNames);
+    }
+
+    /**
+     * @param class-string<ActionInterface>           $action
+     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     */
     public function __construct(string $method, string $path, string $action, array $middlewareNames = [])
     {
         $this->method = $method;
