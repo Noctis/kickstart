@@ -17,7 +17,7 @@ Run the following commands to upgrade your application's dependencies:
 * ```shell
   composer require --with-all-dependencies \
   noctis/kickstart:^3.0@dev \
-  laminas/laminas-diactoros:^2.6 \
+  laminas/laminas-diactoros:^2.8 \
   psr/container:^1.1 \
   psr/http-server-middleware:^1.0 \
   symfony/console:^5.3 \
@@ -28,7 +28,7 @@ Run the following commands to upgrade your application's dependencies:
   composer require --dev --with-all-dependencies \
   squizlabs/php_codesniffer:^3.6 \
   symfony/var-dumper:^5.3 \
-  vimeo/psalm:^4.9
+  vimeo/psalm:^4.11
   ```
 
 ### 2. Updating `.env` and `.env-example`
