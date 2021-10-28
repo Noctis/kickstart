@@ -10,6 +10,16 @@ This document will tell you how to upgrade your application between different ve
 
 ## From 2.3.0 to 3.0.0
 
+Upgrading from a Kickstart 2.3.0-based application to a Kickstart 3.0.0 is easier than it may seem. There will be a
+couple of things that you'll need to do, all of them explained in detail below:
+
+* minor update to `.env` (and `.env-example`),
+* update to `boostrap.php` file,
+* update to the configuration class (`App\Configuration\FancyConfiguration`),
+* updating routes list in `src/Http/Routing/routes.php` file to the new format, 
+* update to application's entry points: the `public/index.php` and `bin/console` files,
+* updates to HTTP middleware and actions
+
 ### 1. Upgrading Dependencies
 
 Run the following commands to upgrade your application's dependencies:
@@ -33,7 +43,7 @@ Run the following commands to upgrade your application's dependencies:
 
 ### 2. Updating `.env` and `.env-example`
 
-In regards to the `.env` and `.env-example` files, only one thing has changed between Kickstart 2.3.0 and 3.0.0: the
+Regarding the `.env` and `.env-example` files, only one thing has changed between Kickstart 2.3.0 and 3.0.0: the
 `debug` option, with its `true` or `false` values has been replaced by `APP_ENV`, with `prod` or `dev` values.
 
 Replace the:
@@ -56,13 +66,13 @@ Change its value accordingly:
 
 ### 3. Migrating `bootstrap.php`
 
-One major thing that has changed in the `boostrap.php` file, between Kickstart 2.3.0 and 3.0.0 is the way that the 
+One major thing that has changed in the `boostrap.php` file between Kickstart 2.3.0 and 3.0.0, is the way that the 
 configuration options requirements are defined.
 
 Replace the contents of your application's `boostrap.php` file with the 
 [`3.0` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php).
 
-Now, you need to migrate your configuration options requirements to the new "format". In Kickstart 2.3.0, the 
+Now you need to migrate your configuration options requirements to the new "format". In Kickstart 2.3.0, the 
 requirements were passed as an array:
 
 ```php
@@ -100,6 +110,8 @@ In Kickstart 3.0.0 you are given access to the `Dotenv\Dotenv` instance, so you 
   $dotenv->required('banning_enabled')
       ->isBoolean();
   ```
+  
+Remember that the `debug` option has been replaced with the `APP_ENV` one, and is no longer boolean.
 
 ### 4. Migrating Configuration Classes
 
@@ -111,6 +123,7 @@ There were two major changes regarding configuration classes between Kickstart 2
 
 First thing you should do is edit your application's `App\Configuration\FancyConfiguration` class and:
 
+* remove `Noctis\KickStart\Configuration\ConfigurationInterface` as its injected dependency,
 * remove its `getBaseHref()`, `get()`, `set()` and `has()` methods,
 * replace all the calls to its `get()` method, with calls to the `Configuration::get()` static method, for example - 
   replace this:
@@ -143,11 +156,14 @@ with this:
 $basePath = Configuration::get('basepath');
 ```
 
+Lastly, make sure your application's `App\Configuration\FancyConfigurationInterface` interface no longer extends the
+now defunct `Noctis\KickStart\Configuration\ConfigurationInterface` one.
+
 ### 5. DIC Compilation
 
 One major thing introduced in Kickstart 3.0.0 is that the DIC (Dependency Injection Container) can now compile its
 configuration and save it to a file, which greatly speeds up the dependency resolution process. For it to work, DIC
-needs a folder into which it will save its files. 
+needs a folder into which it will save the compiled configuration files. 
 
 By default, that folder is `var/cache/container`, inside the root folder of your application. Create such a folder and
 then create an empty file called `.empty` inside it (so that the directory can be committed). Lastly, add
@@ -158,7 +174,7 @@ the following lines to `.gitignore`, so that the compiled DIC files won't make t
 !/var/cache/container/.empty
 ```
 
-### 6. Migrating to new Routes List Format
+### 6. Migrating to New Routes List Format
 
 The HTTP routes list file - `src/Http/Routing/routes.php` - has seen a format upgrade in Kickstart 3.0.0. A single
 route is now a `Noctis\KickStart\Http\Routing\Route` object, instead of an array.
@@ -209,7 +225,7 @@ A standard Kickstart application has two entry points:
 #### 7.1 HTTP Entry Point
 
 The Web entry point in a Kickstart application is the `public/index.php` file. Two major things changed between
-version 2.3.0 and 3.0.0:
+versions 2.3.0 and 3.0.0:
 
 * the list of service providers for a web application has been moved from the `src/Http/Application.php` file to
   `public/index.php`,
@@ -219,7 +235,7 @@ version 2.3.0 and 3.0.0:
 Start by replacing the contents of the `public/index.php` file with its
 [`3.0` version](https://github.com/Noctis/kickstart-app/blob/master/public/index.php).
 
-Now lets deal with the service providers. Open the `src/Http/Application.php` file and make sure all of the service
+Now lets deal with the service providers. Open the `src/Http/Application.php` file and make sure all the service
 providers listed there, e.g.:
 
 ```php
@@ -263,7 +279,7 @@ $containerBuilder
 ;
 ```
 
-Once you're done with migrating registering service providers in `public/index.php`, delete the
+Once you're done with migrating service providers registration to `public/index.php`, delete the
 `src/Http/Application.php` file.
 
 #### 7.2 CLI Entry Point
@@ -278,7 +294,7 @@ version 2.3.0 and 3.0.0:
 Start by replacing the contents of the `bin/console` file with its 
 [`3.0` version](https://github.com/Noctis/kickstart-app/blob/master/bin/console). 
 
-Now, lets deal with the service providers. Open the `src/Console/Application.php` file and make sure all of the service 
+Now, lets deal with the service providers. Open the `src/Console/Application.php` file and make sure all the service 
 providers listed there, e.g.:
 
 ```php
@@ -342,58 +358,56 @@ $app->setCommands([
 ]);
 ```
 
-Once you're done with migrating registering service providers and console commands in the `bin/console` file, delete the
-`src/Console/Application.php` file.
+If your application uses a custom commands loader, i.e. the `App\Console\Application::setCommandLoaderFactory()` method
+is used, you'll need to switch to the `Noctis\KickStart\Console\ConsoleApplication::setCommandLoaderFactory()` method.
+The new method's signature is exactly the same as the old one's.
 
-### 8. Migrating Away From `ResponseFactoryInterface`
+Once you're done with migrating service providers registration and console commands in the `bin/console` file, delete 
+the `src/Console/Application.php` file.
 
-One of the major changes introduced in Kickstart 3.0.0 was the removal of the 
-`Noctis\KickStart\Http\Response\ResponseFactoryInterface` interface and the `ResponseFactory` class, which implements
-it. They were broken down into smaller, dedicated response factories (in the `Noctis\KickStart\Http\Response\Factory`
-namespace), each of which replaces one of the `ResponseFactoryInterface` methods:
-  
-| `ResponseFactoryInterface` method | Replacement method(s) <br/> (in `Noctis\KickStart\Http\Response\Factory` namespace) |
-| --- | --- |
-| `htmlResponse()` | `HtmlResponseFactoryInterface::render()` |
-| `redirectionResponse()` | `RedirectResponseFactoryInterface::toPath()` |
-| `fileResponse()` <br/> `attachmentResponse()` | `AttachmentResponseFactoryInterface::sendFile()`, <br/> `AttachmentResponseFactoryInterface::sendContent()`, or <br/> `AttachmentResponseFactoryInterface::sendResource()` |
-
-You need to find uses of these `ResponseFactoryInterface` methods in your application and replace them with a use of
-the appropriate new response factory.
-
-### 9. Migrating Away From `FileInterface` & `FileResponse`
-
-In Kickstart 2.3.0, the following interfaces and classes have been marked as deprecated:
-
-* `Noctis\KickStart\File\FileInterface`,
-* `Noctis\KickStart\File\File`,
-* `Noctis\KickStart\File\InMemoryFile`, and
-* `Noctis\KickStart\Http\Response\FileResponse`.
-
-In Kickstart 3.0.0 those have been removed, so if your application is still using them, it's high time to migrate your
-code. If your application uses neither of those, you can skip this section.
-
-| Deprecated class | Replacement class |
-| --- | --- |
-| `Noctis\KickStart\File\FileInterface` | `Noctis\KickStart\Http\Response\Attachment\AttachmentInterface` |
-| `Noctis\KickStart\File\File` <br/> `Noctis\KickStart\File\InMemoryFile` | `Noctis\KickStart\Http\Response\Attachment\Attachment` |
-| `Noctis\KickStart\Http\Response\FileResponse` | `Noctis\KickStart\Http\Response\AttachmentResponse` |
-
-To create a new instance of `Noctis\KickStart\File\File`, use the 
-`Noctis\KickStart\Http\Response\Attachment\AttachmentFactoryInterface::createFromPath()` method.
-
-To create a new instance of `Noctis\KickStart\File\InMemoryFile`, use the 
-`Noctis\KickStart\Http\Response\Attachment\AttachmentFactoryInterface::createFromContent()` method.
-
-### 10. Migrating HTTP Actions
+### 8. Migrating HTTP Actions
 
 In Kickstart 3.0.0 two major changes to HTTP actions classes have been introduced:
 
 * all actions must implement the `Psr\Http\Server\MiddlewareInterface` interface,
 * the `Noctis\KickStart\Http\Action\AbstractAction` abstract class has been removed.
 
-Because of this change, all actions' `execute()` methods need to be replaced with a `process()` method, with the 
-following signature:
+Start by modifying all the HTTP actions which extend the `AbstractAction` to now implement the `MiddlewareInterface`
+interface, i.e. replace this:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Action;
+
+use Noctis\KickStart\Http\Action\AbstractAction;
+
+final class DummyAction extends AbstractAction
+{
+    // ...
+}
+```
+
+like so:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Action;
+
+use Noctis\KickStart\Http\Action\ActionInterface;
+
+final class DummyAction implements ActionInterface
+{
+    // ...
+}
+```
+
+Next, replaced the `execute()` methods with the `process()` method, using the following signature:
 
 ```php
 use Psr\Http\Message\ServerRequestInterface;
@@ -406,15 +420,15 @@ public function process(ServerRequestInterface $request, RequestHandlerInterface
 }
 ```
 
-If there were any dependencies injected into the action through its `execute()` method, those will need to be injected
-through its constructor now.
+If there were any dependencies injected through the `execute()` method, those will need to be moved to the action's
+constructor class.
 
 Because the `Noctis\KickStart\Http\Action\AbstractAction` abstract class has been removed, actions no longer have access
 to certain helper functions, like `render()` or `redirect()`. Some of these functions, with the same signatures as in 
 the `AbstractAction`, are available through traits now. You will need to switch your actions to using those traits and
-provide them with an instance of a specific response factory, that they require:
+provide them with an instance of a specific response factory that they require:
 
-#### 10.1 `render()` Method
+#### 8.1 `render()` Method
 
 The `render()` method is now available through the `Noctis\KickStart\Http\Helper\RenderTrait`. This trait needs to be
 provided an instance of `HtmlResponseFactoryInterface` into its private `$htmlResponseFactory` field:
@@ -451,7 +465,7 @@ final class DummyAction implements ActionInterface
 }
 ```
 
-#### 10.2 `redirect()` Method
+#### 8.2 `redirect()` Method
 
 The `redirect()` method is now available through the `Noctis\KickStart\Http\Helper\RedirectTrait`. This trait needs to 
 be provided an instance of `RedirectResponseFactoryInterface` into its private `$redirectResponseFactory` field:
@@ -488,7 +502,7 @@ final class DummyAction implements ActionInterface
 }
 ```
 
-#### 10.3 `notFound()` Method
+#### 8.3 `notFound()` Method
 
 The `notFound()` method is now available through the `Noctis\KickStart\Http\Helper\NotFoundTrait`. This trait needs to
 be provided an instance of `NotFoundResponseFactoryInterface` into its private `$notFoundResponseFactory` field:
@@ -528,7 +542,7 @@ final class DummyAction implements ActionInterface
 }
 ```
 
-#### 10.4 `sendAttachment()` and `sendFile()` Methods
+#### 8.4 `sendAttachment()` and `sendFile()` Methods
 
 The `sendAttachment()` method is now available through the `Noctis\KickStart\Http\Helper\AttachmentTrait`. This trait 
 needs to be provided an instance of `AttachmentResponseFactoryInterface` into its private `$attachmentResponseFactory` 
@@ -574,13 +588,13 @@ The `AttachmentTrait` does offer some additional factory methods for creating an
 * `sendContent()` - can be used as a shortcut for `AttachmentResponseFactoryInterface::sendContent()`,
 * `sendResource()` - can be used as a shortcut for `AttachmentResponseFactoryInterface::sendResource()`.
 
-#### 10.5 `setFlashMessage()` and `getFlashMessage()` Methods
+#### 8.5 `setFlashMessage()` and `getFlashMessage()` Methods
 
 The `setFlashMessage()` and `getFlashMessage()` methods are now available in the 
 `Noctis\KickStart\Http\Service\FlashMessageServiceInterface` class. Although they are named the same as the methods
 that used to be available through the `AbstractAction` class, they do have a slightly different signature. Before
-Kickstart 3.0 both messages had a hard-coded flash message name in them - `message`. Since Kickstart 3.0 the user can
-define the flash message name themselves.
+Kickstart 3.0 both messages had a hard-coded flash message name in them - `message`. Since Kickstart 3.0, one can
+define the flash message's name themselves.
 
 So, you will need to replace usages of:
 
@@ -605,15 +619,15 @@ with:
 $this->getFlashMessage('message')
 ```
 
-#### 10.6 `getBaseHref()` Method
+#### 8.6 `getBaseHref()` Method
 
 The `getBaseHref()` method needs to be replaced with calls to the `createFromRequest()` method of 
 `Noctis\KickStart\Http\Factory\BaseHrefFactoryInterface`. The new method accepts one argument - an instance of
 `Psr\Http\Message\ServerRequestInterface`, which is available in every action's `process()` method.
 
-### 11. Migrating HTTP Middlewares/Guards
+### 9. Migrating HTTP Middlewares/Guards
 
-Compared to actions, middlewares/guards have seen less change in Kickstart 3.0.0, so migration will be simpler.
+Compared to actions, middlewares/guards have seen fewer changes in Kickstart 3.0.0, so migration will be simpler.
 
 One major thing is that the `Noctis\KickStart\Http\Middleware\AbstractMiddleware` abstract class has been removed, so
 you will need to make two things:
@@ -636,7 +650,7 @@ return $handler->handle($request);
 Also, if any of your middlewares/guards have an instance of the now defunct `ResponseFactoryInterface` class injected
 into it - get rid of it.
 
-### 12. Migrating Custom Requests
+### 10. Migrating Custom Requests
 
 The `Noctis\KickStart\Http\Request\Request` class has been renamed to `AbstractRequest` in Kickstart 3.0.0, and it is 
 now an abstract class, meaning it can't be instantiated on its own now, so you will have to change the name of the class
@@ -653,6 +667,64 @@ Some additional methods have been added to the `AbstractRequest` class, i.e.:
 
 Any calls to them are simply forwarded to the instance of `Psr\Http\Message\ServerRequestInterface` the 
 `AbstractRequest` is decorating.
+
+### 11. Migrating Away From `ResponseFactoryInterface`
+
+One of the major changes introduced in Kickstart 3.0.0 was the removal of the
+`Noctis\KickStart\Http\Response\ResponseFactoryInterface` interface and the `ResponseFactory` class which implements
+it. They were broken down into smaller, dedicated response factories (in the `Noctis\KickStart\Http\Response\Factory`
+namespace), each of which replaces one of the `ResponseFactoryInterface`'s methods:
+
+| `ResponseFactoryInterface` method | Replacement method(s) <br/> (in `Noctis\KickStart\Http\Response\Factory` namespace) |
+| --- | --- |
+| `htmlResponse()` | `HtmlResponseFactoryInterface::render()` |
+| `redirectionResponse()` | `RedirectResponseFactoryInterface::toPath()` |
+| `fileResponse()` <br/> `attachmentResponse()` | `AttachmentResponseFactoryInterface::sendFile()`, <br/> `AttachmentResponseFactoryInterface::sendContent()`, or <br/> `AttachmentResponseFactoryInterface::sendResource()` |
+
+You need to find uses of these `ResponseFactoryInterface` methods in your application and replace them with a use of
+the appropriate new response factory.
+
+### 12. Migrating Away From `FileInterface` & `FileResponse`
+
+In Kickstart 2.3.0, the following interfaces and classes have been marked as deprecated:
+
+* `Noctis\KickStart\File\FileInterface`,
+* `Noctis\KickStart\File\File`,
+* `Noctis\KickStart\File\InMemoryFile`, and
+* `Noctis\KickStart\Http\Response\FileResponse`.
+
+In Kickstart 3.0.0 those have been removed, so if your application is still using them, it's high time to migrate your
+code. If your application uses neither of those, you can skip this section.
+
+| Deprecated class | Replacement class |
+| --- | --- |
+| `Noctis\KickStart\File\FileInterface` | `Noctis\KickStart\Http\Response\Attachment\AttachmentInterface` |
+| `Noctis\KickStart\File\File` <br/> `Noctis\KickStart\File\InMemoryFile` | `Noctis\KickStart\Http\Response\Attachment\Attachment` |
+| `Noctis\KickStart\Http\Response\FileResponse` | `Noctis\KickStart\Http\Response\AttachmentResponse` |
+
+To create a new instance of `Noctis\KickStart\File\File`, use the
+`Noctis\KickStart\Http\Response\Attachment\AttachmentFactoryInterface::createFromPath()` method.
+
+To create a new instance of `Noctis\KickStart\File\InMemoryFile`, use the
+`Noctis\KickStart\Http\Response\Attachment\AttachmentFactoryInterface::createFromContent()` method.
+
+### 13. Cherry on Top
+
+Modify the Kickstart version indicator in your application's `composer.json` file, like so:
+
+```json
+"extra": {
+      "app-version": "3.0.0"
+  },
+```
+
+Execute the following command in CLI to update your `composer.lock`:
+
+```sh
+composer update --lock
+```
+
+and we're done!
 
 ## From 1.4.2 to 3.0.0
 
