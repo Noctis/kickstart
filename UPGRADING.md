@@ -372,10 +372,10 @@ the `src/Console/Application.php` file.
 
 In Kickstart 3.0.0 two major changes to HTTP actions classes have been introduced:
 
-* all actions must implement the `Psr\Http\Server\MiddlewareInterface` interface,
+* all actions must implement the `Noctis\KickStart\Http\Action\ActionInterface` interface,
 * the `Noctis\KickStart\Http\Action\AbstractAction` abstract class has been removed.
 
-Start by modifying all the HTTP actions which extend the `AbstractAction` to now implement the `MiddlewareInterface`
+Start by modifying all the HTTP actions which extend the `AbstractAction` to now implement the `ActionInterface` 
 interface, i.e. replace this:
 
 ```php
@@ -426,10 +426,10 @@ public function process(ServerRequestInterface $request, RequestHandlerInterface
 If there were any dependencies injected through the `execute()` method, those will need to be moved to the action's
 constructor class.
 
-Because the `Noctis\KickStart\Http\Action\AbstractAction` abstract class has been removed, actions no longer have access
-to certain helper functions, like `render()` or `redirect()`. Some of these functions, with the same signatures as in 
-the `AbstractAction`, are available through traits now. You will need to switch your actions to using those traits and
-provide them with an instance of a specific response factory that they require:
+Because the `Noctis\KickStart\Http\Action\AbstractAction` abstract class has been removed, actions will no longer have 
+access to certain helper functions, like `render()` or `redirect()`. Some of these functions - with the same signatures 
+as in the `AbstractAction` - are available through traits now. You will need to switch your actions to using those 
+traits and provide those traits with an instance of a specific response factory that they require.
 
 #### 8.1 `render()` Method
 
