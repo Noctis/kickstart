@@ -2,9 +2,9 @@
 
 This document will tell you how to upgrade your application between different versions of Kickstart.
 
-* From 2.3.0...:
+* From 2.3.0:
   * [From 2.3.0 to 3.0.0](#from-230-to-300)
-* From 1.4.2...:
+* From 1.4.2:
   * [From 1.4.2 to 3.0.0](#from-142-to-300)
   * [From 1.4.2 to 2.3.0](#from-142-to-230)
 
@@ -72,7 +72,7 @@ configuration options requirements are defined.
 Replace the contents of your application's `boostrap.php` file with the 
 [`3.0` version](https://github.com/Noctis/kickstart-app/blob/master/bootstrap.php).
 
-Now you need to migrate your configuration options requirements to the new "format". In Kickstart 2.3.0, the 
+Now you'll need to migrate your configuration requirements list to the new "format". In Kickstart 2.3.0, the 
 requirements were passed as an array:
 
 ```php
@@ -125,8 +125,8 @@ First thing you should do is edit your application's `App\Configuration\FancyCon
 
 * remove `Noctis\KickStart\Configuration\ConfigurationInterface` as its injected dependency,
 * remove its `getBaseHref()`, `get()`, `set()` and `has()` methods,
-* replace all the calls to its `get()` method, with calls to the `Configuration::get()` static method, for example - 
-  replace this:
+* replace all the calls to its `get()` method (inside the class and elsewhere in your application), with calls to the 
+  `Configuration::get()` static method, for example replace this:
   ```php
   public function getDBHost(): string
   {
@@ -155,6 +155,9 @@ with this:
 ```php
 $basePath = Configuration::get('basepath');
 ```
+
+Replace the contents of your `App\Provider\ConfigurationProvider` service provider class with the
+[`3.0` version](https://github.com/Noctis/kickstart-app/blob/master/src/Provider/ConfigurationProvider.php).
 
 Lastly, make sure your application's `App\Configuration\FancyConfigurationInterface` interface no longer extends the
 now defunct `Noctis\KickStart\Configuration\ConfigurationInterface` one.
