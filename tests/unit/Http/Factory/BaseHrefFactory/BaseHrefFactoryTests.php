@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
- * @covers BaseHrefFactory::createFromRequest()
+ * @covers \Noctis\KickStart\Http\Factory\BaseHrefFactory::createFromRequest()
  */
 class BaseHrefFactoryTests extends TestCase
 {

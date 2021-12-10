@@ -9,7 +9,7 @@ use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
- * @covers AttachmentFactory::createFromContent()
+ * @covers \Noctis\KickStart\Http\Response\Attachment\AttachmentFactory::createFromContent()
  */
 final class CreateFromContentTests extends AttachmentFactoryTestCase
 {
