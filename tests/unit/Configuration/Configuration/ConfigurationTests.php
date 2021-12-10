@@ -8,9 +8,6 @@ use Noctis\KickStart\Configuration\Configuration;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-/**
- * @covers \Noctis\KickStart\Configuration\Configuration
- */
 final class ConfigurationTests extends TestCase
 {
     public function test_it_is_empty_upon_initialization(): void

@@ -7,9 +7,6 @@ namespace Tests\Acceptance\Http\Response\Factory\AttachmentResponseFactory;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
 use Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactory;
 
-/**
- * @covers \Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactory::sendFile()
- */
 final class SendFileTests extends AttachmentResponseFactoryTestCase
 {
     private string $tempFilePath;

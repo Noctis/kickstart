@@ -10,9 +10,6 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 
-/**
- * @covers \Noctis\KickStart\Http\Factory\BaseHrefFactory::createFromRequest()
- */
 class BaseHrefFactoryTests extends TestCase
 {
     use ProphecyTrait;

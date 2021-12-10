@@ -8,9 +8,6 @@ use Noctis\KickStart\Http\Response\Attachment\AttachmentFactory;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-/**
- * @covers \Noctis\KickStart\Http\Response\Attachment\AttachmentFactory::createFromPath()
- */
 final class CreateFromPathTests extends AttachmentFactoryTestCase
 {
     use ProphecyTrait;

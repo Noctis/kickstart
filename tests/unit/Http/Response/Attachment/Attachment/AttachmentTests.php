@@ -10,9 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\StreamInterface;
 
-/**
- * @covers \Noctis\KickStart\Http\Response\Attachment\Attachment
- */
 final class AttachmentTests extends TestCase
 {
     use ProphecyTrait;
