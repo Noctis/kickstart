@@ -62,4 +62,68 @@ final class ConfigurationTests extends TestCase
             Configuration::get('foo', 'bar')
         );
     }
+
+    /**
+     * @dataProvider booleanValuesProvider
+     */
+    public function test_it_properly_evaluates_boolean_values(string $value, bool $expectedResult): void
+    {
+        $_ENV['foo'] = $value;
+
+        $this->assertSame(
+            $expectedResult,
+            Configuration::get('foo')
+        );
+    }
+
+    public function booleanValuesProvider(): array
+    {
+        return [
+            '1. Boolean "true"' => [
+                'value'          => 'true',
+                'expectedResult' => true,
+            ],
+            '2. Boolean "false"' => [
+                'value'          => 'false',
+                'expectedResult' => false,
+            ],
+        ];
+    }
+
+    public function test_trailing_slash_is_removed_from_set_basehref(): void
+    {
+        $_ENV['basehref'] = '/foo/';
+
+        $this->assertSame(
+            '/foo',
+            Configuration::getBaseHref()
+        );
+    }
+
+    /**
+     * @dataProvider environmentsProvider
+     */
+    public function test_is_production_returns_expected_result(string $env, bool $expectedResult): void
+    {
+        $_ENV['APP_ENV'] = $env;
+
+        $this->assertSame(
+            $expectedResult,
+            Configuration::isProduction()
+        );
+    }
+
+    public function environmentsProvider(): array
+    {
+        return [
+            '1. Production environment' => [
+                'env'            => 'prod',
+                'expectedResult' => true,
+            ],
+            '2. Development environment' => [
+                'env'            => 'dev',
+                'expectedResult' => false,
+            ],
+        ];
+    }
 }
