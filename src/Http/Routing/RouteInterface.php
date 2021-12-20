@@ -16,10 +16,22 @@ interface RouteInterface
     /**
      * @return class-string<ActionInterface>
      */
-    public function getAction(): string;
+    public function getActionName(): string;
 
     /**
      * @return list<class-string<MiddlewareInterface>>
      */
     public function getMiddlewareNames(): array;
+
+    /**
+     * @param array<string, string> $vars
+     *
+     * @return static
+     */
+    public function withAdditionalVars(array $vars): self;
+
+    /**
+     * @return array<string, string>
+     */
+    public function getAdditionalVars(): array;
 }
