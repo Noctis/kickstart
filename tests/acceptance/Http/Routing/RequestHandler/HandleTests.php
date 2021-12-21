@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Acceptance\Http\Routing\Handler\RequestHandler;
+namespace Tests\Acceptance\Http\Routing\RequestHandler;
 
 use DI\Container;
 use DI\ContainerBuilder;
 use Noctis\KickStart\Http\Action\ActionInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStack;
 use Noctis\KickStart\Http\Routing\MiddlewareStackInterface;
-use Noctis\KickStart\Http\Routing\RequestHandler;
+use Noctis\KickStart\Http\Routing\MiddlewareStackHandler;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,7 +19,7 @@ use Tests\Helper\PassThroughMiddleware;
 use Tests\Helper\TextResponseMiddleware;
 
 /**
- * @covers \Noctis\KickStart\Http\Routing\RequestHandler::handle()
+ * @covers \Noctis\KickStart\Http\Routing\MiddlewareStackHandler::handle()
  */
 final class HandleTests extends TestCase
 {
@@ -90,9 +90,9 @@ final class HandleTests extends TestCase
      * @param list<class-string<MiddlewareInterface>> $guards
      * @param class-string<ActionInterface>           $actionClass
      */
-    private function getRequestHandler(array $guards, string $actionClass): RequestHandler
+    private function getRequestHandler(array $guards, string $actionClass): MiddlewareStackHandler
     {
-        $requestHandler = new RequestHandler(
+        $requestHandler = new MiddlewareStackHandler(
             $this->getContainer()
         );
 

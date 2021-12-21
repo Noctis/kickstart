@@ -7,6 +7,7 @@ namespace Noctis\KickStart\Provider;
 use Noctis\KickStart\Http\Routing\RouteInterface;
 use Noctis\KickStart\Http\Routing\Router\FastRouteRouter;
 use Noctis\KickStart\Http\Routing\Router\RouterInterface;
+use Noctis\KickStart\Http\Routing\RoutesCollection;
 use Psr\Container\ContainerInterface;
 
 final class RoutingProvider implements ServicesProviderInterface
@@ -33,9 +34,9 @@ final class RoutingProvider implements ServicesProviderInterface
         return [
             RouterInterface::class => function (ContainerInterface $container): FastRouteRouter {
                 $router = $container->get(FastRouteRouter::class);
-                foreach ($this->routes as $route) {
-                    $router->addRoute($route);
-                }
+                $router->setRoutes(
+                    new RoutesCollection($this->routes)
+                );
 
                 return $router;
             }

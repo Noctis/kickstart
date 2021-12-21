@@ -6,10 +6,9 @@ namespace Noctis\KickStart\Http\Routing;
 
 use ArrayIterator;
 use InvalidArgumentException;
-use IteratorAggregate;
 use Psr\Http\Server\MiddlewareInterface;
 
-final class MiddlewareStack implements IteratorAggregate, MiddlewareStackInterface
+final class MiddlewareStack implements MiddlewareStackInterface
 {
     /** @var list<class-string<MiddlewareInterface>> */
     private array $middlewareNames = [];
@@ -69,11 +68,10 @@ final class MiddlewareStack implements IteratorAggregate, MiddlewareStackInterfa
         return array_shift($this->middlewareNames);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getIterator(): ArrayIterator
     {
-        return new ArrayIterator($this->middlewareNames);
+        return new ArrayIterator(
+            array_values($this->middlewareNames)
+        );
     }
 }

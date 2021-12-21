@@ -8,29 +8,29 @@ use DI\Container;
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Noctis\KickStart\ApplicationInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStack;
+use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
 use Noctis\KickStart\Http\Routing\Router\RouterInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 final class WebApplication implements ApplicationInterface
 {
     private Container $container;
     private ServerRequestInterface $request;
     private RouterInterface $router;
-    private RequestHandlerInterface $requestHandler;
+    private MiddlewareStackHandlerInterface $middlewareStackHandler;
     private EmitterInterface $responseEmitter;
 
     public function __construct(
         Container $container,
         ServerRequestInterface $request,
         RouterInterface $router,
-        RequestHandlerInterface $requestHandler,
+        MiddlewareStackHandlerInterface $middlewareStackHandler,
         EmitterInterface $responseEmitter
     ) {
         $this->container = $container;
         $this->request = $request;
         $this->router = $router;
-        $this->requestHandler = $requestHandler;
+        $this->middlewareStackHandler = $middlewareStackHandler;
         $this->responseEmitter = $responseEmitter;
     }
 
@@ -42,11 +42,11 @@ final class WebApplication implements ApplicationInterface
         $this->enhanceRequest(
             $route->getAdditionalVars()
         );
-        $this->requestHandler
+        $this->middlewareStackHandler
             ->setMiddlewareStack(
                 MiddlewareStack::createFromRoute($route)
             );
-        $response = $this->requestHandler
+        $response = $this->middlewareStackHandler
             ->handle($this->request);
 
         $this->responseEmitter

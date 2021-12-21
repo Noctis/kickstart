@@ -11,6 +11,7 @@ use Noctis\KickStart\Http\Action\MethodNotAllowedAction;
 use Noctis\KickStart\Http\Action\NotFoundAction;
 use Noctis\KickStart\Http\Routing\Route;
 use Noctis\KickStart\Http\Routing\RouteInterface;
+use Noctis\KickStart\Http\Routing\RoutesCollectionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 
@@ -18,35 +19,20 @@ use function FastRoute\simpleDispatcher;
 
 final class FastRouteRouter implements RouterInterface
 {
-    /** @var list<RouteInterface> */
-    private array $routes = [];
+    private ?RoutesCollectionInterface $routes = null;
 
-    public function addRoute(RouteInterface $route): RouterInterface
+    public function setRoutes(RoutesCollectionInterface $routesCollection): void
     {
-        $this->routes[] = $route;
-
-        return $this;
+        $this->routes = $routesCollection;
     }
 
     public function route(ServerRequestInterface $request): RouteInterface
     {
-        $dispatcher = simpleDispatcher(
-            function (RouteCollector $r): void {
-                $r->addGroup(
-                    Configuration::getBaseHref(),
-                    function (RouteCollector $routeCollector): void {
-                        foreach ($this->routes as $route) {
-                            $routeCollector->addRoute(
-                                $route->getMethod(),
-                                $route->getPath(),
-                                $route
-                            );
-                        }
-                    }
-                );
-            }
-        );
+        if ($this->routes === null) {
+            throw new RuntimeException('Routes have not been set. Did you forget to call `setRoutes()`?');
+        }
 
+        $dispatcher = $this->getDispatcher($this->routes);
         $method = $request->getMethod();
         $requestedPath = $request->getUri()
             ->getPath();
@@ -68,5 +54,26 @@ final class FastRouteRouter implements RouterInterface
         }
 
         return $route;
+    }
+
+    private function getDispatcher(RoutesCollectionInterface $routes): Dispatcher
+    {
+        return simpleDispatcher(
+            function (RouteCollector $r) use ($routes): void {
+                $r->addGroup(
+                    Configuration::getBaseHref(),
+                    function (RouteCollector $routeCollector) use ($routes): void {
+                        /** @var RouteInterface $route */
+                        foreach ($routes as $route) {
+                            $routeCollector->addRoute(
+                                $route->getMethod(),
+                                $route->getPath(),
+                                $route
+                            );
+                        }
+                    }
+                );
+            }
+        );
     }
 }

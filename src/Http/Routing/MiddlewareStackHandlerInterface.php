@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
-use Noctis\KickStart\Http\Routing\MiddlewareStackInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-interface MiddlewareStackHandlerInterface
+interface MiddlewareStackHandlerInterface extends RequestHandlerInterface
 {
     public function setMiddlewareStack(MiddlewareStackInterface $middlewareStack): void;
 }

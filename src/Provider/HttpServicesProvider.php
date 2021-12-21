@@ -21,12 +21,12 @@ use Noctis\KickStart\Http\Response\Factory\NotFoundResponseFactory;
 use Noctis\KickStart\Http\Response\Factory\NotFoundResponseFactoryInterface;
 use Noctis\KickStart\Http\Response\Factory\RedirectResponseFactory;
 use Noctis\KickStart\Http\Response\Factory\RedirectResponseFactoryInterface;
-use Noctis\KickStart\Http\Routing\RequestHandler;
+use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
+use Noctis\KickStart\Http\Routing\MiddlewareStackHandler;
 use Noctis\KickStart\Http\Service\FlashMessageService;
 use Noctis\KickStart\Http\Service\FlashMessageServiceInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 
 use function DI\autowire;
 
@@ -44,9 +44,9 @@ final class HttpServicesProvider implements ServicesProviderInterface
             FlashMessageServiceInterface::class => FlashMessageService::class,
             HtmlResponseFactoryInterface::class => HtmlResponseFactory::class,
             ManagerInterface::class => SessionManager::class,
+            MiddlewareStackHandlerInterface::class => MiddlewareStackHandler::class,
             NotFoundResponseFactoryInterface::class => NotFoundResponseFactory::class,
             RedirectResponseFactoryInterface::class => RedirectResponseFactory::class,
-            RequestHandlerInterface::class => RequestHandler::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
             SessionContainer::class => autowire(SessionContainer::class)
                 ->constructorParameter('name', 'flash'),

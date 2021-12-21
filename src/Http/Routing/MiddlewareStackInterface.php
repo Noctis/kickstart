@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
+use IteratorAggregate;
 use Psr\Http\Server\MiddlewareInterface;
 
-interface MiddlewareStackInterface
+interface MiddlewareStackInterface extends IteratorAggregate
 {
     /**
      * @param class-string<MiddlewareInterface> $name

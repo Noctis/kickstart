@@ -23,7 +23,7 @@ final class Route implements RouteInterface
     private array $middlewareNames;
 
     /** @var array<string, string> */
-    private array $additionalVars = [];
+    private array $additionalVars;
 
     /**
      * @param class-string<ActionInterface>           $actionName

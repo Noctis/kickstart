@@ -8,10 +8,9 @@ use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
 
-final class RequestHandler implements RequestHandlerInterface, MiddlewareStackHandlerInterface
+final class MiddlewareStackHandler implements MiddlewareStackHandlerInterface
 {
     private Container $container;
     private ?MiddlewareStackInterface $middlewareStack;
