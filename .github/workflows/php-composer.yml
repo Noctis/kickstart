@@ -18,6 +18,8 @@ jobs:
         php-version: '8.0'
         extensions: filter
 
+    - uses: actions/checkout@v2
+
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
