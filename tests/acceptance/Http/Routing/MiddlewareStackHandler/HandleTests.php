@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use RuntimeException;
 use Tests\Helper\HttpAction;
 use Tests\Helper\PassThroughMiddleware;
 use Tests\Helper\TextResponseMiddleware;
@@ -24,6 +25,34 @@ use Tests\Helper\TextResponseMiddleware;
 final class HandleTests extends TestCase
 {
     use ProphecyTrait;
+
+    public function test_an_exception_is_thrown_if_middleware_stack_has_not_been_set(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $requestHandler = new MiddlewareStackHandler(
+            $this->getContainer()
+        );
+
+        $requestHandler->handle(
+            $this->getRequest()
+        );
+    }
+
+    public function test_an_exception_is_thrown_if_nothing_in_the_stack_generates_a_response(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $requestHandler = new MiddlewareStackHandler(
+            $this->getContainer()
+        );
+        $stack = $this->getMiddlewareStack([PassThroughMiddleware::class]);
+        $requestHandler->setMiddlewareStack($stack);
+
+        $requestHandler->handle(
+            $this->getRequest()
+        );
+    }
 
     public function test_given_action_is_called_if_no_guards_were_given(): void
     {
