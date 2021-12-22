@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Acceptance\Http\Routing\RequestHandler;
+namespace Tests\Acceptance\Http\Routing\MiddlewareStackHandler;
 
 use DI\Container;
 use DI\ContainerBuilder;
