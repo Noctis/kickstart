@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Provider;
 
 use Noctis\KickStart\Http\Routing\RouteInterface;
-use Noctis\KickStart\Http\Routing\Router;
-use Noctis\KickStart\Http\Routing\RouterInterface;
-
-use function DI\autowire;
+use Noctis\KickStart\Http\Routing\Router\FastRouteRouter;
+use Noctis\KickStart\Http\Routing\Router\RouterInterface;
+use Noctis\KickStart\Http\Routing\RoutesCollection;
+use Psr\Container\ContainerInterface;
 
 final class RoutingProvider implements ServicesProviderInterface
 {
@@ -32,11 +32,14 @@ final class RoutingProvider implements ServicesProviderInterface
     public function getServicesDefinitions(): array
     {
         return [
-            RouterInterface::class => autowire(Router::class)
-                ->constructorParameter(
-                    'routes',
-                    $this->routes
-                ),
+            RouterInterface::class => function (ContainerInterface $container): FastRouteRouter {
+                $router = $container->get(FastRouteRouter::class);
+                $router->setRoutes(
+                    new RoutesCollection($this->routes)
+                );
+
+                return $router;
+            }
         ];
     }
 }

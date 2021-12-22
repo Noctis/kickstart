@@ -2,32 +2,63 @@
 
 declare(strict_types=1);
 
-namespace Tests\Acceptance\Http\Routing\Handler\ActionInvoker;
+namespace Tests\Acceptance\Http\Routing\MiddlewareStackHandler;
 
 use DI\Container;
 use DI\ContainerBuilder;
 use Noctis\KickStart\Http\Action\ActionInterface;
-use Noctis\KickStart\Http\Routing\Handler\ActionInvoker;
+use Noctis\KickStart\Http\Routing\MiddlewareStack;
+use Noctis\KickStart\Http\Routing\MiddlewareStackInterface;
+use Noctis\KickStart\Http\Routing\MiddlewareStackHandler;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use RuntimeException;
 use Tests\Helper\HttpAction;
 use Tests\Helper\PassThroughMiddleware;
 use Tests\Helper\TextResponseMiddleware;
 
 /**
- * @covers \Noctis\KickStart\Http\Routing\Handler\ActionInvoker::handle()
+ * @covers \Noctis\KickStart\Http\Routing\MiddlewareStackHandler::handle()
  */
 final class HandleTests extends TestCase
 {
     use ProphecyTrait;
 
+    public function test_an_exception_is_thrown_if_middleware_stack_has_not_been_set(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $requestHandler = new MiddlewareStackHandler(
+            $this->getContainer()
+        );
+
+        $requestHandler->handle(
+            $this->getRequest()
+        );
+    }
+
+    public function test_an_exception_is_thrown_if_nothing_in_the_stack_generates_a_response(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $requestHandler = new MiddlewareStackHandler(
+            $this->getContainer()
+        );
+        $stack = $this->getMiddlewareStack([PassThroughMiddleware::class]);
+        $requestHandler->setMiddlewareStack($stack);
+
+        $requestHandler->handle(
+            $this->getRequest()
+        );
+    }
+
     public function test_given_action_is_called_if_no_guards_were_given(): void
     {
-        $actionInvoker = $this->getActionInvoker([], HttpAction::class);
+        $requestHandler = $this->getRequestHandler([], HttpAction::class);
 
-        $response = $actionInvoker->handle(
+        $response = $requestHandler->handle(
             $this->getRequest()
         );
 
@@ -51,9 +82,9 @@ final class HandleTests extends TestCase
             PassThroughMiddleware::class,
         ];
         /** @psalm-suppress InvalidArgument */
-        $actionInvoker = $this->getActionInvoker($middlewares, HttpAction::class);
+        $requestHandler = $this->getRequestHandler($middlewares, HttpAction::class);
 
-        $response = $actionInvoker->handle(
+        $response = $requestHandler->handle(
             $this->getRequest()
         );
 
@@ -71,9 +102,9 @@ final class HandleTests extends TestCase
             PassThroughMiddleware::class,
         ];
         /** @psalm-suppress InvalidArgument */
-        $actionInvoker = $this->getActionInvoker($middlewares, HttpAction::class);
+        $requestHandler = $this->getRequestHandler($middlewares, HttpAction::class);
 
-        $response = $actionInvoker->handle(
+        $response = $requestHandler->handle(
             $this->getRequest()
         );
 
@@ -88,17 +119,17 @@ final class HandleTests extends TestCase
      * @param list<class-string<MiddlewareInterface>> $guards
      * @param class-string<ActionInterface>           $actionClass
      */
-    private function getActionInvoker(array $guards, string $actionClass): ActionInvoker
+    private function getRequestHandler(array $guards, string $actionClass): MiddlewareStackHandler
     {
-        $actionInvoker = new ActionInvoker(
+        $requestHandler = new MiddlewareStackHandler(
             $this->getContainer()
         );
 
-        $stack = $guards;
-        $stack[] = $actionClass;
-        $actionInvoker->setStack($stack);
+        $stack = $this->getMiddlewareStack($guards);
+        $stack->addMiddleware($actionClass);
+        $requestHandler->setMiddlewareStack($stack);
 
-        return $actionInvoker;
+        return $requestHandler;
     }
 
     private function getContainer(): Container
@@ -114,5 +145,13 @@ final class HandleTests extends TestCase
         $request = $this->prophesize(ServerRequestInterface::class);
 
         return $request->reveal();
+    }
+
+    /**
+     * @param list<class-string<MiddlewareInterface>> $middlewares
+     */
+    private function getMiddlewareStack(array $middlewares): MiddlewareStackInterface
+    {
+        return new MiddlewareStack($middlewares);
     }
 }
