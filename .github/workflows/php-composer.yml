@@ -14,6 +14,9 @@ jobs:
     steps:
     - name: Setup PHP Action
       uses: shivammathur/setup-php@2.16.0
+      with:
+        php-version: '8.0'
+        extensions: filter
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
