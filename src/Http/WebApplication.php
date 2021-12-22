@@ -59,7 +59,8 @@ final class WebApplication implements ApplicationInterface
     private function enhanceRequest(array $additionalVars): void
     {
         /**
-         * @todo Move elsewhere. Idea: middlewares are known for modifying the request object, but how do I pass $additionalVars into said middleware?
+         * @todo Move elsewhere. Idea: middlewares are known for modifying the request object,
+         *       but how do I pass $additionalVars into said middleware?
          */
         foreach ($additionalVars as $name => $value) {
             $this->request = $this->request
