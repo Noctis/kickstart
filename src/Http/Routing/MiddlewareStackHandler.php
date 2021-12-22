@@ -2,47 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Noctis\KickStart\Http\Routing\Handler;
+namespace Noctis\KickStart\Http\Routing;
 
 use DI\Container;
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use RuntimeException;
 
-final class ActionInvoker implements ActionInvokerInterface
+final class MiddlewareStackHandler implements MiddlewareStackHandlerInterface
 {
     private Container $container;
-
-    /** @var array<class-string<MiddlewareInterface>> */
-    private array $stack = [];
+    private ?MiddlewareStackInterface $middlewareStack;
 
     public function __construct(Container $container)
     {
         $this->container = $container;
+        $this->middlewareStack = null;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function setStack(array $stack): void
+    public function setMiddlewareStack(MiddlewareStackInterface $middlewareStack): void
     {
-        $this->stack = array_map(
-            function (string $className): string {
-                if (!is_a($className, MiddlewareInterface::class, true)) {
-                    throw new InvalidArgumentException(
-                        sprintf(
-                            'Given stack must contain only class names implementing the %s interface.',
-                            MiddlewareInterface::class
-                        )
-                    );
-                }
-
-                return $className;
-            },
-            $stack
-        );
+        $this->middlewareStack = $middlewareStack;
     }
 
     /**
@@ -57,15 +38,19 @@ final class ActionInvoker implements ActionInvokerInterface
         $this->container
             ->set(ServerRequestInterface::class, $request);
 
-        if ($this->stack === []) {
+        if ($this->middlewareStack === null) {
             throw new RuntimeException(
                 'Stack not found. Did you forget to call the `setStack()` method?'
             );
         }
 
-        $middleware = $this->getMiddleware(
-            array_shift($this->stack)
-        );
+        $nextMiddleware = $this->middlewareStack
+            ->shift();
+        if ($nextMiddleware === null) {
+            throw new RuntimeException('Middleware stack is empty.');
+        }
+
+        $middleware = $this->getMiddleware($nextMiddleware);
 
         return $middleware->process($request, $this);
     }

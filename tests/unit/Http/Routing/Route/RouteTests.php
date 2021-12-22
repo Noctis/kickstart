@@ -32,7 +32,7 @@ final class RouteTests extends TestCase
         );
         $this->assertSame(
             'App\Http\Action\FooAction',
-            $route->getAction()
+            $route->getActionName()
         );
         $this->assertSame(
             $middlewares,
@@ -57,7 +57,7 @@ final class RouteTests extends TestCase
         );
         $this->assertSame(
             'App\Http\Action\FooAction',
-            $route->getAction()
+            $route->getActionName()
         );
         $this->assertSame(
             [],
