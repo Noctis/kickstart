@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "~8.0.0",
         "ext-filter": "*",
         "composer-runtime-api": "^2",
         "fig/http-message-util": "^1.1",
@@ -59,7 +59,13 @@
         "phpcs": "phpcs --standard=PSR12"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "phpunit/phpunit": true,
+            "squizlabs/php_codesniffer": true,
+            "vimeo/psalm": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
