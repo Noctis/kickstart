@@ -26,6 +26,7 @@ Run the following commands to upgrade your application's dependencies:
 
 * ```shell
   composer require --with-all-dependencies \
+  php:~8.0.0 \
   noctis/kickstart:^3.0@dev \
   laminas/laminas-diactoros:^2.8 \
   psr/container:^1.1 \
@@ -431,7 +432,7 @@ access to certain helper functions, like `render()` or `redirect()`. Some of the
 as in the `AbstractAction` - are available through traits now. You will need to switch your actions to using those 
 traits and provide those traits with an instance of a specific response factory that they require.
 
-#### 8.1 `render()` Method
+#### 8.1 The `render()` Method
 
 The `render()` method is now available through the `Noctis\KickStart\Http\Helper\RenderTrait`. This trait needs to be
 provided an instance of `HtmlResponseFactoryInterface` into its private `$htmlResponseFactory` field:
@@ -468,7 +469,7 @@ final class DummyAction implements ActionInterface
 }
 ```
 
-#### 8.2 `redirect()` Method
+#### 8.2 The `redirect()` Method
 
 The `redirect()` method is now available through the `Noctis\KickStart\Http\Helper\RedirectTrait`. This trait needs to 
 be provided an instance of `RedirectResponseFactoryInterface` into its private `$redirectResponseFactory` field:
@@ -505,7 +506,7 @@ final class DummyAction implements ActionInterface
 }
 ```
 
-#### 8.3 `notFound()` Method
+#### 8.3 The `notFound()` Method
 
 The `notFound()` method is now available through the `Noctis\KickStart\Http\Helper\NotFoundTrait`. This trait needs to
 be provided an instance of `NotFoundResponseFactoryInterface` into its private `$notFoundResponseFactory` field:
@@ -545,7 +546,7 @@ final class DummyAction implements ActionInterface
 }
 ```
 
-#### 8.4 `sendAttachment()` and `sendFile()` Methods
+#### 8.4 The `sendAttachment()` and `sendFile()` Methods
 
 The `sendAttachment()` method is now available through the `Noctis\KickStart\Http\Helper\AttachmentTrait`. This trait 
 needs to be provided an instance of `AttachmentResponseFactoryInterface` into its private `$attachmentResponseFactory` 
@@ -591,7 +592,7 @@ The `AttachmentTrait` does offer some additional factory methods for creating an
 * `sendContent()` - can be used as a shortcut for `AttachmentResponseFactoryInterface::sendContent()`,
 * `sendResource()` - can be used as a shortcut for `AttachmentResponseFactoryInterface::sendResource()`.
 
-#### 8.5 `setFlashMessage()` and `getFlashMessage()` Methods
+#### 8.5 The `setFlashMessage()` and `getFlashMessage()` Methods
 
 The `setFlashMessage()` and `getFlashMessage()` methods are now available in the 
 `Noctis\KickStart\Http\Service\FlashMessageServiceInterface` class. Although they are named the same as the methods
@@ -622,7 +623,7 @@ with:
 $this->getFlashMessage('message')
 ```
 
-#### 8.6 `getBaseHref()` Method
+#### 8.6 The `getBaseHref()` Method
 
 The `getBaseHref()` method needs to be replaced with calls to the `createFromRequest()` method of 
 `Noctis\KickStart\Http\Factory\BaseHrefFactoryInterface`. The new method accepts one argument - an instance of
@@ -713,15 +714,25 @@ To create a new instance of `Noctis\KickStart\File\InMemoryFile`, use the
 
 ### 13. Cherry on Top
 
+Add the following to the `config` section in your `composer.json` file:
+
+```json
+"allow-plugins": {
+    "composer/package-versions-deprecated": true,
+    "squizlabs/php_codesniffer": true,
+    "vimeo/psalm": true
+}
+```
+
 Modify the Kickstart version indicator in your application's `composer.json` file, like so:
 
 ```json
 "extra": {
-      "app-version": "3.0.0"
-  },
+    "app-version": "3.0.0"
+},
 ```
 
-Execute the following command in CLI to update your `composer.lock`:
+Finally, execute the following command in CLI to update your `composer.lock` accordingly:
 
 ```sh
 composer update --lock
