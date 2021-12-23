@@ -59,7 +59,13 @@
         "phpcs": "phpcs --standard=PSR12"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "phpunit/phpunit": true,
+            "squizlabs/php_codesniffer": true,
+            "vimeo/psalm": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
