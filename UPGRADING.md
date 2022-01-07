@@ -735,7 +735,7 @@ Modify the Kickstart version indicator in your application's `composer.json` fil
 Finally, execute the following command in CLI to update your `composer.lock` accordingly:
 
 ```sh
-composer update --lock
+$ composer update --lock
 ```
 
 and we're done!
@@ -947,7 +947,8 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 
 #### 4.2 HTTP Actions
 
-* Rename & move the `src/Http/Routes/StandardRoutes.php` file to `src/Http/Routing/routes.php`.
+* Rename & move the `src/Http/Routes/StandardRoutes.php` file to `src/Http/Routing/routes.php` (**notice the
+  subdirectory name change, from `Routes` to `Routing`!**)..
 * Modify the `src/Http/Routing/routes.php` appropriately. For example, if the file originally looked like this:
   ```php
   <?php declare(strict_types=1);
@@ -985,7 +986,6 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 
   use App\Http\Action\DummyAction;
   use App\Http\Middleware\Guard\DummyGuard;
-  use Noctis\KickStart\Http\Routing\Route;
 
   return [
       new Route('GET', '/[{name}]', DummyAction::class, [DummyGuard::class]),
@@ -1139,15 +1139,15 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 ### 7. What's Left
 
 * Delete the `src/ContainerBuilder.php` file.
-* Add the following section to your `composer.json`:
+* Modify your `composer.json` file by adding the following `extra` section to it:
   ```json
   "extra": {
       "app-version": "3.0.0"
   }
   ```
-  and run the following command to update your `composer.lock` file:
-  ```shell
-  composer update --lock
+* Run the following command in your console to update your `composer.lock` file:
+  ```sh
+  $ composer update --lock
   ```
 
 ## From 1.4.2 to 2.3.0
@@ -1296,7 +1296,8 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   }
   ```
 * Delete the `src/Http/Middleware/Guard/GuardMiddlewareInterface.php` file.
-* Rename & move the `src/Http/Routes/StandardRoutes.php` file to `src/Http/Routing/routes.php`.
+* Rename & move the `src/Http/Routes/StandardRoutes.php` file to `src/Http/Routing/routes.php` (**notice the 
+  subdirectory name change, from `Routes` to `Routing`!**).
 * Modify the `src/Http/Routing/routes.php` appropriately. For example, if the file originally looked like this:
   ```php
   <?php declare(strict_types=1);
@@ -1337,7 +1338,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   use Noctis\KickStart\Http\Routing\Route;
 
   return [
-      new Route('GET', '[{name}]', DummyAction::class, [DummyGuard::class]),
+      ['GET', '[{name}]', DummyAction::class, [DummyGuard::class]],
   ];
   ```
 * Delete the `src/Http/Router.php` file.
@@ -1373,44 +1374,11 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   * those classes extend the `Noctis\KickStart\Http\Request\Request` class,
   * replace reference to `Symfony\Component\HttpFoundation\Request` with a reference to
     `Psr\Http\Message\ServerRequestInterface`
-* Edit any `*Action.php` files within `src/Http/Action` directory (except `BaseAction.php`) and:
-  * make sure those classes implement the `Noctis\KickStart\Http\Action\ActionInterface` interface,
-  * have the following constructor:
-    ```php
-    use Noctis\KickStart\Http\Response\ResponseFactoryInterface;
-    
-    // ...
-    
-    private ResponseFactoryInterface $responseFactory;
-
-    public function __construct(ResponseFactoryInterface $responseFactory)
-    {
-        $this->responseFactory = $responseFactory;
-    }
-    ```
-  * rename their `execute()` methods to `process()` with the following signature:
-    ```php
-    use Psr\Http\Message\ResponseInterface;
-    use Psr\Http\Message\ServerRequestInterface;
-    use Psr\Http\Server\RequestHandlerInterface;
-    
-    // ...
-    
-    /**
-     * @inheritDoc
-     */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-        // ...
-    }
-    ```,
-  * if an `execute()` method had dependencies injected into it, move them to the action's constructor,
-  * if an action uses the `$this->render()` method, replace it with a call to `$this->responseFactory->htmlResponse()`,
-  * if an action uses the `$this->redirect()` method, replace it with a call to 
-    `$this->responseFactory->redirectionResponse()`,
-  * if given action sends an attachment (i.e. file) in response, you can use the `sendAttachment()` action,
-  * make sure `process()` method type-hints returning either `HtmlResponse`, `RedirectResponse`, `JsonResponse` or
-    `EmptyResponse` from the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`.
+* Edit any `*Action.php` files within `src/Http/Action` directory (except `BaseAction.php`) and make sure:
+  * those classes extend the `Noctis\KickStart\Http\Action\AbstractAction` abstract class,
+  * their `execute()` methods type-hint returning either `HtmlResponse`, `RedirectResponse`, `JsonResponse` or
+    `EmptyResponse` from the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`,
+  * if given action sends an attachment (i.e. file) in response, you can use the `sendAttachment()` action.
 * If there are no custom methods inside, delete the `src/Http/Action/BaseAction.php` file.
 * Delete the `src/Http/Factory`, `src/Http/Helper` directories.
 * Delete the `ActionInvoker.php`, `RequestHandlerInterface.php` and `RequestHandlerStack.php` files from the
@@ -1447,3 +1415,13 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
 ### 7. What's Left
 
 * Delete the `src/ContainerBuilder.php` file.
+* Modify your `composer.json` file by adding the following `extra` section to it:
+  ```json
+  "extra": {
+      "app-version": "2.3.0"
+  }
+  ```
+* Run the following command in your console to update your `composer.lock` file:
+  ```sh
+  $ composer update --lock
+  ```
