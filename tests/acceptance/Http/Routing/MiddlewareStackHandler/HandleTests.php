@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Acceptance\Http\Routing\MiddlewareStackHandler;
 
-use DI\Container;
 use DI\ContainerBuilder;
 use Noctis\KickStart\Http\Action\ActionInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStack;
 use Noctis\KickStart\Http\Routing\MiddlewareStackInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandler;
+use Noctis\KickStart\Service\Container\PhpDiContainer;
+use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\ServerRequestInterface;
@@ -132,11 +133,12 @@ final class HandleTests extends TestCase
         return $requestHandler;
     }
 
-    private function getContainer(): Container
+    private function getContainer(): SettableContainerInterface
     {
         $containerBuilder = new ContainerBuilder();
 
-        return $containerBuilder->build();
+        return $containerBuilder->build()
+            ->get(PhpDiContainer::class);
     }
 
     /** @noinspection PhpIncompatibleReturnTypeInspection */
