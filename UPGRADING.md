@@ -988,7 +988,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   use App\Http\Middleware\Guard\DummyGuard;
 
   return [
-      new Route('GET', '/[{name}]', DummyAction::class, [DummyGuard::class]),
+      Route::get('/[{name}]', DummyAction::class, [DummyGuard::class]),
   ];
   ```
 * Delete the `src/Http/Router.php` file.
@@ -1040,7 +1040,7 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
     {
         // ...
     }
-    ```,
+    ```
   * if the `execute()` method had dependencies injected into it, eg:
     ```php
     <?php declare(strict_types=1);
@@ -1082,34 +1082,122 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
     ```
   * make sure `process()` method type-hints returning either `HtmlResponse`, `RedirectResponse`, `JsonResponse` or 
     `EmptyResponse` from the `Laminas\Diactoros\Response` namespace, e.g. `Laminas\Diactoros\Response\HtmlResponse`,
-  * **if the action uses a custom request class, you must move that custom request's functionality elsewhere, as custom
-    requests functionality (including the `Noctis\KickStart\Http\Request\Request` class) has been removed in Kickstart
-    3.0.0**,
-* If the given action returns an HTML response, i.e. has the `return $this->render(...);` line:
-  * make sure an instance of `Noctis\KickStart\Http\Response\Factory\HtmlResponseFactoryInterface` is injected into it,
-  * replace the call to `$this->render()` with a call to the `HtmlResponseFactoryInterface::render()` method.
-* If the given action returns a redirection, i.e. has the `return $this->redirect(...);` line:
-  * make sure an instance of `Noctis\KickStart\Http\Response\Factory\RedirectResponseFactoryInterface` is injected into
-    it,
-  * replace the call to `$this->redirect()` with a call to the `RedirectResponseFactoryInterface::toPath()` method.
-* If the given action returns (sends) a file in response:
-  * make sure an instance of `Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactoryInterface` is injected
-    into it,
-  * call one the following methods to return an instance of `Noctis\KickStart\Http\Response\AttachmentResponse`:
-    * `AttachmentResponseFactoryInterface::sendFile()`,
-    * `AttachmentResponseFactoryInterface::sendContent()`, or
-    * `AttachmentResponseFactoryInterface::sendResource()`.
-* If the given action use the flash messages functionality, i.e. has the `$this->setFlashMessage()` and/or
-  `$this->getFlashMessage()` lines:
-  * make sure an instance of `Noctis\KickStart\Http\Service\FlashMessageServiceInterface` is injected into it,
-  * replace the calls to `$this->setFlashMessage()` and `$this->getFlashMessage()` methods, with calls to
-    `FlashMessageServiceInterface::setFlashMessage()` and `FlashMessageServiceInterface::getFlashMessage()` methods
-    respectively.
+  * if the given action returns an HTML response, i.e. has the `return $this->render(...);` line:
+    * include the `Noctis\KickStart\Http\Helper\RenderTrait` trait in it, and 
+    * make sure an instance of `Noctis\KickStart\Http\Response\Factory\HtmlResponseFactoryInterface` is injected into 
+      the trait's `$htmlResponseFactory` field (through the action's constructor),
+  * if the given action returns a redirection, i.e. has the `return $this->redirect(...);` line:
+    * include the `Noctis\KickStart\Http\Helper\RedirectTrait` trait in it, and
+    * make sure an instance of `Noctis\KickStart\Http\Response\Factory\RedirectResponseFactoryInterface` is injected 
+      into the trait's `$redirectResponseFactory` field (through the action's constructor),
+  * if the given action returns (sends) a file in response:
+    * include the `Noctis\KickStart\Http\Helper\AttachmentTrait` trait in it, and 
+    * make sure an instance of `Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactoryInterface` is injected
+      into the trait's `$attachmentResponseFactory` field (through the action's constructor),
+    * use one of the methods provided by the `AttachmentTrait`, accordingly to what you're sending to the browser:
+      * `sendFile()` - if you want to send a file which already exists on a storage device,
+      * `sendContent()` - if you want to send string data which is currently stored in a variable,
+      * `sendResource()` - if you want to send a 
+        [PHP resource](https://www.php.net/manual/en/language.types.resource.php).
+  * if the given action returns a "not found" (404) response, i.e. has the `return $this->notFound();` line:
+    * include the `Noctis\KickStart\Http\Helper\NotFoundTrait` trait in it, and
+    * make sure an `Noctis\KickStart\Http\Response\Factory\NotFoundResponseFactoryInterface` is injected into the 
+      trait's `$notFoundResponseFactory` field (through the action's constructor).
 * If there were no custom methods added to the `App\Http\Action\BaseAction` abstract class, delete the
   `src/Http/Action/BaseAction.php` file.
 * Delete the `src/Http/Factory`, `src/Http/Helper` directories.
 * Delete the `ActionInvoker.php`, `RequestHandlerInterface.php` and `RequestHandlerStack.php` files from the
   `src/Http/Middleware` directory.
+
+#### 4.3 Migrating Custom Requests
+
+* Edit any custom request classes in your application and make sure they now extend the
+  `Noctis\KickStart\Http\Request\AbstractRequest` class, instead of the now non-existent 
+  `App\Http\Request\AbstractRequest` one,
+* Replace any calls to the request's `getFiles()` method with calls to the `getUploadedFiles()` method,
+* The request's `getSession()` method has been removed in Kickstart 2.0.0. You can find more information on how to
+  implement session handling in your application in the Kickstart's 
+  [Implementing Session Handling](https://github.com/Noctis/kickstart-app/blob/master/docs/cookbook/Implementing_Session_Handling.md) 
+  cookbook recipe,
+* The request's `getClientIp()` method has also been removed in Kickstart 2.0.0. You can find more information on how to
+  acquire the client's IP address in Kickstart's 
+  [Acquiring Client IP Address](https://github.com/Noctis/kickstart-app/blob/master/docs/cookbook/Acquiring_Client_IP_Address.md)
+  cookbook recipe,
+* The request's `getBasePath()` method has been removed in Kickstart 3.0.0. Replace any calls to it with calls to the
+  `createFromRequest()` method of the `Noctis\KickStart\Http\Factory\BaseHrefFactoryInterface`, for example replace 
+  this (**notice:** the following code shows an action already migrated to Kickstart 3.0):
+  ```php
+  <?php
+
+  declare(strict_types=1);
+
+  namespace Bartender\Http\Action;
+
+  use Bartender\Http\Request\DummyRequest;
+  use Noctis\KickStart\Http\Action\ActionInterface;
+  use Psr\Http\Message\ResponseInterface;
+  use Psr\Http\Message\ServerRequestInterface;
+  use Psr\Http\Server\RequestHandlerInterface;
+
+  final class DummyAction implements ActionInterface
+  {
+      private DummyRequest $dummyRequest;
+
+      /**
+       * @param DummyRequest $dummyRequest
+       */
+      public function __construct(DummyRequest $dummyRequest)
+      {
+          $this->dummyRequest = $dummyRequest;
+      }
+
+      public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+      {
+          $basePath = $this->request
+              ->getBasePath();
+        
+          // ...
+      }
+  }
+  ```
+  like this:
+  ```php
+  <?php
+  
+  declare(strict_types=1);
+  
+  namespace Bartender\Http\Action;
+  
+  use Bartender\Http\Request\DummyRequest;
+  use Noctis\KickStart\Http\Action\ActionInterface;
+  use Noctis\KickStart\Http\Factory\BaseHrefFactoryInterface;
+  use Psr\Http\Message\ResponseInterface;
+  use Psr\Http\Message\ServerRequestInterface;
+  use Psr\Http\Server\RequestHandlerInterface;
+  
+  final class DummyAction implements ActionInterface
+  {
+      private DummyRequest $dummyRequest;
+      private BaseHrefFactoryInterface $baseHrefFactory;
+  
+      /**
+       * @param DummyRequest $dummyRequest
+       */
+      public function __construct(DummyRequest $dummyRequest, BaseHrefFactoryInterface $baseHrefFactory)
+      {
+          $this->dummyRequest = $dummyRequest;
+          $this->baseHrefFactory = $baseHrefFactory;
+      }
+  
+      public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+      {
+          $basePath = $this->baseHrefFactory
+              ->createFromRequest($request);
+  
+          // ...
+      }
+  }
+  ```
 
 ### 5. Console Related Things
 
