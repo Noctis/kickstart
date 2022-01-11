@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
-use DI\Container;
+use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -12,10 +12,10 @@ use RuntimeException;
 
 final class MiddlewareStackHandler implements MiddlewareStackHandlerInterface
 {
-    private Container $container;
+    private SettableContainerInterface $container;
     private ?MiddlewareStackInterface $middlewareStack;
 
-    public function __construct(Container $container)
+    public function __construct(SettableContainerInterface $container)
     {
         $this->container = $container;
         $this->middlewareStack = null;

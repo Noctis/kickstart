@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http;
 
-use DI\Container;
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Noctis\KickStart\ApplicationInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStack;
@@ -12,12 +11,13 @@ use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
 use Noctis\KickStart\Http\Routing\RouteInterface;
 use Noctis\KickStart\Http\Routing\Router\RouterInterface;
 use Noctis\KickStart\Http\Service\RequestDecoratorInterface;
+use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class WebApplication implements ApplicationInterface
 {
-    private Container $container;
+    private SettableContainerInterface $container;
     private ServerRequestInterface $request;
     private RouterInterface $router;
     private MiddlewareStackHandlerInterface $middlewareStackHandler;
@@ -25,7 +25,7 @@ final class WebApplication implements ApplicationInterface
     private EmitterInterface $responseEmitter;
 
     public function __construct(
-        Container $container,
+        SettableContainerInterface $container,
         ServerRequestInterface $request,
         RouterInterface $router,
         MiddlewareStackHandlerInterface $middlewareStackHandler,
