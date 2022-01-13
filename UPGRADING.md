@@ -932,23 +932,15 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   }
   ```
 * If the middleware uses the `App\Http\Helper\HttpRedirectionTrait` trait:
-  * remove any references to it in the middleware,
+  * replace it with a reference to `Noctis\KickStart\Http\Helper\RedirectTrait`,
   * make sure an instance of `Noctis\KickStart\Http\Response\Factory\RedirectResponseFactoryInterface` is injected
-    into the middleware, through its constructor,
-  * use the `RedirectResponseFactoryInterface::toPath()` method, in place of calls to 
-    `HttpRedirectionTrait::redirect()`.
+    into the trait's `$redirectResponseFactory` field (through the middleware's constructor).
 * If the middleware uses the `App\Http\Helper\FlashMessageTrait` trait:
-  * remove any references to it in the middleware,
-  * make sure an instance of `Noctis\KickStart\Http\Service\FlashMessageServiceInterface` is injected into the 
+  * remove the reference to it from the middleware,
+  * make sure an instance of `Noctis\KickStart\Http\Service\FlashMessageServiceInterface` is injected into the
     middleware, through its constructor,
   * use the `FlashMessageServiceInterface::setFlashMessage()` and `FlashMessageServiceInterface::getFlashMessage()`
-    methods, in place of calls to `FlashMessageTrait::setFlashMessage()` and `FlashMessageTrait::getFlashMessage()`
-    methods, respectively.
-* If the middleware uses the `App\Http\Helper\RenderTrait` trait:
-  * remove any references to it and `Twig\Environment` in the middleware,
-  * make sure an instance of `Noctis\KickStart\Http\Response\Factory\HtmlResponseFactoryInterface` is injected into the
-    middleware, through its constructor,
-  * use the `HtmlResponseFactoryInterface::render()` method, in place of calls to `RenderTrait::render()`.
+    methods, in place of calls to the trait's `setFlashMessage()` and `getFlashMessage()` methods, respectively.
 * Delete the `src/Http/Middleware/Guard/GuardMiddlewareInterface.php` file.
 
 #### 4.2 HTTP Actions
