@@ -9,8 +9,6 @@ use Laminas\Diactoros\UriFactory;
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use Laminas\Session\Container as SessionContainer;
-use Laminas\Session\ManagerInterface;
-use Laminas\Session\SessionManager;
 use Noctis\KickStart\Http\Factory\BaseHrefFactory;
 use Noctis\KickStart\Http\Factory\BaseHrefFactoryInterface;
 use Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactory;
@@ -45,7 +43,6 @@ final class HttpServicesProvider implements ServicesProviderInterface
             EmitterInterface::class => SapiEmitter::class,
             FlashMessageServiceInterface::class => FlashMessageService::class,
             HtmlResponseFactoryInterface::class => HtmlResponseFactory::class,
-            ManagerInterface::class => SessionManager::class,
             MiddlewareStackHandlerInterface::class => MiddlewareStackHandler::class,
             NotFoundResponseFactoryInterface::class => NotFoundResponseFactory::class,
             RedirectResponseFactoryInterface::class => RedirectResponseFactory::class,
