@@ -24,7 +24,7 @@ couple of things that you'll need to do, all of them explained in detail below:
 
 Run the following commands to upgrade your application's dependencies:
 
-* ```shell
+```shell
   composer require --with-all-dependencies \
   php:~8.0.0 \
   noctis/kickstart:^3.0@dev \
@@ -34,8 +34,9 @@ Run the following commands to upgrade your application's dependencies:
   symfony/console:^5.3 \
   symfony/http-foundation:^5.3 \
   vlucas/phpdotenv:^5.3
-  ```
-* ```shell
+```
+
+```shell
   composer require --dev --with-all-dependencies \
   squizlabs/php_codesniffer:^3.6 \
   symfony/var-dumper:^5.3 \
@@ -767,10 +768,12 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   vimeo/psalm
   ```
 * Run the following commands to install new packages:
+
   ```shell
   composer require \
   php:^8.0 \
   composer-runtime-api:^2 \
+  laminas/laminas-diactoros:^2.8 \
   noctis/kickstart:^3.0 \
   paragonie/easydb:^2.11 \
   php-di/php-di:^6.3 \
@@ -780,13 +783,16 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   symfony/console:^5.3 \
   symfony/http-foundation:^5.3 \
   vlucas/phpdotenv:^5.3
+  ```
   
+  ```shell
   composer require --dev \
   roave/security-advisories:dev-latest \
   squizlabs/php_codesniffer:^3.6 \
   symfony/var-dumper:^5.3 \
   vimeo/psalm:^4.9
   ```
+
 * Since Psalm has been updated from 3.x to 4.x, and the new version's configuration file (`psalm.xml`) has a different
   format, run the following command to recreate it:
   ```shell
@@ -1278,7 +1284,9 @@ modified by hand, i.e. it's not possible to just copy over their contents from t
   psr/http-server-handler:^1.0 \
   symfony/console:^5.2 \
   symfony/http-foundation:^5.2
+  ```
 
+  ```shell
   composer require --dev \
   roave/security-advisories:dev-latest \
   symfony/var-dumper:^5.2 \
