@@ -9,9 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 final class RouteTests extends TestCase
 {
-    /**
-     * @covers \Noctis\KickStart\Http\Routing\Route
-     */
     public function test_it_returns_correct_information(): void
     {
         $middlewares = [
@@ -40,9 +37,6 @@ final class RouteTests extends TestCase
         );
     }
 
-    /**
-     * @covers \Noctis\KickStart\Http\Routing\Route
-     */
     public function test_it_can_be_created_with_no_middlewares(): void
     {
         $route = new Route('GET', '/foo', 'App\Http\Action\FooAction', []);
