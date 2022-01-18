@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Response\Headers;
 
-use Symfony\Component\HttpFoundation\HeaderUtils;
+use Noctis\KickStart\Http\Helper\HeaderUtils;
 
 final class Disposition implements DispositionInterface
 {
