@@ -5,20 +5,29 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Response\Headers;
 
 use Symfony\Component\HttpFoundation\HeaderUtils;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 final class Disposition implements DispositionInterface
 {
     private string $disposition;
 
-    public function __construct(string $filename, string $fallbackFilename = null)
+    public static function attachment(string $filename, string $fallbackFilename = null): self
+    {
+        return new self(HeaderUtils::DISPOSITION_ATTACHMENT, $filename, $fallbackFilename);
+    }
+
+    public static function inline(string $filename, string $fallbackFilename = null): self
+    {
+        return new self(HeaderUtils::DISPOSITION_INLINE, $filename, $fallbackFilename);
+    }
+
+    private function __construct(string $type, string $filename, string $fallbackFilename = null)
     {
         if ($fallbackFilename === null) {
             $fallbackFilename = $filename;
         }
 
         $this->disposition = HeaderUtils::makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $type,
             $this->escape($filename),
             $this->escape($fallbackFilename),
         );
