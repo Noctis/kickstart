@@ -52,4 +52,4 @@ jobs:
       #- run: ./vendor/bin/phpunit
       - run: composer run-script phpunit
       - run: composer run-script psalm ./src
-      - run: composer run-script phpcs ./src
+      #- run: composer run-script phpcs ./src
