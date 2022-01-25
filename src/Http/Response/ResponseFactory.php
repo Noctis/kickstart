@@ -43,11 +43,9 @@ final class ResponseFactory implements ResponseFactoryInterface
      */
     public function redirectionResponse(UriInterface $uri, array $params = []): RedirectResponse
     {
-        if (!empty($params)) {
-            $uri = $uri->withQuery(
-                http_build_query($params)
-            );
-        }
+        $uri = $uri->withQuery(
+            http_build_query($params)
+        );
 
         return new RedirectResponse((string)$uri);
     }

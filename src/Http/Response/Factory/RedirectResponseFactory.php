@@ -43,11 +43,9 @@ final class RedirectResponseFactory implements RedirectResponseFactoryInterface
                 );
         }
 
-        if (!empty($queryParams)) {
-            $uri = $uri->withQuery(
-                http_build_query($queryParams)
-            );
-        }
+        $uri = $uri->withQuery(
+            http_build_query($queryParams)
+        );
 
         return new RedirectResponse((string)$uri);
     }
