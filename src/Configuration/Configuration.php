@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Configuration;
 
-final class Configuration implements ConfigurationInterface
+final class Configuration
 {
-    /** @var array<string, mixed> */
-    private array $values = [];
+    private function __construct()
+    {
+    }
 
-    public function getBaseHref(): string
+    public static function isProduction(): bool
+    {
+        return self::get('APP_ENV') === 'prod';
+    }
+
+    public static function getBaseHref(): string
     {
         /** @var string $baseHref */
-        $baseHref = $this->get('basehref');
+        $baseHref = self::get('basehref');
 
         // Remove trailing slash ("/"), if applicable
         if ($baseHref[-1] === '/') {
@@ -22,18 +28,26 @@ final class Configuration implements ConfigurationInterface
         return $baseHref;
     }
 
-    public function get(string $name, mixed $default = null): mixed
+    public static function get(string $name, mixed $default = null): mixed
     {
-        return $this->values[$name] ?? $default;
+        /** @var mixed */
+        $value = $_ENV[$name] ?? $default;
+
+        return match ($value) {
+            'true'  => true,
+            'false' => false,
+            default => $value
+        };
     }
 
-    public function set(string $name, mixed $value): void
+    public static function set(string $name, mixed $value): void
     {
-        $this->values[$name] = $value;
+        /** @psalm-suppress MixedAssignment */
+        $_ENV[$name] = $value;
     }
 
-    public function has(string $name): bool
+    public static function has(string $name): bool
     {
-        return array_key_exists($name, $this->values);
+        return array_key_exists($name, $_ENV);
     }
 }
