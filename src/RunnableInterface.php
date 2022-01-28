@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart;
 
-interface ApplicationInterface
+interface RunnableInterface
 {
     public function run(): void;
 }

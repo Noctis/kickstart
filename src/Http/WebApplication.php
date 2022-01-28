@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http;
 
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
-use Noctis\KickStart\ApplicationInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStack;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
 use Noctis\KickStart\Http\Routing\RouteInterface;
 use Noctis\KickStart\Http\Routing\Router\RouterInterface;
 use Noctis\KickStart\Http\Service\RequestDecoratorInterface;
+use Noctis\KickStart\RunnableInterface;
 use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class WebApplication implements ApplicationInterface
+final class WebApplication implements RunnableInterface
 {
     private SettableContainerInterface $container;
     private ServerRequestInterface $request;
