@@ -30,8 +30,6 @@ final class RoutesCollection implements RoutesCollectionInterface
 
     public function getIterator(): ArrayIterator
     {
-        return new ArrayIterator(
-            array_values($this->routes)
-        );
+        return new ArrayIterator($this->routes);
     }
 }

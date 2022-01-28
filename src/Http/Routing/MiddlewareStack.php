@@ -70,8 +70,6 @@ final class MiddlewareStack implements MiddlewareStackInterface
 
     public function getIterator(): ArrayIterator
     {
-        return new ArrayIterator(
-            array_values($this->middlewareNames)
-        );
+        return new ArrayIterator($this->middlewareNames);
     }
 }
