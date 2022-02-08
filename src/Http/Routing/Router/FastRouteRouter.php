@@ -21,9 +21,11 @@ final class FastRouteRouter implements RouterInterface
 {
     private ?RoutesCollectionInterface $routes = null;
 
-    public function setRoutes(RoutesCollectionInterface $routesCollection): void
+    public function setRoutes(RoutesCollectionInterface $routesCollection): RouterInterface
     {
         $this->routes = $routesCollection;
+
+        return $this;
     }
 
     public function route(ServerRequestInterface $request): RouteInterface

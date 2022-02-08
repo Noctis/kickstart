@@ -9,6 +9,7 @@ use Noctis\KickStart\Http\Routing\MiddlewareStack;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
 use Noctis\KickStart\Http\Routing\RouteInterface;
 use Noctis\KickStart\Http\Routing\Router\RouterInterface;
+use Noctis\KickStart\Http\Routing\RoutesCollection;
 use Noctis\KickStart\Http\Service\RequestDecoratorInterface;
 use Noctis\KickStart\RunnableInterface;
 use Noctis\KickStart\Service\Container\SettableContainerInterface;
@@ -23,6 +24,9 @@ final class WebApplication implements RunnableInterface
     private MiddlewareStackHandlerInterface $middlewareStackHandler;
     private RequestDecoratorInterface $requestDecorator;
     private EmitterInterface $responseEmitter;
+
+    /** @var list<RouteInterface> */
+    private array $routes = [];
 
     public function __construct(
         SettableContainerInterface $container,
@@ -48,6 +52,17 @@ final class WebApplication implements RunnableInterface
             ->emit($response);
     }
 
+    /**
+     * @param list<RouteInterface> $routes
+     */
+    public function setRoutes(array $routes): void
+    {
+        $this->routes = array_map(
+            fn (RouteInterface $route): RouteInterface => $route,
+            $routes
+        );
+    }
+
     private function generateResponse(): ResponseInterface
     {
         $route = $this->determineRoute();
@@ -63,6 +78,9 @@ final class WebApplication implements RunnableInterface
     private function determineRoute(): RouteInterface
     {
         return $this->router
+            ->setRoutes(
+                new RoutesCollection($this->routes)
+            )
             ->route($this->request);
     }
 
