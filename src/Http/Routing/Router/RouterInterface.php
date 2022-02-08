@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface RouterInterface
 {
-    public function setRoutes(RoutesCollectionInterface $routesCollection): void;
+    public function setRoutes(RoutesCollectionInterface $routesCollection): self;
 
     public function route(ServerRequestInterface $request): RouteInterface;
 }
