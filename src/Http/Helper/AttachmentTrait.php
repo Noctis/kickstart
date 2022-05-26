@@ -44,6 +44,7 @@ trait AttachmentTrait
         string $mimeType,
         DispositionInterface $disposition
     ): AttachmentResponse {
-        return $this->sendResource($resource, $mimeType, $disposition);
+        return $this->attachmentResponseFactory
+            ->sendResource($resource, $mimeType, $disposition);
     }
 }
