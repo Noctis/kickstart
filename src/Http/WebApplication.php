@@ -113,6 +113,7 @@ final class WebApplication implements RunnableInterface
         /** @var class-string<Request> $requestClass */
 
         $this->reRegisterServerRequest();
+        /** @var Request */
         $this->request = $this->container
             ->get($requestClass);
         $this->reRegisterServerRequest();
