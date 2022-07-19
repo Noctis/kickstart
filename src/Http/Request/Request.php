@@ -20,7 +20,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getProtocolVersion()
+    public function getProtocolVersion(): string
     {
         return $this->request
             ->getProtocolVersion();
@@ -29,7 +29,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -41,7 +41,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->request
             ->getHeaders();
@@ -50,7 +50,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function hasHeader($name)
+    public function hasHeader($name): bool
     {
         return $this->request
             ->hasHeader($name);
@@ -59,7 +59,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getHeader($name)
+    public function getHeader($name): array
     {
         return $this->request
             ->getHeader($name);
@@ -68,7 +68,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getHeaderLine($name)
+    public function getHeaderLine($name): string
     {
         return $this->request
             ->getHeaderLine($name);
@@ -77,7 +77,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withHeader($name, $value)
+    public function withHeader($name, $value): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -89,7 +89,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withAddedHeader($name, $value)
+    public function withAddedHeader($name, $value): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -101,7 +101,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withoutHeader($name)
+    public function withoutHeader($name): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -113,7 +113,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getBody()
+    public function getBody(): StreamInterface
     {
         return $this->request
             ->getBody();
@@ -122,7 +122,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -134,7 +134,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getRequestTarget()
+    public function getRequestTarget(): string
     {
         return $this->request
             ->getRequestTarget();
@@ -143,7 +143,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withRequestTarget($requestTarget)
+    public function withRequestTarget($requestTarget): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -155,7 +155,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->request
             ->getMethod();
@@ -164,7 +164,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withMethod($method)
+    public function withMethod($method): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -176,7 +176,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getUri()
+    public function getUri(): UriInterface
     {
         return $this->request
             ->getUri();
@@ -185,7 +185,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withUri(UriInterface $uri, $preserveHost = false)
+    public function withUri(UriInterface $uri, $preserveHost = false): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -197,7 +197,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getServerParams()
+    public function getServerParams(): array
     {
         return $this->request
             ->getServerParams();
@@ -206,7 +206,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getCookieParams()
+    public function getCookieParams(): array
     {
         return $this->request
             ->getCookieParams();
@@ -215,7 +215,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withCookieParams(array $cookies)
+    public function withCookieParams(array $cookies): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -227,7 +227,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getQueryParams()
+    public function getQueryParams(): array
     {
         return $this->request
             ->getQueryParams();
@@ -236,7 +236,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withQueryParams(array $query)
+    public function withQueryParams(array $query): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -248,7 +248,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getUploadedFiles()
+    public function getUploadedFiles(): array
     {
         return $this->request
             ->getUploadedFiles();
@@ -257,7 +257,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withUploadedFiles(array $uploadedFiles)
+    public function withUploadedFiles(array $uploadedFiles): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -269,7 +269,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getParsedBody()
+    public function getParsedBody(): null | array | object
     {
         return $this->request
             ->getParsedBody();
@@ -278,7 +278,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withParsedBody($data)
+    public function withParsedBody($data): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -290,7 +290,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->request
             ->getAttributes();
@@ -308,7 +308,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withAttribute($name, $value)
+    public function withAttribute($name, $value): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
@@ -320,7 +320,7 @@ class Request implements ServerRequestInterface
     /**
      * @inheritDoc
      */
-    public function withoutAttribute($name)
+    public function withoutAttribute($name): static
     {
         $clone = clone $this;
         $clone->request = $clone->request
