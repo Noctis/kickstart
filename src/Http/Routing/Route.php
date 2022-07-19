@@ -208,7 +208,14 @@ final class Route implements RouteInterface
      */
     public function withAdditionalVars(array $vars): RouteInterface
     {
-        return new self($this->method, $this->path, $this->actionName, $this->middlewareNames, $vars);
+        return new self(
+            $this->method,
+            $this->path,
+            $this->actionName,
+            $this->middlewareNames,
+            $vars,
+            $this->customRequestClass
+        );
     }
 
     /**
