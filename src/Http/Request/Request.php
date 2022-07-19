@@ -11,7 +11,7 @@ class Request extends ServerRequest implements ServerRequestInterface
 {
     public static function createFromServerRequest(ServerRequestInterface $request): self
     {
-        return new self(
+        return new static(
             $request->getServerParams(),
             $request->getUploadedFiles(),
             $request->getUri(),
