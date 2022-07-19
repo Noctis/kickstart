@@ -31,8 +31,11 @@ class Request implements ServerRequestInterface
      */
     public function withProtocolVersion($version)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withProtocolVersion($version);
+
+        return $clone;
     }
 
     /**
@@ -76,8 +79,11 @@ class Request implements ServerRequestInterface
      */
     public function withHeader($name, $value)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withHeader($name, $value);
+
+        return $clone;
     }
 
     /**
@@ -85,8 +91,11 @@ class Request implements ServerRequestInterface
      */
     public function withAddedHeader($name, $value)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withAddedHeader($name, $value);
+
+        return $clone;
     }
 
     /**
@@ -94,8 +103,11 @@ class Request implements ServerRequestInterface
      */
     public function withoutHeader($name)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withoutHeader($name);
+
+        return $clone;
     }
 
     /**
@@ -112,8 +124,11 @@ class Request implements ServerRequestInterface
      */
     public function withBody(StreamInterface $body)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withBody($body);
+
+        return $clone;
     }
 
     /**
@@ -130,8 +145,11 @@ class Request implements ServerRequestInterface
      */
     public function withRequestTarget($requestTarget)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withRequestTarget($requestTarget);
+
+        return $clone;
     }
 
     /**
@@ -148,8 +166,11 @@ class Request implements ServerRequestInterface
      */
     public function withMethod($method)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withMethod($method);
+
+        return $clone;
     }
 
     /**
@@ -166,8 +187,11 @@ class Request implements ServerRequestInterface
      */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withUri($uri, $preserveHost);
+
+        return $clone;
     }
 
     /**
@@ -193,8 +217,11 @@ class Request implements ServerRequestInterface
      */
     public function withCookieParams(array $cookies)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withCookieParams($cookies);
+
+        return $clone;
     }
 
     /**
@@ -211,8 +238,11 @@ class Request implements ServerRequestInterface
      */
     public function withQueryParams(array $query)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withQueryParams($query);
+
+        return $clone;
     }
 
     /**
@@ -229,8 +259,11 @@ class Request implements ServerRequestInterface
      */
     public function withUploadedFiles(array $uploadedFiles)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withUploadedFiles($uploadedFiles);
+
+        return $clone;
     }
 
     /**
@@ -247,8 +280,11 @@ class Request implements ServerRequestInterface
      */
     public function withParsedBody($data)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withParsedBody($data);
+
+        return $clone;
     }
 
     /**
@@ -274,8 +310,11 @@ class Request implements ServerRequestInterface
      */
     public function withAttribute($name, $value)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withAttribute($name, $value);
+
+        return $clone;
     }
 
     /**
@@ -283,7 +322,10 @@ class Request implements ServerRequestInterface
      */
     public function withoutAttribute($name)
     {
-        return $this->request
+        $clone = clone $this;
+        $clone->request = $clone->request
             ->withoutAttribute($name);
+
+        return $clone;
     }
 }
