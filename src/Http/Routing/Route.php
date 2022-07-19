@@ -6,6 +6,7 @@ namespace Noctis\KickStart\Http\Routing;
 
 use Fig\Http\Message\RequestMethodInterface;
 use Noctis\KickStart\Http\Action\ActionInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
 /**
@@ -25,77 +26,155 @@ final class Route implements RouteInterface
     /** @var array<string, string> */
     private array $additionalVars;
 
+    /** @var class-string<ServerRequestInterface> | null */
+    private ?string $customRequestClass;
+
     /**
-     * @param class-string<ActionInterface>           $actionName
-     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     * @param class-string<ActionInterface>               $actionName
+     * @param list<class-string<MiddlewareInterface>>     $middlewareNames
+     * @param class-string<ServerRequestInterface> | null $customRequestClass
      */
-    public static function get(string $path, string $actionName, array $middlewareNames = []): self
-    {
-        return new self(RequestMethodInterface::METHOD_GET, $path, $actionName, $middlewareNames);
+    public static function get(
+        string $path,
+        string $actionName,
+        array $middlewareNames = [],
+        string $customRequestClass = null
+    ): self {
+        return new self(
+            RequestMethodInterface::METHOD_GET,
+            $path,
+            $actionName,
+            $middlewareNames,
+            [],
+            $customRequestClass
+        );
     }
 
     /**
-     * @param class-string<ActionInterface>           $actionName
-     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     * @param class-string<ActionInterface>               $actionName
+     * @param list<class-string<MiddlewareInterface>>     $middlewareNames
+     * @param class-string<ServerRequestInterface> | null $customRequestClass
      */
-    public static function post(string $path, string $actionName, array $middlewareNames = []): self
-    {
-        return new self(RequestMethodInterface::METHOD_POST, $path, $actionName, $middlewareNames);
+    public static function post(
+        string $path,
+        string $actionName,
+        array $middlewareNames = [],
+        string $customRequestClass = null
+    ): self {
+        return new self(
+            RequestMethodInterface::METHOD_POST,
+            $path,
+            $actionName,
+            $middlewareNames,
+            [],
+            $customRequestClass
+        );
     }
 
     /**
-     * @param class-string<ActionInterface>           $actionName
-     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     * @param class-string<ActionInterface>               $actionName
+     * @param list<class-string<MiddlewareInterface>>     $middlewareNames
+     * @param class-string<ServerRequestInterface> | null $customRequestClass
      */
-    public static function put(string $path, string $actionName, array $middlewareNames = []): self
-    {
-        return new self(RequestMethodInterface::METHOD_PUT, $path, $actionName, $middlewareNames);
+    public static function put(
+        string $path,
+        string $actionName,
+        array $middlewareNames = [],
+        string $customRequestClass = null
+    ): self {
+        return new self(
+            RequestMethodInterface::METHOD_PUT,
+            $path,
+            $actionName,
+            $middlewareNames,
+            [],
+            $customRequestClass
+        );
     }
 
     /**
-     * @param class-string<ActionInterface>           $actionName
-     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     * @param class-string<ActionInterface>               $actionName
+     * @param list<class-string<MiddlewareInterface>>     $middlewareNames
+     * @param class-string<ServerRequestInterface> | null $customRequestClass
      */
-    public static function patch(string $path, string $actionName, array $middlewareNames = []): self
-    {
-        return new self(RequestMethodInterface::METHOD_PATCH, $path, $actionName, $middlewareNames);
+    public static function patch(
+        string $path,
+        string $actionName,
+        array $middlewareNames = [],
+        string $customRequestClass = null
+    ): self {
+        return new self(
+            RequestMethodInterface::METHOD_PATCH,
+            $path,
+            $actionName,
+            $middlewareNames,
+            [],
+            $customRequestClass
+        );
     }
 
     /**
-     * @param class-string<ActionInterface>           $actionName
-     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     * @param class-string<ActionInterface>               $actionName
+     * @param list<class-string<MiddlewareInterface>>     $middlewareNames
+     * @param class-string<ServerRequestInterface> | null $customRequestClass
      */
-    public static function delete(string $path, string $actionName, array $middlewareNames = []): self
-    {
-        return new self(RequestMethodInterface::METHOD_DELETE, $path, $actionName, $middlewareNames);
+    public static function delete(
+        string $path,
+        string $actionName,
+        array $middlewareNames = [],
+        string $customRequestClass = null
+    ): self {
+        return new self(
+            RequestMethodInterface::METHOD_DELETE,
+            $path,
+            $actionName,
+            $middlewareNames,
+            [],
+            $customRequestClass
+        );
     }
 
     /**
-     * @param class-string<ActionInterface>           $actionName
-     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     * @param class-string<ActionInterface>               $actionName
+     * @param list<class-string<MiddlewareInterface>>     $middlewareNames
+     * @param class-string<ServerRequestInterface> | null $customRequestClass
      */
-    public static function head(string $path, string $actionName, array $middlewareNames = []): self
-    {
-        return new self(RequestMethodInterface::METHOD_HEAD, $path, $actionName, $middlewareNames);
+    public static function head(
+        string $path,
+        string $actionName,
+        array $middlewareNames = [],
+        string $customRequestClass = null
+    ): self {
+        return new self(
+            RequestMethodInterface::METHOD_HEAD,
+            $path,
+            $actionName,
+            $middlewareNames,
+            [],
+            $customRequestClass
+        );
     }
 
     /**
-     * @param class-string<ActionInterface>           $actionName
-     * @param list<class-string<MiddlewareInterface>> $middlewareNames
-     * @param array<string, string>                   $additionalVars
+     * @param class-string<ActionInterface>               $actionName
+     * @param list<class-string<MiddlewareInterface>>     $middlewareNames
+     * @param array<string, string>                       $additionalVars
+     * @param class-string<ServerRequestInterface> | null $customRequestClass
      */
     public function __construct(
         string $method,
         string $path,
         string $actionName,
         array $middlewareNames = [],
-        array $additionalVars = []
+        array $additionalVars = [],
+        string $customRequestClass = null
     ) {
         $this->method = $method;
         $this->path = $path;
         $this->actionName = $actionName;
         $this->middlewareNames = $middlewareNames;
         $this->additionalVars = $additionalVars;
+        $this->customRequestClass = $customRequestClass;
     }
 
     public function getMethod(): string
@@ -138,5 +217,13 @@ final class Route implements RouteInterface
     public function getAdditionalVars(): array
     {
         return $this->additionalVars;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCustomRequestClass(): ?string
+    {
+        return $this->customRequestClass;
     }
 }
