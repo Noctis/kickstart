@@ -11,7 +11,7 @@ class Request extends ServerRequest implements ServerRequestInterface
 {
     public static function createFromServerRequest(ServerRequestInterface $request): self
     {
-        return new static(
+        $newRequest = new static(
             $request->getServerParams(),
             $request->getUploadedFiles(),
             $request->getUri(),
@@ -23,5 +23,13 @@ class Request extends ServerRequest implements ServerRequestInterface
             $request->getParsedBody(),
             $request->getProtocolVersion()
         );
+
+        /** @var array<string, mixed> $attributes */
+        $attributes = $request->getAttributes();
+        foreach ($attributes as $name => $value) {
+            $newRequest = $newRequest->withAttribute($name, $value);
+        }
+
+        return $newRequest;
     }
 }
