@@ -16,6 +16,13 @@ abstract class AbstractRequest
         $this->request = $request;
     }
 
+    /**
+     * @deprecated Will be removed in Kickstart 4.0.0
+     * Please use:
+     *   - `getQueryParams()` for `GET` requests,
+     *   - `getParsedBody()` for `POST` requests, and
+     *   - `getAttribute()` for named request parameters.
+     */
     public function get(string $key, mixed $default = null): mixed
     {
         $value = $this->request
