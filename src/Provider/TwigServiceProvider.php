@@ -30,12 +30,9 @@ final class TwigServiceProvider implements ServicesProviderInterface
                     'debug'            => $debugMode,
                     'strict_variables' => $debugMode,
                 ]);
-
-                if ($debugMode) {
-                    $twig->addExtension(
-                        new DebugExtension()
-                    );
-                }
+                $twig->addExtension(
+                    new DebugExtension()
+                );
 
                 return $twig;
             }
