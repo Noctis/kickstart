@@ -46,6 +46,42 @@ final class Route implements RouteInterface
     /**
      * @param class-string<ActionInterface>           $actionName
      * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     */
+    public static function put(string $path, string $actionName, array $middlewareNames = []): self
+    {
+        return new self(RequestMethodInterface::METHOD_PUT, $path, $actionName, $middlewareNames);
+    }
+
+    /**
+     * @param class-string<ActionInterface>           $actionName
+     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     */
+    public static function patch(string $path, string $actionName, array $middlewareNames = []): self
+    {
+        return new self(RequestMethodInterface::METHOD_PATCH, $path, $actionName, $middlewareNames);
+    }
+
+    /**
+     * @param class-string<ActionInterface>           $actionName
+     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     */
+    public static function delete(string $path, string $actionName, array $middlewareNames = []): self
+    {
+        return new self(RequestMethodInterface::METHOD_DELETE, $path, $actionName, $middlewareNames);
+    }
+
+    /**
+     * @param class-string<ActionInterface>           $actionName
+     * @param list<class-string<MiddlewareInterface>> $middlewareNames
+     */
+    public static function head(string $path, string $actionName, array $middlewareNames = []): self
+    {
+        return new self(RequestMethodInterface::METHOD_HEAD, $path, $actionName, $middlewareNames);
+    }
+
+    /**
+     * @param class-string<ActionInterface>           $actionName
+     * @param list<class-string<MiddlewareInterface>> $middlewareNames
      * @param array<string, string>                   $additionalVars
      */
     public function __construct(
