@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Routing;
 
 use Noctis\KickStart\Http\Action\ActionInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
 interface RouteInterface
@@ -34,4 +35,9 @@ interface RouteInterface
      * @return array<string, string>
      */
     public function getAdditionalVars(): array;
+
+    /**
+     * @return class-string<ServerRequestInterface>|null
+     */
+    public function getCustomRequestClass(): ?string;
 }

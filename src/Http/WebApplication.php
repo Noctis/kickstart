@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http;
 
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
+use Noctis\KickStart\Http\Request\Request;
 use Noctis\KickStart\Http\Routing\MiddlewareStack;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
 use Noctis\KickStart\Http\Routing\RouteInterface;
@@ -70,6 +71,7 @@ final class WebApplication implements RunnableInterface
         $this->decorateRequest(
             $route->getAdditionalVars()
         );
+        $this->createKickstartRequest($route);
 
         return $this->middlewareStackHandler
             ->handle($this->request);
@@ -99,6 +101,26 @@ final class WebApplication implements RunnableInterface
     {
         $this->request = $this->requestDecorator
             ->withAttributes($this->request, $additionalVars);
+    }
+
+    private function createKickstartRequest(RouteInterface $route): void
+    {
+        if ($route->getCustomRequestClass() !== null) {
+            $requestClass = $route->getCustomRequestClass();
+        } else {
+            $requestClass = Request::class;
+        }
+        /** @var class-string<Request> $requestClass */
+
+        $this->reRegisterServerRequest();
+        /** @var Request */
+        $this->request = $this->container
+            ->get($requestClass);
+        $this->reRegisterServerRequest();
+    }
+
+    private function reRegisterServerRequest(): void
+    {
         $this->container
             ->set(ServerRequestInterface::class, $this->request);
     }
