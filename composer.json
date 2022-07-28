@@ -14,7 +14,7 @@
         "php": "~8.0.0",
         "composer-runtime-api": "^2",
         "fig/http-message-util": "^1.1",
-        "laminas/laminas-diactoros": "^2.8",
+        "laminas/laminas-diactoros": "^2.11.1",
         "laminas/laminas-httphandlerrunner": "^2.1",
         "laminas/laminas-session": "^2.12",
         "nikic/fast-route": "^1.3",
