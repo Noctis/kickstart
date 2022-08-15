@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Console;
 
+use Noctis\KickStart\BootableApplicationTrait;
 use Noctis\KickStart\Console\Command\AbstractCommand;
 use Noctis\KickStart\RunnableInterface;
 use Psr\Container\ContainerInterface;
@@ -14,6 +15,8 @@ use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 
 final class ConsoleApplication implements RunnableInterface
 {
+    use BootableApplicationTrait;
+
     private ContainerInterface $container;
     private SymfonyConsoleApplication $consoleApp;
 

@@ -20,7 +20,7 @@ use function DI\autowire;
 use function DI\decorate;
 use function DI\get;
 
-abstract class AbstractContainerBuilder implements ContainerBuilderInterface
+final class ContainerBuilder implements ContainerBuilderInterface
 {
     private ActualContainerBuilder $containerBuilder;
 
