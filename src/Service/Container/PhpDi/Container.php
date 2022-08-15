@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Noctis\KickStart\Service\Container;
+namespace Noctis\KickStart\Service\Container\PhpDi;
 
-use DI\Container;
+use DI\Container as ActualContainer;
+use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Psr\Container\ContainerInterface;
 
-final class PhpDiContainer implements ContainerInterface, SettableContainerInterface
+final class Container implements ContainerInterface, SettableContainerInterface
 {
-    private Container $container;
+    private ActualContainer $container;
 
-    public function __construct(Container $container)
+    public function __construct(ActualContainer $container)
     {
         $this->container = $container;
     }

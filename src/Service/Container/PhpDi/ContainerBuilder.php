@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Noctis\KickStart;
+namespace Noctis\KickStart\Service\Container\PhpDi;
 
 use DI\ContainerBuilder as ActualContainerBuilder;
 use DI\Definition\Definition;
@@ -10,6 +10,7 @@ use DI\Definition\Helper\AutowireDefinitionHelper;
 use DI\Definition\Helper\DefinitionHelper;
 use InvalidArgumentException;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
+use Noctis\KickStart\Service\Container\ContainerBuilderInterface;
 use Noctis\KickStart\Service\Container\Definition\Autowire;
 use Noctis\KickStart\Service\Container\Definition\ContainerDefinitionInterface;
 use Noctis\KickStart\Service\Container\Definition\Decorator;

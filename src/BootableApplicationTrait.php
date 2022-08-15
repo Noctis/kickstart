@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart;
 
 use Noctis\KickStart\Provider\ServicesProviderInterface;
+use Noctis\KickStart\Service\Container\PhpDi\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 
 trait BootableApplicationTrait
@@ -14,6 +15,7 @@ trait BootableApplicationTrait
      */
     public static function boot(array $servicesProviders): self
     {
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         $container = self::buildContainer(
             array_merge(
                 self::getObligatoryServiceProviders(),
