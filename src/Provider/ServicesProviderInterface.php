@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Provider;
 
-use DI\Definition\Definition;
-use DI\Definition\Helper\DefinitionHelper;
+use Noctis\KickStart\Service\Container\Definition\ContainerDefinitionInterface;
 
 interface ServicesProviderInterface
 {
     /**
-     * @psalm-return array<string, string|callable|DefinitionHelper|Definition>
+     * @psalm-return array<string, string | callable | array | ContainerDefinitionInterface>
      */
     public function getServicesDefinitions(): array;
 }

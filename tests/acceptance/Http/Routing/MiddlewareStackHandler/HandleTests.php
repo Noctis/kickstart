@@ -9,7 +9,7 @@ use Noctis\KickStart\Http\Action\ActionInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStack;
 use Noctis\KickStart\Http\Routing\MiddlewareStackInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandler;
-use Noctis\KickStart\Service\Container\PhpDiContainer;
+use Noctis\KickStart\Service\Container\PhpDi\Container;
 use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -138,7 +138,7 @@ final class HandleTests extends TestCase
         $containerBuilder = new ContainerBuilder();
 
         return $containerBuilder->build()
-            ->get(PhpDiContainer::class);
+            ->get(Container::class);
     }
 
     /** @noinspection PhpIncompatibleReturnTypeInspection */
