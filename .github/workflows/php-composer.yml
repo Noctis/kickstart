@@ -47,4 +47,4 @@ jobs:
       run: composer run-script psalm ./src
 
     - name: Run Coding Style Check
-      run: composer run-script phpcs ./src
+      run: vendor/bin/phpcs
