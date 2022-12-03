@@ -10,11 +10,9 @@ use Twig\TwigFunction;
 
 final class TwigRenderer implements TemplateRendererInterface
 {
-    private Twig $twig;
-
-    public function __construct(Twig $twig)
-    {
-        $this->twig = $twig;
+    public function __construct(
+        private readonly Twig $twig
+    ) {
     }
 
     public function render(string $template, array $params = []): string

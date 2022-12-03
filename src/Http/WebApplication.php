@@ -27,13 +27,6 @@ final class WebApplication implements RunnableInterface
 {
     use BootableApplicationTrait;
 
-    private SettableContainerInterface $container;
-    private ServerRequestInterface $request;
-    private RouterInterface $router;
-    private MiddlewareStackHandlerInterface $middlewareStackHandler;
-    private RequestDecoratorInterface $requestDecorator;
-    private EmitterInterface $responseEmitter;
-
     /** @var list<RouteInterface> */
     private array $routes = [];
 
@@ -50,19 +43,13 @@ final class WebApplication implements RunnableInterface
     }
 
     public function __construct(
-        SettableContainerInterface $container,
-        ServerRequestInterface $request,
-        RouterInterface $router,
-        MiddlewareStackHandlerInterface $middlewareStackHandler,
-        RequestDecoratorInterface $requestDecorator,
-        EmitterInterface $responseEmitter
+        private readonly SettableContainerInterface      $container,
+        private ServerRequestInterface                   $request,
+        private readonly RouterInterface                 $router,
+        private readonly MiddlewareStackHandlerInterface $middlewareStackHandler,
+        private readonly RequestDecoratorInterface       $requestDecorator,
+        private readonly EmitterInterface                $responseEmitter
     ) {
-        $this->container = $container;
-        $this->request = $request;
-        $this->router = $router;
-        $this->middlewareStackHandler = $middlewareStackHandler;
-        $this->requestDecorator = $requestDecorator;
-        $this->responseEmitter = $responseEmitter;
     }
 
     public function run(): void

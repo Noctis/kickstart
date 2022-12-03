@@ -10,11 +10,9 @@ use Psr\Http\Message\UriInterface;
 
 class Request implements ServerRequestInterface
 {
-    protected ServerRequestInterface $request;
-
-    public function __construct(ServerRequestInterface $request)
-    {
-        $this->request = $request;
+    public function __construct(
+        protected ServerRequestInterface $request
+    ) {
     }
 
     /**

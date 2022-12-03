@@ -11,11 +11,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class NotFoundAction implements ActionInterface
 {
-    private NotFoundResponseFactoryInterface $notFoundResponseFactory;
-
-    public function __construct(NotFoundResponseFactoryInterface $notFoundResponseFactory)
-    {
-        $this->notFoundResponseFactory = $notFoundResponseFactory;
+    public function __construct(
+        private readonly NotFoundResponseFactoryInterface $notFoundResponseFactory
+    ) {
     }
 
     /**

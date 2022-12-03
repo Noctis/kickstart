@@ -24,7 +24,7 @@ use function Psl\Dict\map;
 
 final class ContainerBuilder implements ContainerBuilderInterface
 {
-    private ActualContainerBuilder $containerBuilder;
+    private readonly ActualContainerBuilder $containerBuilder;
 
     public function __construct()
     {

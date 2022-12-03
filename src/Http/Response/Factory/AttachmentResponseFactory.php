@@ -10,11 +10,9 @@ use Noctis\KickStart\Http\Response\Headers\DispositionInterface;
 
 final class AttachmentResponseFactory implements AttachmentResponseFactoryInterface
 {
-    private AttachmentFactoryInterface $attachmentFactory;
-
-    public function __construct(AttachmentFactoryInterface $attachmentFactory)
-    {
-        $this->attachmentFactory = $attachmentFactory;
+    public function __construct(
+        private readonly AttachmentFactoryInterface $attachmentFactory
+    ) {
     }
 
     public function sendFile(
