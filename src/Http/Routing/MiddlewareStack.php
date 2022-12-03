@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
-use ArrayIterator;
 use InvalidArgumentException;
+use Psl\DataStructure\Queue;
+use Psl\DataStructure\QueueInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
 final class MiddlewareStack implements MiddlewareStackInterface
 {
-    /** @var list<class-string<MiddlewareInterface>> */
-    private array $middlewareNames = [];
+    /** @var QueueInterface<class-string<MiddlewareInterface>> */
+    private QueueInterface $queue;
 
     public static function createFromRoute(RouteInterface $route): self
     {
@@ -30,6 +31,8 @@ final class MiddlewareStack implements MiddlewareStackInterface
      */
     public function __construct(array $middlewareNames)
     {
+        /** @psalm-suppress MixedPropertyTypeCoercion */
+        $this->queue = new Queue();
         foreach ($middlewareNames as $name) {
             $this->addMiddleware($name);
         }
@@ -50,14 +53,15 @@ final class MiddlewareStack implements MiddlewareStackInterface
             );
         }
 
-        $this->middlewareNames[] = $name;
+        $this->queue
+            ->enqueue($name);
 
         return $this;
     }
 
     public function isEmpty(): bool
     {
-        return $this->middlewareNames === [];
+        return $this->queue->peek() === null;
     }
 
     /**
@@ -65,11 +69,7 @@ final class MiddlewareStack implements MiddlewareStackInterface
      */
     public function shift(): ?string
     {
-        return array_shift($this->middlewareNames);
-    }
-
-    public function getIterator(): ArrayIterator
-    {
-        return new ArrayIterator($this->middlewareNames);
+        return $this->queue
+            ->pull();
     }
 }

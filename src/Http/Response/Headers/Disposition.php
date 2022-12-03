@@ -6,6 +6,9 @@ namespace Noctis\KickStart\Http\Response\Headers;
 
 use Noctis\KickStart\Http\Helper\HeaderUtils;
 
+use function Psl\Str\is_empty;
+use function Psl\Str\replace_every;
+
 final class Disposition implements DispositionInterface
 {
     private string $disposition;
@@ -22,7 +25,7 @@ final class Disposition implements DispositionInterface
 
     private function __construct(string $type, string $filename, string $fallbackFilename = null)
     {
-        if ($fallbackFilename === null) {
+        if (is_empty($fallbackFilename)) {
             $fallbackFilename = $filename;
         }
 
@@ -40,10 +43,13 @@ final class Disposition implements DispositionInterface
 
     private function escape(string $value): string
     {
-        return str_replace(
-            ['/', '\\', '"'],
-            '',
-            $value
+        return replace_every(
+            $value,
+            [
+                '/'  => '',
+                '\\' => '',
+                '"'  => ''
+            ]
         );
     }
 }

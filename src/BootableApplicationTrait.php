@@ -8,6 +8,9 @@ use Noctis\KickStart\Provider\ServicesProviderInterface;
 use Noctis\KickStart\Service\Container\PhpDi\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 
+use function Psl\Vec\concat;
+use function Psl\Vec\map;
+
 trait BootableApplicationTrait
 {
     /**
@@ -17,7 +20,7 @@ trait BootableApplicationTrait
     {
         /** @psalm-suppress MixedArgumentTypeCoercion */
         $container = self::buildContainer(
-            array_merge(
+            concat(
                 self::getObligatoryServiceProviders(),
                 $servicesProviders
             )
@@ -40,11 +43,11 @@ trait BootableApplicationTrait
     private static function buildContainer(array $servicesProviders): ContainerInterface
     {
         $containerBuilder = new ContainerBuilder();
-        array_map(
+        map(
+            $servicesProviders,
             function (ServicesProviderInterface $serviceProvider) use ($containerBuilder): void {
                 $containerBuilder->registerServicesProvider($serviceProvider);
-            },
-            $servicesProviders
+            }
         );
 
         return $containerBuilder->build();

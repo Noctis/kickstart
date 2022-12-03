@@ -8,6 +8,8 @@ use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 
+use function Psl\Dict\merge;
+
 final class AttachmentResponse extends Response
 {
     /**
@@ -37,6 +39,6 @@ final class AttachmentResponse extends Response
             'Content-Description' => 'File Transfer',
         ];
 
-        return array_merge($standardHeaders, $headers);
+        return merge($headers, $standardHeaders);
     }
 }

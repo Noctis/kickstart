@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Configuration;
 
+use function Psl\Str\strip_suffix;
+
 final class Configuration
 {
     private function __construct()
@@ -21,11 +23,7 @@ final class Configuration
         $baseHref = self::get('basehref');
 
         // Remove trailing slash ("/"), if applicable
-        if ($baseHref[-1] === '/') {
-            $baseHref = substr($baseHref, 0, -1);
-        }
-
-        return $baseHref;
+        return strip_suffix($baseHref, '/');
     }
 
     public static function get(string $name, mixed $default = null): mixed
