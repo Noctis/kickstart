@@ -25,6 +25,7 @@ use Noctis\KickStart\Http\Service\FlashMessageService;
 use Noctis\KickStart\Http\Service\FlashMessageServiceInterface;
 use Noctis\KickStart\Http\Service\RequestDecorator;
 use Noctis\KickStart\Http\Service\RequestDecoratorInterface;
+use Noctis\KickStart\Service\Container\PhpDi\Definition\Autowire;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
@@ -46,7 +47,8 @@ final class HttpServicesProvider implements ServicesProviderInterface
             RedirectResponseFactoryInterface::class => RedirectResponseFactory::class,
             RequestDecoratorInterface::class => RequestDecorator::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
-            SessionContainer::class => ['name' => 'flash'],
+            SessionContainer::class => (new Autowire(SessionContainer::class))
+                ->constructorParameter('name', 'flash'),
             UriFactoryInterface::class => UriFactory::class,
         ];
     }

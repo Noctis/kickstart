@@ -6,5 +6,4 @@ namespace Noctis\KickStart\Service\Container\Definition;
 
 interface DecoratorDefinitionInterface extends ContainerDefinitionInterface
 {
-    public function getCallable(): callable;
 }
