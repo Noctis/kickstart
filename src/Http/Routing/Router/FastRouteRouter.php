@@ -65,7 +65,6 @@ final class FastRouteRouter implements RouterInterface
                 $r->addGroup(
                     Configuration::getBaseHref(),
                     function (RouteCollector $routeCollector) use ($routes): void {
-                        /** @var RouteInterface $route */
                         foreach ($routes as $route) {
                             $routeCollector->addRoute(
                                 $route->getMethod(),
