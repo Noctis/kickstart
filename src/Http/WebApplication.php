@@ -21,6 +21,8 @@ use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+use function Psl\Vec\map;
+
 final class WebApplication implements RunnableInterface
 {
     use BootableApplicationTrait;
@@ -76,9 +78,9 @@ final class WebApplication implements RunnableInterface
      */
     public function setRoutes(array $routes): void
     {
-        $this->routes = array_map(
-            fn (RouteInterface $route): RouteInterface => $route,
-            $routes
+        $this->routes = map(
+            $routes,
+            fn (RouteInterface $route): RouteInterface => $route
         );
     }
 

@@ -20,6 +20,7 @@ use Psr\Container\ContainerInterface;
 use function DI\autowire;
 use function DI\decorate;
 use function DI\get;
+use function Psl\Dict\map;
 
 final class ContainerBuilder implements ContainerBuilderInterface
 {
@@ -34,9 +35,9 @@ final class ContainerBuilder implements ContainerBuilderInterface
     {
         $this->containerBuilder
             ->addDefinitions(
-                array_map(
-                    [$this, 'getBuilderDefinition'],
-                    $servicesProvider->getServicesDefinitions()
+                map(
+                    $servicesProvider->getServicesDefinitions(),
+                    fn ($sudoDefinition) => $this->getBuilderDefinition($sudoDefinition)
                 )
             );
 

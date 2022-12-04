@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Routing;
 
-use ArrayIterator;
+use Psl\Iter\Iterator;
+use Traversable;
 
 final class RoutesCollection implements RoutesCollectionInterface
 {
@@ -28,8 +29,8 @@ final class RoutesCollection implements RoutesCollectionInterface
         return $this;
     }
 
-    public function getIterator(): ArrayIterator
+    public function getIterator(): Traversable
     {
-        return new ArrayIterator($this->routes);
+        return Iterator::create($this->routes);
     }
 }

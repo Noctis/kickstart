@@ -9,6 +9,9 @@ use Noctis\KickStart\Configuration\Configuration;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
+use function Psl\Regex\matches;
+use function Psl\Str\concat;
+
 final class RedirectResponseFactory implements RedirectResponseFactoryInterface
 {
     private UriFactoryInterface $uriFactory;
@@ -27,16 +30,16 @@ final class RedirectResponseFactory implements RedirectResponseFactoryInterface
      */
     public function toPath(string $path, array $queryParams = []): RedirectResponse
     {
-        if (preg_match('/:\/\//', $path) === 1) {
+        if (matches($path, '/:\/\//')) {
             $uri = $this->uriFactory
                 ->createUri($path);
         } else {
             $uri = $this->request
                 ->getUri()
                 ->withPath(
-                    sprintf(
-                        '%s/%s',
+                    concat(
                         Configuration::getBaseHref(),
+                        '/',
                         $path
                     )
                 );
