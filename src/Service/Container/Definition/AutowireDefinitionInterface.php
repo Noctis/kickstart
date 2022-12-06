@@ -7,4 +7,6 @@ namespace Noctis\KickStart\Service\Container\Definition;
 interface AutowireDefinitionInterface extends ContainerDefinitionInterface
 {
     public function constructorParameter(string $name, mixed $value): self;
+
+    public function method(string $methodName, mixed $value): self;
 }

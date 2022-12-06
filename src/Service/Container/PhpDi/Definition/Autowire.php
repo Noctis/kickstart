@@ -17,6 +17,9 @@ final class Autowire implements AutowireDefinitionInterface
     /** @var array<string, mixed> */
     private array $constructorParameters = [];
 
+    /** @var array<string, mixed> */
+    private array $methodParameters = [];
+
     /**
      * @param class-string $className
      */
@@ -32,11 +35,21 @@ final class Autowire implements AutowireDefinitionInterface
         return $this;
     }
 
+    public function method(string $methodName, mixed $value): AutowireDefinitionInterface
+    {
+        $this->methodParameters[$methodName] = $value;
+
+        return $this;
+    }
+
     public function __invoke(): AutowireDefinitionHelper
     {
         $helper = autowire($this->className);
         foreach ($this->constructorParameters as $name => $value) {
             $helper = $helper->constructorParameter($name, $value);
+        }
+        foreach ($this->methodParameters as $methodName => $value) {
+            $helper = $helper->method($methodName, $value);
         }
 
         return $helper;
