@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Service\Container\PhpDi;
 
 use DI\Container as ActualContainer;
-use Noctis\KickStart\Service\Container\DefinitionNormalizerInterface;
 use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Psr\Container\ContainerInterface;
 
 final class Container implements ContainerInterface, SettableContainerInterface
 {
-    private ActualContainer $container;
-    private DefinitionNormalizerInterface $definitionNormalizer;
-
-    public function __construct(ActualContainer $container, DefinitionNormalizerInterface $definitionNormalizer)
-    {
-        $this->container = $container;
-        $this->definitionNormalizer = $definitionNormalizer;
+    public function __construct(
+        private readonly ActualContainer      $container,
+        private readonly DefinitionNormalizer $definitionNormalizer = new DefinitionNormalizer()
+    ) {
     }
 
     /**
