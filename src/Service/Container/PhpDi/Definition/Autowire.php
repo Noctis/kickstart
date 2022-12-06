@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Service\Container\PhpDi\Definition;
 
+use Closure;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use Noctis\KickStart\Service\Container\Definition\AutowireDefinitionInterface;
 use Noctis\KickStart\Service\Container\Definition\ContainerDefinitionInterface;
@@ -12,32 +13,33 @@ use function DI\autowire;
 
 final class Autowire implements AutowireDefinitionInterface
 {
-    /** @var class-string */
-    private string $className;
-
-    /** @var array<string, mixed> */
+    /** @var array<string, string | int | float | bool | array | Closure | ContainerDefinitionInterface> */
     private array $constructorParameters = [];
 
-    /** @var array<string, mixed> */
+    /** @var array<string, string | int | float | bool | array | Closure | ContainerDefinitionInterface> */
     private array $methodParameters = [];
 
     /**
      * @param class-string $className
      */
-    public function __construct(string $className)
-    {
-        $this->className = $className;
+    public function __construct(
+        private readonly string $className
+    ) {
     }
 
-    public function constructorParameter(string $name, mixed $value): AutowireDefinitionInterface
-    {
+    public function constructorParameter(
+        string $name,
+        string | int | float | bool | array | Closure | ContainerDefinitionInterface $value
+    ): AutowireDefinitionInterface {
         $this->constructorParameters[$name] = $value;
 
         return $this;
     }
 
-    public function method(string $methodName, mixed $value): AutowireDefinitionInterface
-    {
+    public function method(
+        string $methodName,
+        string | int | float | bool | array | Closure | ContainerDefinitionInterface $value
+    ): AutowireDefinitionInterface {
         $this->methodParameters[$methodName] = $value;
 
         return $this;
