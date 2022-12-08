@@ -14,15 +14,10 @@ use function Psl\Str\concat;
 
 final class RedirectResponseFactory implements RedirectResponseFactoryInterface
 {
-    private UriFactoryInterface $uriFactory;
-    private ServerRequestInterface $request;
-
     public function __construct(
-        UriFactoryInterface $uriFactory,
-        ServerRequestInterface $request
+        private readonly UriFactoryInterface    $uriFactory,
+        private readonly ServerRequestInterface $request
     ) {
-        $this->uriFactory = $uriFactory;
-        $this->request = $request;
     }
 
     /**

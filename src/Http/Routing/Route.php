@@ -14,21 +14,6 @@ use Psr\Http\Server\MiddlewareInterface;
  */
 final class Route implements RouteInterface
 {
-    private string $method;
-    private string $path;
-
-    /** @var class-string<ActionInterface> */
-    private string $actionName;
-
-    /** @var list<class-string<MiddlewareInterface>> */
-    private array $middlewareNames;
-
-    /** @var array<string, string> */
-    private array $additionalVars;
-
-    /** @var class-string<ServerRequestInterface> | null */
-    private ?string $customRequestClass;
-
     /**
      * @param class-string<ActionInterface>               $actionName
      * @param list<class-string<MiddlewareInterface>>     $middlewareNames
@@ -162,19 +147,13 @@ final class Route implements RouteInterface
      * @param class-string<ServerRequestInterface> | null $customRequestClass
      */
     public function __construct(
-        string $method,
-        string $path,
-        string $actionName,
-        array $middlewareNames = [],
-        array $additionalVars = [],
-        string $customRequestClass = null
+        private readonly string  $method,
+        private readonly string  $path,
+        private readonly string  $actionName,
+        private readonly array   $middlewareNames = [],
+        private readonly array   $additionalVars = [],
+        private readonly ?string $customRequestClass = null
     ) {
-        $this->method = $method;
-        $this->path = $path;
-        $this->actionName = $actionName;
-        $this->middlewareNames = $middlewareNames;
-        $this->additionalVars = $additionalVars;
-        $this->customRequestClass = $customRequestClass;
     }
 
     public function getMethod(): string

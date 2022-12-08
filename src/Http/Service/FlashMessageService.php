@@ -8,11 +8,8 @@ use Laminas\Session\Container;
 
 final class FlashMessageService implements FlashMessageServiceInterface
 {
-    private Container $flashContainer;
-
-    public function __construct(Container $flashContainer)
+    public function __construct(private Container $flashContainer)
     {
-        $this->flashContainer = $flashContainer;
     }
 
     public function setFlashMessage(string $name, ?string $message): void

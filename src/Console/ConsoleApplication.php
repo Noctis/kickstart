@@ -17,19 +17,16 @@ final class ConsoleApplication implements RunnableInterface
 {
     use BootableApplicationTrait;
 
-    private ContainerInterface $container;
-    private SymfonyConsoleApplication $consoleApp;
-
     /** @var list<class-string<AbstractCommand>> */
     private array $commandsClassesNames = [];
 
     /** @var callable | null */
     private $commandLoaderFactory = null;
 
-    public function __construct(ContainerInterface $container, SymfonyConsoleApplication $consoleApp)
-    {
-        $this->container = $container;
-        $this->consoleApp = $consoleApp;
+    public function __construct(
+        private readonly ContainerInterface        $container,
+        private readonly SymfonyConsoleApplication $consoleApp
+    ) {
     }
 
     public function run(): void

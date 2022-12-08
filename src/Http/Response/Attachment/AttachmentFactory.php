@@ -9,11 +9,9 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 final class AttachmentFactory implements AttachmentFactoryInterface
 {
-    private StreamFactoryInterface $streamFactory;
-
-    public function __construct(StreamFactoryInterface $streamFactory)
-    {
-        $this->streamFactory = $streamFactory;
+    public function __construct(
+        private readonly StreamFactoryInterface $streamFactory
+    ) {
     }
 
     public function createFromPath(

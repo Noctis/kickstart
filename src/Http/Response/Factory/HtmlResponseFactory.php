@@ -11,18 +11,11 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class HtmlResponseFactory implements HtmlResponseFactoryInterface
 {
-    private TemplateRendererInterface $templateRenderer;
-    private ServerRequestInterface $request;
-    private BaseHrefFactoryInterface $baseHrefFactory;
-
     public function __construct(
-        BaseHrefFactoryInterface $baseHrefFactory,
-        ServerRequestInterface $request,
-        TemplateRendererInterface $templateRenderer
+        private readonly BaseHrefFactoryInterface  $baseHrefFactory,
+        private readonly ServerRequestInterface    $request,
+        private readonly TemplateRendererInterface $templateRenderer
     ) {
-        $this->templateRenderer = $templateRenderer;
-        $this->request = $request;
-        $this->baseHrefFactory = $baseHrefFactory;
     }
 
     /**

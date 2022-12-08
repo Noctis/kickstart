@@ -12,13 +12,11 @@ use RuntimeException;
 
 final class MiddlewareStackHandler implements MiddlewareStackHandlerInterface
 {
-    private SettableContainerInterface $container;
-    private ?MiddlewareStackInterface $middlewareStack;
+    private ?MiddlewareStackInterface $middlewareStack = null;
 
-    public function __construct(SettableContainerInterface $container)
-    {
-        $this->container = $container;
-        $this->middlewareStack = null;
+    public function __construct(
+        private readonly SettableContainerInterface $container
+    ) {
     }
 
     public function setMiddlewareStack(MiddlewareStackInterface $middlewareStack): void

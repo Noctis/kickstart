@@ -6,20 +6,14 @@ namespace Noctis\KickStart\Service\Container\Definition;
 
 final class Autowire implements AutowireDefinitionInterface
 {
-    /** @var class-string */
-    private string $className;
-
-    /** @var array<string, mixed> */
-    private array $constructorParameters;
-
     /**
      * @param class-string         $className
      * @param array<string, mixed> $constructorParameters
      */
-    public function __construct(string $className, array $constructorParameters)
-    {
-        $this->className = $className;
-        $this->constructorParameters = $constructorParameters;
+    public function __construct(
+        private readonly string $className,
+        private readonly array  $constructorParameters
+    ) {
     }
 
     /**

@@ -10,11 +10,9 @@ use Psr\Container\ContainerInterface;
 
 final class Container implements ContainerInterface, SettableContainerInterface
 {
-    private ActualContainer $container;
-
-    public function __construct(ActualContainer $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private readonly ActualContainer $container
+    ) {
     }
 
     /**
