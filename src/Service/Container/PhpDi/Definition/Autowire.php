@@ -13,10 +13,10 @@ use function DI\autowire;
 
 final class Autowire implements AutowireDefinitionInterface
 {
-    /** @var array<string, string | int | float | bool | array | Closure | ContainerDefinitionInterface> */
+    /** @var array<string, scalar | array | Closure | ContainerDefinitionInterface | object > */
     private array $constructorParameters = [];
 
-    /** @var array<string, string | int | float | bool | array | Closure | ContainerDefinitionInterface> */
+    /** @var array<string, scalar | array | Closure | ContainerDefinitionInterface | object> */
     private array $methodParameters = [];
 
     /**
@@ -27,18 +27,24 @@ final class Autowire implements AutowireDefinitionInterface
     ) {
     }
 
+    /**
+     * @param scalar | array | Closure | ContainerDefinitionInterface | object $value
+     */
     public function constructorParameter(
         string $name,
-        string | int | float | bool | array | Closure | ContainerDefinitionInterface $value
+        string | int | float | bool | array | object $value
     ): AutowireDefinitionInterface {
         $this->constructorParameters[$name] = $value;
 
         return $this;
     }
 
+    /**
+     * @param scalar | array | Closure | ContainerDefinitionInterface | object $value
+     */
     public function method(
         string $methodName,
-        string | int | float | bool | array | Closure | ContainerDefinitionInterface $value
+        string | int | float | bool | array | object $value
     ): AutowireDefinitionInterface {
         $this->methodParameters[$methodName] = $value;
 
