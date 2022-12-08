@@ -6,11 +6,11 @@ namespace Noctis\KickStart\Service\Container\PhpDi\Definition;
 
 use Closure;
 use DI\Definition\Helper\FactoryDefinitionHelper;
-use Noctis\KickStart\Service\Container\Definition\ContainerDefinitionInterface;
+use Noctis\KickStart\Service\Container\Definition\FactoryDefinitionInterface;
 
 use function DI\factory;
 
-final class Factory implements ContainerDefinitionInterface
+final class Factory implements FactoryDefinitionInterface
 {
     public function __construct(
         private readonly Closure $factory
