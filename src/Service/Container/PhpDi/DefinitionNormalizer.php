@@ -17,6 +17,7 @@ final class DefinitionNormalizer implements DefinitionNormalizerInterface
     public function normalize(mixed $definition): mixed
     {
         if (is_string($definition) && exists($definition)) {
+            /** @var class-string $definition */
             $definition = autowire($definition);
         } elseif ($definition instanceof Closure) {
             $definition = factory($definition);

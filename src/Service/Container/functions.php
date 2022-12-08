@@ -14,6 +14,9 @@ use Noctis\KickStart\Service\Container\PhpDi\Definition\Decorator;
 use Noctis\KickStart\Service\Container\PhpDi\Definition\Factory;
 use Noctis\KickStart\Service\Container\PhpDi\Definition\Reference;
 
+/**
+ * @param class-string $className
+ */
 function autowire(string $className): AutowireDefinitionInterface
 {
     return new Autowire($className);
