@@ -63,6 +63,8 @@ final class WebApplication implements RunnableInterface
         $routes = new RoutesCollection($routes);
         $this->router
             ->setRoutes($routes);
+        $this->container
+            ->set('__routes', $routes);
     }
 
     private function generateResponse(): ResponseInterface
