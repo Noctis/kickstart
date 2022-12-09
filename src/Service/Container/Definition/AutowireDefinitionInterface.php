@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Service\Container\Definition;
 
+use Closure;
+
 interface AutowireDefinitionInterface extends ContainerDefinitionInterface
 {
-    /**
-     * @return class-string
-     */
-    public function getClassName(): string;
+    public function constructorParameter(
+        string $name,
+        string | int | float | bool | array | Closure | ContainerDefinitionInterface $value
+    ): self;
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function getConstructorParameters(): array;
+    public function method(
+        string $methodName,
+        string | int | float | bool | array | Closure | ContainerDefinitionInterface $value
+    ): self;
 }

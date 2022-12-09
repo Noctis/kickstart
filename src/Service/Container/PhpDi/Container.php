@@ -11,7 +11,8 @@ use Psr\Container\ContainerInterface;
 final class Container implements ContainerInterface, SettableContainerInterface
 {
     public function __construct(
-        private readonly ActualContainer $container
+        private readonly ActualContainer      $container,
+        private readonly DefinitionNormalizer $definitionNormalizer = new DefinitionNormalizer()
     ) {
     }
 
@@ -36,6 +37,10 @@ final class Container implements ContainerInterface, SettableContainerInterface
     public function set(string $id, mixed $entry): void
     {
         $this->container
-            ->set($id, $entry);
+            ->set(
+                $id,
+                $this->definitionNormalizer
+                    ->normalize($entry)
+            );
     }
 }

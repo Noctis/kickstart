@@ -28,6 +28,8 @@ use Noctis\KickStart\Http\Service\RequestDecoratorInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
+use function Noctis\KickStart\Service\Container\autowire;
+
 final class HttpServicesProvider implements ServicesProviderInterface
 {
     /**
@@ -46,7 +48,8 @@ final class HttpServicesProvider implements ServicesProviderInterface
             RedirectResponseFactoryInterface::class => RedirectResponseFactory::class,
             RequestDecoratorInterface::class => RequestDecorator::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
-            SessionContainer::class => ['name' => 'flash'],
+            SessionContainer::class => autowire(SessionContainer::class)
+                ->constructorParameter('name', 'flash'),
             UriFactoryInterface::class => UriFactory::class,
         ];
     }
