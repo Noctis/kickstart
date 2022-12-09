@@ -61,7 +61,7 @@ final class WebApplication implements RunnableInterface
     }
 
     /**
-     * @param list<RouteInterface> $routes
+     * @param array<int|string, RouteInterface> $routes
      */
     public function setRoutes(array $routes): void
     {
