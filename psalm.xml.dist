@@ -13,6 +13,10 @@
         </ignoreFiles>
     </projectFiles>
 
+    <forbiddenFunctions>
+        <function name="dump"/>
+    </forbiddenFunctions>
+
     <plugins>
         <pluginClass class="Psl\Psalm\Plugin"/>
     </plugins>
