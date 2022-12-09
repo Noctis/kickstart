@@ -7,7 +7,7 @@ namespace Noctis\KickStart\Service;
 interface UrlGeneratorInterface
 {
     /**
-     * @param array<string, string> $params
+     * @param array<string, int|string> $params
      */
     public function generate(string $template, array $params = []): string;
 }
