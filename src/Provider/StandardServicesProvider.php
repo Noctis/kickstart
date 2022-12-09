@@ -7,6 +7,8 @@ namespace Noctis\KickStart\Provider;
 use Laminas\Diactoros\StreamFactory;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentFactory;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentFactoryInterface;
+use Noctis\KickStart\Service\UrlGenerator;
+use Noctis\KickStart\Service\UrlGeneratorInterface;
 use Noctis\KickStart\Service\Container\DefinitionNormalizerInterface;
 use Noctis\KickStart\Service\Container\PhpDi\Container;
 use Noctis\KickStart\Service\Container\PhpDi\DefinitionNormalizer;
@@ -30,6 +32,7 @@ final class StandardServicesProvider implements ServicesProviderInterface
             SettableContainerInterface::class => Container::class,
             StreamFactoryInterface::class => StreamFactory::class,
             TemplateRendererInterface::class  => TwigRenderer::class,
+            UrlGeneratorInterface::class => UrlGenerator::class,
         ];
     }
 }
