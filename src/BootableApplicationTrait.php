@@ -14,9 +14,9 @@ use function Psl\Vec\map;
 trait BootableApplicationTrait
 {
     /**
-     * @param list<ServicesProviderInterface> $servicesProviders
+     * @param ServicesProviderInterface ...$servicesProviders
      */
-    public static function boot(array $servicesProviders): self
+    public static function boot(ServicesProviderInterface ...$servicesProviders): self
     {
         /** @psalm-suppress MixedArgumentTypeCoercion */
         $container = self::buildContainer(
