@@ -12,4 +12,6 @@ use IteratorAggregate;
 interface RoutesCollectionInterface extends IteratorAggregate
 {
     public function addRoute(int|string $key, RouteInterface $route): self;
+
+    public function getNamedRoute(string $name): ?RouteInterface;
 }

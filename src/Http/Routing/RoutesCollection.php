@@ -29,6 +29,11 @@ final class RoutesCollection implements RoutesCollectionInterface
         return $this;
     }
 
+    public function getNamedRoute(string $name): ?RouteInterface
+    {
+        return $this->routes[$name] ?? null;
+    }
+
     public function getIterator(): Traversable
     {
         return Iterator::create($this->routes);
