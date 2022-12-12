@@ -14,5 +14,5 @@ interface PathGeneratorInterface
     /**
      * @param array<string, string|int> $params
      */
-    public function generate(string $routeName, array $params = []): GeneratedUriInterface;
+    public function toRoute(string $routeName, array $params = []): GeneratedUriInterface;
 }

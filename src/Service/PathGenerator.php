@@ -28,7 +28,7 @@ final class PathGenerator implements PathGeneratorInterface
     /**
      * @inheritDoc
      */
-    public function generate(string $routeName, array $params = []): GeneratedUriInterface
+    public function toRoute(string $routeName, array $params = []): GeneratedUriInterface
     {
         /** @psalm-suppress PossiblyNullReference */
         $route = $this->routes

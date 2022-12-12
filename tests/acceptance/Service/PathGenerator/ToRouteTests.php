@@ -12,7 +12,7 @@ use Noctis\KickStart\Service\UrlGenerator;
 use Noctis\KickStart\Service\UrlGeneratorInterface;
 use PHPUnit\Framework\TestCase;
 
-final class GenerateTests extends TestCase
+final class ToRouteTests extends TestCase
 {
     public function test_it_returns_given_route_name_with_params_as_query_string_if_no_routes_were_provided(): void
     {
@@ -20,7 +20,7 @@ final class GenerateTests extends TestCase
             $this->getUrlGenerator()
         );
 
-        $path = $generator->generate('sign-in', ['foo' => 'bar']);
+        $path = $generator->toRoute('sign-in', ['foo' => 'bar']);
 
         $this->assertSame(
             'sign-in?foo=bar',
@@ -37,7 +37,7 @@ final class GenerateTests extends TestCase
             $this->getRoutes(['home' => '/'])
         );
 
-        $path = $generator->generate('sign-in', ['foo' => 'bar']);
+        $path = $generator->toRoute('sign-in', ['foo' => 'bar']);
 
         $this->assertSame(
             'sign-in?foo=bar',
@@ -57,7 +57,7 @@ final class GenerateTests extends TestCase
             ])
         );
 
-        $path = $generator->generate('sign-in', ['foo' => 'bar']);
+        $path = $generator->toRoute('sign-in', ['foo' => 'bar']);
 
         $this->assertSame(
             '/sign-in/form?foo=bar',
