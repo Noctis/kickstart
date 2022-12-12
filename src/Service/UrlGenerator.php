@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Service;
 
+use Noctis\KickStart\ValueObject\GeneratedUri;
+use Noctis\KickStart\ValueObject\GeneratedUriInterface;
+
 final class UrlGenerator implements UrlGeneratorInterface
 {
     /**
      * @inheritDoc
      */
-    public function generate(string $template, array $params = []): string
+    public function generate(string $template, array $params = []): GeneratedUriInterface
     {
         foreach ($params as $name => $value) {
             $replacementsMade = 0;
@@ -19,10 +22,6 @@ final class UrlGenerator implements UrlGeneratorInterface
             }
         }
 
-        $queryString = count($params) > 0
-            ? '?' . http_build_query($params)
-            : '';
-
-        return $template . $queryString;
+        return new GeneratedUri($template, $params);
     }
 }

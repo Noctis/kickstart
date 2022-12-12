@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Service;
 
 use Noctis\KickStart\Http\Routing\RoutesCollectionInterface;
+use Noctis\KickStart\ValueObject\GeneratedUriInterface;
 
 interface PathGeneratorInterface
 {
@@ -13,5 +14,5 @@ interface PathGeneratorInterface
     /**
      * @param array<string, string|int> $params
      */
-    public function generate(string $routeName, array $params = []): string;
+    public function generate(string $routeName, array $params = []): GeneratedUriInterface;
 }

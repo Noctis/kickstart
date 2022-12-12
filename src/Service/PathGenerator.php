@@ -6,6 +6,7 @@ namespace Noctis\KickStart\Service;
 
 use Noctis\KickStart\Http\Routing\RoutesCollection;
 use Noctis\KickStart\Http\Routing\RoutesCollectionInterface;
+use Noctis\KickStart\ValueObject\GeneratedUriInterface;
 
 final class PathGenerator implements PathGeneratorInterface
 {
@@ -27,7 +28,7 @@ final class PathGenerator implements PathGeneratorInterface
     /**
      * @inheritDoc
      */
-    public function generate(string $routeName, array $params = []): string
+    public function generate(string $routeName, array $params = []): GeneratedUriInterface
     {
         /** @psalm-suppress PossiblyNullReference */
         $route = $this->routes

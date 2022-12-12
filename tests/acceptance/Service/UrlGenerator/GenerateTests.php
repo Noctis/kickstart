@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Service\UrlGenerator;
+namespace Tests\Acceptance\Service\UrlGenerator;
 
 use Noctis\KickStart\Service\UrlGenerator;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,10 @@ final class GenerateTests extends TestCase
 
         $result = (new UrlGenerator())->generate($route, $params);
 
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame(
+            $expectedResult,
+            $result->toString()
+        );
     }
 
     public function test_it_builds_query_string_from_given_params_when_given_route_has_no_placeholders(): void
@@ -28,7 +31,10 @@ final class GenerateTests extends TestCase
 
         $result = (new UrlGenerator())->generate($route, $params);
 
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame(
+            $expectedResult,
+            $result->toString()
+        );
     }
 
     /** @group doMe */
@@ -40,7 +46,10 @@ final class GenerateTests extends TestCase
 
         $result = (new UrlGenerator())->generate($route, $params);
 
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame(
+            $expectedResult,
+            $result->toString()
+        );
     }
 
     public function test_given_params_with_no_matching_placeholder_in_route_become_part_of_query_string(): void
@@ -51,7 +60,10 @@ final class GenerateTests extends TestCase
 
         $result = (new UrlGenerator())->generate($route, $params);
 
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame(
+            $expectedResult,
+            $result->toString()
+        );
     }
 
     public function test_route_placeholders_with_no_match_in_given_params_are_not_replaced_with_anything(): void
@@ -62,7 +74,10 @@ final class GenerateTests extends TestCase
 
         $result = (new UrlGenerator())->generate($route, $params);
 
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame(
+            $expectedResult,
+            $result->toString()
+        );
     }
 
     public function test_placeholders_with_specifications_are_correctly_replaced_with_given_params(): void
@@ -73,7 +88,10 @@ final class GenerateTests extends TestCase
 
         $result = (new UrlGenerator())->generate($route, $params);
 
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame(
+            $expectedResult,
+            $result->toString()
+        );
     }
 
     public function test_params_which_only_partially_match_route_placeholder_do_not_replace_them(): void
@@ -84,6 +102,23 @@ final class GenerateTests extends TestCase
 
         $result = (new UrlGenerator())->generate($route, $params);
 
-        $this->assertSame($expectedResult, $result);
+        $this->assertSame(
+            $expectedResult,
+            $result->toString()
+        );
+    }
+
+    public function test_query_params_in_returned_object_only_contain_params_which_did_not_match_route_named_parameters(): void
+    {
+        $route = '/document/format/{name}';
+        $params = ['name' => 'pdf', 'foo' => 'bar'];
+        $expectedResult = ['foo' => 'bar'];
+
+        $result = (new UrlGenerator())->generate($route, $params);
+
+        $this->assertSame(
+            $expectedResult,
+            $result->getQueryParams()
+        );
     }
 }
