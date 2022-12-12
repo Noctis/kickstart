@@ -11,9 +11,6 @@ use Twig\Environment as Twig;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 
-use function Noctis\KickStart\Service\Container\autowire;
-use function Noctis\KickStart\Service\Container\reference;
-
 final class TwigServiceProvider implements ServicesProviderInterface
 {
     /**
@@ -44,11 +41,6 @@ final class TwigServiceProvider implements ServicesProviderInterface
 
                 return $twig;
             },
-            UrlExtension::class => autowire(UrlExtension::class)
-                ->method(
-                    'setRoutes',
-                    reference('__routes')
-                ),
         ];
     }
 }
