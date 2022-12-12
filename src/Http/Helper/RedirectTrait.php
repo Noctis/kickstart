@@ -18,10 +18,13 @@ trait RedirectTrait
      */
     public function redirect(string $path, array $params = []): RedirectResponse
     {
+        $generatedUri = $this->pathGenerator
+            ->generate($path, $params);
+
         return $this->redirectResponseFactory
             ->toPath(
-                $this->pathGenerator
-                    ->generate($path, $params)
+                $generatedUri->getPath(),
+                $generatedUri->getQueryParams()
             );
     }
 }
