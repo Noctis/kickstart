@@ -46,10 +46,10 @@ jobs:
           php-version: '8.1'
           ini-file: production
           coverage: none
-          tools: phpmd
+          tools: phpmd/phpmd
 
       - name: Run PHPMD
-        run: phpmd . sarif codesize --reportfile phpmd-results.sarif --exclude vendor/*
+        run: vendor/bin/phpmd ./src sarif codesize --reportfile phpmd-results.sarif
         continue-on-error: true
 
       - name: Upload analysis results to GitHub
