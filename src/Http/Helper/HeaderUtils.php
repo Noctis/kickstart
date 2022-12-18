@@ -17,6 +17,13 @@ final class HeaderUtils
     public const DISPOSITION_INLINE = 'inline';
 
     /**
+     * This class should not be instantiated.
+     */
+    private function __construct()
+    {
+    }
+
+    /**
      * Generates an HTTP Content-Disposition field-value.
      *
      * @param string $disposition      One of "inline" or "attachment"
