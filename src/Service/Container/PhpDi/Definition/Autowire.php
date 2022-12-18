@@ -70,6 +70,9 @@ final class Autowire implements AutowireDefinitionInterface
         return $helper;
     }
 
+    /**
+     * @param array | object | scalar $value
+     */
     private function resolve(mixed $value): mixed
     {
         if ($value instanceof ContainerDefinitionInterface) {
