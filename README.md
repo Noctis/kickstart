@@ -3,6 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/noctis/kickstart/v)](//packagist.org/packages/noctis/kickstart)
 [![Latest Unstable Version](https://poser.pugx.org/noctis/kickstart/v/unstable)](//packagist.org/packages/noctis/kickstart)
 [![Type Coverage](https://shepherd.dev/github/Noctis/kickstart/coverage.svg)](https://shepherd.dev/github/Noctis/kickstart)
+[![Maintainability](https://api.codeclimate.com/v1/badges/4e78db12b834b2628d02/maintainability)](https://codeclimate.com/github/Noctis/kickstart/maintainability)
 [![License](https://poser.pugx.org/noctis/kickstart/license)](//packagist.org/packages/noctis/kickstart)
 
 ## What is it?
