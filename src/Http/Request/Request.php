@@ -15,6 +15,16 @@ class Request implements ServerRequestInterface
     ) {
     }
 
+    public function fromQueryString(string $name, mixed $default = null): mixed
+    {
+        return $this->getQueryParams()[$name] ?? $default;
+    }
+
+    public function fromBody(string $name, mixed $default = null): mixed
+    {
+        return $this->getParsedBody()[$name] ?? $default;
+    }
+
     /**
      * @inheritDoc
      */
