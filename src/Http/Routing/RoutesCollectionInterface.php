@@ -7,9 +7,11 @@ namespace Noctis\KickStart\Http\Routing;
 use IteratorAggregate;
 
 /**
- * @template-extends IteratorAggregate<int, RouteInterface>
+ * @template-extends IteratorAggregate<int|string, RouteInterface>
  */
 interface RoutesCollectionInterface extends IteratorAggregate
 {
-    public function addRoute(RouteInterface $route): self;
+    public function addRoute(int|string $key, RouteInterface $route): self;
+
+    public function getNamedRoute(string $name): ?RouteInterface;
 }

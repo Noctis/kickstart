@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Provider;
 
 use Noctis\KickStart\Configuration\Configuration;
+use Noctis\KickStart\Service\Twig\Extension\UrlExtension;
+use Psr\Container\ContainerInterface;
 use Twig\Environment as Twig;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
@@ -17,7 +19,7 @@ final class TwigServiceProvider implements ServicesProviderInterface
     public function getServicesDefinitions(): array
     {
         return [
-            Twig::class => function (): Twig {
+            Twig::class => function (ContainerInterface $container): Twig {
                 /** @var string $basePath */
                 $basePath = Configuration::get('basepath');
                 $debugMode = !Configuration::isProduction();
@@ -33,9 +35,12 @@ final class TwigServiceProvider implements ServicesProviderInterface
                 $twig->addExtension(
                     new DebugExtension()
                 );
+                $twig->addExtension(
+                    $container->get(UrlExtension::class)
+                );
 
                 return $twig;
-            }
+            },
         ];
     }
 }

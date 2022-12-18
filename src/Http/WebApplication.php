@@ -21,14 +21,9 @@ use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-use function Psl\Vec\map;
-
 final class WebApplication implements RunnableInterface
 {
     use BootableApplicationTrait;
-
-    /** @var list<RouteInterface> */
-    private array $routes = [];
 
     /**
      * @inheritDoc
@@ -61,14 +56,15 @@ final class WebApplication implements RunnableInterface
     }
 
     /**
-     * @param list<RouteInterface> $routes
+     * @param array<int|string, RouteInterface> $routes
      */
     public function setRoutes(array $routes): void
     {
-        $this->routes = map(
-            $routes,
-            fn (RouteInterface $route): RouteInterface => $route
-        );
+        $routes = new RoutesCollection($routes);
+        $this->router
+            ->setRoutes($routes);
+        $this->container
+            ->set('__routes', $routes);
     }
 
     private function generateResponse(): ResponseInterface
@@ -87,9 +83,6 @@ final class WebApplication implements RunnableInterface
     private function determineRoute(): RouteInterface
     {
         return $this->router
-            ->setRoutes(
-                new RoutesCollection($this->routes)
-            )
             ->route($this->request);
     }
 

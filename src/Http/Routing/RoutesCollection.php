@@ -9,24 +9,29 @@ use Traversable;
 
 final class RoutesCollection implements RoutesCollectionInterface
 {
-    /** @var list<RouteInterface> */
+    /** @var array<int|string, RouteInterface> */
     private array $routes = [];
 
     /**
-     * @param list<RouteInterface> $routes
+     * @param array<int|string, RouteInterface> $routes
      */
     public function __construct(array $routes)
     {
-        foreach ($routes as $route) {
-            $this->addRoute($route);
+        foreach ($routes as $key => $route) {
+            $this->addRoute($key, $route);
         }
     }
 
-    public function addRoute(RouteInterface $route): RoutesCollectionInterface
+    public function addRoute(int|string $key, RouteInterface $route): RoutesCollectionInterface
     {
-        $this->routes[] = $route;
+        $this->routes[$key] = $route;
 
         return $this;
+    }
+
+    public function getNamedRoute(string $name): ?RouteInterface
+    {
+        return $this->routes[$name] ?? null;
     }
 
     public function getIterator(): Traversable
