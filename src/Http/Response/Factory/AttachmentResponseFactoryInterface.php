@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Response\Factory;
 
+use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 interface AttachmentResponseFactoryInterface extends ResponseFactoryInterface
 {
+    public function setAttachment(AttachmentInterface $attachment): self;
+
     /**
      * @inheritDoc
      */

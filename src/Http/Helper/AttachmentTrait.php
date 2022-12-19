@@ -59,24 +59,8 @@ trait AttachmentTrait
 
     private function responseWithAttachment(AttachmentInterface $attachment): AttachmentResponse
     {
-        return $this->getResponse()
-            ->withBody(
-                $attachment->getStream()
-            )
-            ->withHeader(
-                'Content-Type',
-                $attachment->getMimeType()
-            )
-            ->withHeader(
-                'Content-Disposition',
-                $attachment->getDisposition()
-                    ->toString()
-            );
-    }
-
-    private function getResponse(): AttachmentResponse
-    {
         return $this->attachmentResponseFactory
+            ->setAttachment($attachment)
             ->createResponse();
     }
 }
