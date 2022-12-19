@@ -22,6 +22,6 @@ final class NotFoundAction implements ActionInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         return $this->notFoundResponseFactory
-            ->notFound();
+            ->createResponse();
     }
 }
