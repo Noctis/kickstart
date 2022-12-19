@@ -9,7 +9,7 @@ use Laminas\Diactoros\Response\RedirectResponse;
 interface RedirectServiceInterface
 {
     /**
-     * @param array<string, string> $queryParams
+     * @param array<string, string|int> $queryParams
      */
     public function redirectToPath(string $path, array $queryParams = []): RedirectResponse;
 
