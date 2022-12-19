@@ -23,6 +23,8 @@ use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandler;
 use Noctis\KickStart\Http\Service\FlashMessageService;
 use Noctis\KickStart\Http\Service\FlashMessageServiceInterface;
+use Noctis\KickStart\Http\Service\RedirectService;
+use Noctis\KickStart\Http\Service\RedirectServiceInterface;
 use Noctis\KickStart\Http\Service\RenderService;
 use Noctis\KickStart\Http\Service\RenderServiceInterface;
 use Noctis\KickStart\Http\Service\RequestDecorator;
@@ -48,6 +50,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
             MiddlewareStackHandlerInterface::class => MiddlewareStackHandler::class,
             NotFoundResponseFactoryInterface::class => NotFoundResponseFactory::class,
             RedirectResponseFactoryInterface::class => RedirectResponseFactory::class,
+            RedirectServiceInterface::class => RedirectService::class,
             RenderServiceInterface::class => RenderService::class,
             RequestDecoratorInterface::class => RequestDecorator::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
