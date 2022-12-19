@@ -12,12 +12,14 @@ use function Psl\Str\is_empty;
 
 final class NotFoundResponseFactory implements NotFoundResponseFactoryInterface
 {
-    public function notFound(string $message = null): EmptyResponse | TextResponse
-    {
-        if (!is_empty($message)) {
-            return new TextResponse($message, StatusCodeInterface::STATUS_NOT_FOUND);
-        }
+    public function createResponse(
+        int $code = StatusCodeInterface::STATUS_NOT_FOUND,
+        string $reasonPhrase = ''
+    ): EmptyResponse | TextResponse {
+        $response = $reasonPhrase === ''
+            ? new EmptyResponse()
+            : new TextResponse($reasonPhrase);
 
-        return new EmptyResponse(StatusCodeInterface::STATUS_NOT_FOUND);
+        return $response->withStatus(StatusCodeInterface::STATUS_NOT_FOUND, $reasonPhrase);
     }
 }

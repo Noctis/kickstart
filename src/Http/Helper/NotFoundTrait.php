@@ -15,6 +15,6 @@ trait NotFoundTrait
     public function notFound(string $message = null): EmptyResponse | TextResponse
     {
         return $this->notFoundResponseFactory
-            ->notFound($message);
+            ->createResponse(reasonPhrase: (string)$message);
     }
 }
