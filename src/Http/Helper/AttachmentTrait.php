@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Helper;
 
-use Noctis\KickStart\Http\Response\Attachment\AttachmentFactoryInterface;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
-use Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactoryInterface;
 use Noctis\KickStart\Http\Response\Headers\DispositionInterface;
+use Noctis\KickStart\Http\Service\AttachmentServiceInterface;
 
 trait AttachmentTrait
 {
-    private AttachmentFactoryInterface $attachmentFactory;
-
-    private AttachmentResponseFactoryInterface $attachmentResponseFactory;
+    private AttachmentServiceInterface $attachmentService;
 
     public function sendAttachment(AttachmentInterface $attachment): AttachmentResponse
     {
-        return $this->responseWithAttachment($attachment);
+        return $this->attachmentService
+            ->sendAttachment($attachment);
     }
 
     public function sendFile(
@@ -26,10 +24,8 @@ trait AttachmentTrait
         string $mimeType,
         DispositionInterface $disposition
     ): AttachmentResponse {
-        $attachment = $this->attachmentFactory
-            ->createFromPath($path, $mimeType, $disposition);
-
-        return $this->responseWithAttachment($attachment);
+        return $this->attachmentService
+            ->sendFile($path, $mimeType, $disposition);
     }
 
     public function sendContent(
@@ -37,10 +33,8 @@ trait AttachmentTrait
         string $mimeType,
         DispositionInterface $disposition
     ): AttachmentResponse {
-        $attachment = $this->attachmentFactory
-            ->createFromContent($content, $mimeType, $disposition);
-
-        return $this->responseWithAttachment($attachment);
+        return $this->attachmentService
+            ->sendContent($content, $mimeType, $disposition);
     }
 
     /**
@@ -51,16 +45,7 @@ trait AttachmentTrait
         string $mimeType,
         DispositionInterface $disposition
     ): AttachmentResponse {
-        $attachment = $this->attachmentFactory
-            ->createFromResource($resource, $mimeType, $disposition);
-
-        return $this->responseWithAttachment($attachment);
-    }
-
-    private function responseWithAttachment(AttachmentInterface $attachment): AttachmentResponse
-    {
-        return $this->attachmentResponseFactory
-            ->setAttachment($attachment)
-            ->createResponse();
+        return $this->attachmentService
+            ->sendResource($resource, $mimeType, $disposition);
     }
 }

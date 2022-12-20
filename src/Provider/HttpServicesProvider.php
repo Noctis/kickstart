@@ -21,6 +21,8 @@ use Noctis\KickStart\Http\Response\Factory\RedirectResponseFactory;
 use Noctis\KickStart\Http\Response\Factory\RedirectResponseFactoryInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandler;
+use Noctis\KickStart\Http\Service\AttachmentService;
+use Noctis\KickStart\Http\Service\AttachmentServiceInterface;
 use Noctis\KickStart\Http\Service\FlashMessageService;
 use Noctis\KickStart\Http\Service\FlashMessageServiceInterface;
 use Noctis\KickStart\Http\Service\RedirectService;
@@ -43,6 +45,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
     {
         return [
             AttachmentResponseFactoryInterface::class => AttachmentResponseFactory::class,
+            AttachmentServiceInterface::class => AttachmentService::class,
             BaseHrefFactoryInterface::class => BaseHrefFactory::class,
             EmitterInterface::class => SapiEmitter::class,
             FlashMessageServiceInterface::class => FlashMessageService::class,
