@@ -13,7 +13,7 @@ use Tests\Helper\GetAttachmentTrait;
 use Tests\Helper\GetDispositionTrait;
 use Tests\Helper\GetStreamTrait;
 
-final class AttachmentResponseFactoryTests extends TestCase
+final class CreateResponseTests extends TestCase
 {
     use GetAttachmentTrait;
     use GetDispositionTrait;
