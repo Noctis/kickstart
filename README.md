@@ -141,8 +141,10 @@ composer update noctis/kickstart
 If you need to update the skeleton application, i.e. `noctis/kickstart-app` - you will have to perform the update 
 manually, if we're talking about an already existing application based on it.
 
-## Why does it require PHP 8.0?
+## Why does it require PHP 8.1?
 
-While working on the 2.x version of Kickstart (separate user & system packages) I decided to take advantage of the fact 
-that PHP 8.0 recently came out and jump ahead of the curve. I could've made them work on PHP 7.4, but... I decided not to.
-We'll have to move our code to PHP 8 eventually, might as well do it early.
+Kickstart 3.x used to require PHP 8.0. I was on the fence on whether I should bump that requirement to PHP 8.1 for
+Kickstart 4.x, but then [active support for PHP 8.0 ended](https://www.php.net/supported-versions.php) and... PHP kinda
+made the decision for me :) 
+
+PHP 8.1 it is.
