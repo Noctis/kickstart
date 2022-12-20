@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tests\Acceptance\Http\Response\Factory\AttachmentResponseFactory;
+namespace Tests\Acceptance\Http\Service\AttachmentService;
 
 use Laminas\Diactoros\StreamFactory;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentFactory;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentFactoryInterface;
+use Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactory;
+use Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactoryInterface;
 use Noctis\KickStart\Http\Response\Headers\DispositionInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-abstract class AttachmentResponseFactoryTestCase extends TestCase
+abstract class AttachmentServiceTestCase extends TestCase
 {
     use ProphecyTrait;
 
@@ -20,6 +22,11 @@ abstract class AttachmentResponseFactoryTestCase extends TestCase
         return new AttachmentFactory(
             new StreamFactory()
         );
+    }
+
+    protected function getAttachmentResponseFactory(): AttachmentResponseFactoryInterface
+    {
+        return new AttachmentResponseFactory();
     }
 
     /** @noinspection PhpUndefinedMethodInspection */
