@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Tests\Unit\Http\Response\Attachment\AttachmentResponse;
 
 use Fig\Http\Message\StatusCodeInterface;
-use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
-use Noctis\KickStart\Http\Response\Headers\DispositionInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
-use Psr\Http\Message\StreamInterface;
+use Tests\Helper\GetAttachmentTrait;
+use Tests\Helper\GetDispositionTrait;
+use Tests\Helper\GetStreamTrait;
 
 final class AttachmentResponseTests extends TestCase
 {
+    use GetAttachmentTrait;
+    use GetDispositionTrait;
+    use GetStreamTrait;
     use ProphecyTrait;
 
     public function test_it_sets_its_headers_based_on_given_attachment(): void
@@ -76,44 +78,5 @@ final class AttachmentResponseTests extends TestCase
             ->getStatusCode();
 
         $this->assertSame($expectedResult, $result);
-    }
-
-    private function getAttachment(string $mimeType, string $disposition): AttachmentInterface
-    {
-        /** @var AttachmentInterface $attachment */
-        $attachment = $this->prophesize(AttachmentInterface::class);
-
-        $attachment->getStream()
-            ->willReturn(
-                $this->getStream()
-            );
-        $attachment->getMimeType()
-            ->willReturn($mimeType);
-
-        $attachment->getDisposition()
-            ->willReturn(
-                $this->getDisposition($disposition)
-            );
-
-        /** @var ObjectProphecy $attachment */
-        return $attachment->reveal();
-    }
-
-    private function getDisposition(string $value): DispositionInterface
-    {
-        /** @var DispositionInterface $disposition */
-        $disposition = $this->prophesize(DispositionInterface::class);
-
-        $disposition->toString()
-            ->willReturn($value);
-
-        /** @var ObjectProphecy $disposition */
-        return $disposition->reveal();
-    }
-
-    private function getStream(): StreamInterface
-    {
-        return $this->prophesize(StreamInterface::class)
-            ->reveal();
     }
 }
