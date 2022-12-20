@@ -33,7 +33,7 @@ final class AttachmentResponseFactory implements AttachmentResponseFactoryInterf
             throw new RuntimeException(
                 sprintf(
                     'Attachment not set. Did you forget to call `setAttachment()` on %s?',
-                __CLASS__
+                    __CLASS__
                 )
             );
         }
