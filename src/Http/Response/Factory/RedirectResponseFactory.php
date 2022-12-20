@@ -7,6 +7,7 @@ namespace Noctis\KickStart\Http\Response\Factory;
 use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Psr\Http\Message\UriInterface;
+use RuntimeException;
 
 final class RedirectResponseFactory implements RedirectResponseFactoryInterface
 {
@@ -28,7 +29,15 @@ final class RedirectResponseFactory implements RedirectResponseFactoryInterface
         int $code = StatusCodeInterface::STATUS_FOUND,
         string $reasonPhrase = ''
     ): RedirectResponse {
-        /** @psalm-suppress PossiblyNullArgument `RedirectResponse`'s constructor will take care of this */
+        if ($this->uri === null) {
+            throw new RuntimeException(
+                sprintf(
+                    'Destination URI not set. Did you forget to call `setUri()` on %s?',
+                    __CLASS__
+                )
+            );
+        }
+
         return (new RedirectResponse($this->uri))
             ->withStatus($code, $reasonPhrase);
     }
