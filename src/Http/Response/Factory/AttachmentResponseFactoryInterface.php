@@ -4,29 +4,16 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Response\Factory;
 
+use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
-use Noctis\KickStart\Http\Response\Headers\DispositionInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
-interface AttachmentResponseFactoryInterface
+interface AttachmentResponseFactoryInterface extends ResponseFactoryInterface
 {
-    public function sendFile(
-        string $path,
-        string $mimeType,
-        DispositionInterface $disposition
-    ): AttachmentResponse;
-
-    public function sendContent(
-        string $content,
-        string $mimeType,
-        DispositionInterface $disposition
-    ): AttachmentResponse;
+    public function setAttachment(AttachmentInterface $attachment): self;
 
     /**
-     * @param resource $resource
+     * @inheritDoc
      */
-    public function sendResource(
-        $resource,
-        string $mimeType,
-        DispositionInterface $disposition
-    ): AttachmentResponse;
+    public function createResponse(int $code = 200, string $reasonPhrase = ''): AttachmentResponse;
 }

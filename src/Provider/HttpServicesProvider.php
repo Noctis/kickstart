@@ -21,8 +21,14 @@ use Noctis\KickStart\Http\Response\Factory\RedirectResponseFactory;
 use Noctis\KickStart\Http\Response\Factory\RedirectResponseFactoryInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandler;
+use Noctis\KickStart\Http\Service\AttachmentService;
+use Noctis\KickStart\Http\Service\AttachmentServiceInterface;
 use Noctis\KickStart\Http\Service\FlashMessageService;
 use Noctis\KickStart\Http\Service\FlashMessageServiceInterface;
+use Noctis\KickStart\Http\Service\RedirectService;
+use Noctis\KickStart\Http\Service\RedirectServiceInterface;
+use Noctis\KickStart\Http\Service\RenderService;
+use Noctis\KickStart\Http\Service\RenderServiceInterface;
 use Noctis\KickStart\Http\Service\RequestDecorator;
 use Noctis\KickStart\Http\Service\RequestDecoratorInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,6 +45,7 @@ final class HttpServicesProvider implements ServicesProviderInterface
     {
         return [
             AttachmentResponseFactoryInterface::class => AttachmentResponseFactory::class,
+            AttachmentServiceInterface::class => AttachmentService::class,
             BaseHrefFactoryInterface::class => BaseHrefFactory::class,
             EmitterInterface::class => SapiEmitter::class,
             FlashMessageServiceInterface::class => FlashMessageService::class,
@@ -46,6 +53,8 @@ final class HttpServicesProvider implements ServicesProviderInterface
             MiddlewareStackHandlerInterface::class => MiddlewareStackHandler::class,
             NotFoundResponseFactoryInterface::class => NotFoundResponseFactory::class,
             RedirectResponseFactoryInterface::class => RedirectResponseFactory::class,
+            RedirectServiceInterface::class => RedirectService::class,
+            RenderServiceInterface::class => RenderService::class,
             RequestDecoratorInterface::class => RequestDecorator::class,
             ServerRequestInterface::class => fn (): ServerRequestInterface => ServerRequestFactory::fromGlobals(),
             SessionContainer::class => autowire(SessionContainer::class)

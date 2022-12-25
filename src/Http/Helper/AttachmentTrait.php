@@ -6,16 +6,17 @@ namespace Noctis\KickStart\Http\Helper;
 
 use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
-use Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactoryInterface;
 use Noctis\KickStart\Http\Response\Headers\DispositionInterface;
+use Noctis\KickStart\Http\Service\AttachmentServiceInterface;
 
 trait AttachmentTrait
 {
-    private AttachmentResponseFactoryInterface $attachmentResponseFactory;
+    private AttachmentServiceInterface $attachmentService;
 
     public function sendAttachment(AttachmentInterface $attachment): AttachmentResponse
     {
-        return new AttachmentResponse($attachment);
+        return $this->attachmentService
+            ->sendAttachment($attachment);
     }
 
     public function sendFile(
@@ -23,7 +24,7 @@ trait AttachmentTrait
         string $mimeType,
         DispositionInterface $disposition
     ): AttachmentResponse {
-        return $this->attachmentResponseFactory
+        return $this->attachmentService
             ->sendFile($path, $mimeType, $disposition);
     }
 
@@ -32,7 +33,7 @@ trait AttachmentTrait
         string $mimeType,
         DispositionInterface $disposition
     ): AttachmentResponse {
-        return $this->attachmentResponseFactory
+        return $this->attachmentService
             ->sendContent($content, $mimeType, $disposition);
     }
 
@@ -44,7 +45,7 @@ trait AttachmentTrait
         string $mimeType,
         DispositionInterface $disposition
     ): AttachmentResponse {
-        return $this->attachmentResponseFactory
+        return $this->attachmentService
             ->sendResource($resource, $mimeType, $disposition);
     }
 }

@@ -5,31 +5,27 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http\Helper;
 
 use Laminas\Diactoros\Response\RedirectResponse;
-use Noctis\KickStart\Http\Response\Factory\RedirectResponseFactoryInterface;
-use Noctis\KickStart\Service\PathGeneratorInterface;
+use Noctis\KickStart\Http\Service\RedirectServiceInterface;
 
 trait RedirectTrait
 {
-    private RedirectResponseFactoryInterface $redirectResponseFactory;
-    private PathGeneratorInterface $pathGenerator;
+    private RedirectServiceInterface $redirectService;
 
     /**
-     * @param array<string, string> $params
+     * @param array<string, string> $queryParams
      */
-    public function redirect(string $path, array $params = []): RedirectResponse
+    public function redirect(string $path, array $queryParams = []): RedirectResponse
     {
-        return $this->redirectResponseFactory
-            ->toPath($path, $params);
+        return $this->redirectService
+            ->redirectToPath($path, $queryParams);
     }
 
-    public function redirectToRoute(string $name, array $params): RedirectResponse
+    /**
+     * @param array<string, string|int> $params
+     */
+    public function redirectToRoute(string $name, array $params = []): RedirectResponse
     {
-        $generatedUri = $this->pathGenerator
-            ->toRoute($name, $params);
-
-        return $this->redirect(
-            $generatedUri->getPath(),
-            $generatedUri->getQueryParams()
-        );
+        return $this->redirectService
+            ->redirectToRoute($name, $params);
     }
 }

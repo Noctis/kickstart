@@ -4,46 +4,41 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Response\Factory;
 
+use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response\RedirectResponse;
-use Noctis\KickStart\Configuration\Configuration;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriFactoryInterface;
-
-use function Psl\Regex\matches;
-use function Psl\Str\concat;
+use Psr\Http\Message\UriInterface;
+use RuntimeException;
 
 final class RedirectResponseFactory implements RedirectResponseFactoryInterface
 {
-    public function __construct(
-        private readonly UriFactoryInterface    $uriFactory,
-        private readonly ServerRequestInterface $request
-    ) {
+    private UriInterface | string | null $uri;
+
+    public function __construct()
+    {
+        $this->uri = null;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function toPath(string $path, array $queryParams = []): RedirectResponse
+    public function setUri(UriInterface | string $uri): self
     {
-        if (matches($path, '/:\/\//')) {
-            $uri = $this->uriFactory
-                ->createUri($path);
-        } else {
-            $uri = $this->request
-                ->getUri()
-                ->withPath(
-                    concat(
-                        Configuration::getBaseHref(),
-                        '/',
-                        $path
-                    )
-                );
+        $this->uri = $uri;
+
+        return $this;
+    }
+
+    public function createResponse(
+        int $code = StatusCodeInterface::STATUS_FOUND,
+        string $reasonPhrase = ''
+    ): RedirectResponse {
+        if ($this->uri === null) {
+            throw new RuntimeException(
+                sprintf(
+                    'Destination URI not set. Did you forget to call `setUri()` on %s?',
+                    __CLASS__
+                )
+            );
         }
 
-        $uri = $uri->withQuery(
-            http_build_query($queryParams)
-        );
-
-        return new RedirectResponse((string)$uri);
+        return (new RedirectResponse($this->uri))
+            ->withStatus($code, $reasonPhrase);
     }
 }

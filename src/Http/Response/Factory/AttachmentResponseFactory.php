@@ -4,50 +4,41 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Response\Factory;
 
-use Noctis\KickStart\Http\Response\Attachment\AttachmentFactoryInterface;
+use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
-use Noctis\KickStart\Http\Response\Headers\DispositionInterface;
+use RuntimeException;
 
 final class AttachmentResponseFactory implements AttachmentResponseFactoryInterface
 {
-    public function __construct(
-        private readonly AttachmentFactoryInterface $attachmentFactory
-    ) {
+    private ?AttachmentInterface $attachment;
+
+    public function __construct()
+    {
+        $this->attachment = null;
     }
 
-    public function sendFile(
-        string $path,
-        string $mimeType,
-        DispositionInterface $disposition
-    ): AttachmentResponse {
-        return new AttachmentResponse(
-            $this->attachmentFactory
-                ->createFromPath($path, $mimeType, $disposition)
-        );
-    }
+    public function setAttachment(AttachmentInterface $attachment): self
+    {
+        $this->attachment = $attachment;
 
-    public function sendContent(
-        string $content,
-        string $mimeType,
-        DispositionInterface $disposition
-    ): AttachmentResponse {
-        return new AttachmentResponse(
-            $this->attachmentFactory
-                ->createFromContent($content, $mimeType, $disposition)
-        );
+        return $this;
     }
 
     /**
      * @inheritDoc
      */
-    public function sendResource(
-        $resource,
-        string $mimeType,
-        DispositionInterface $disposition
-    ): AttachmentResponse {
-        return new AttachmentResponse(
-            $this->attachmentFactory
-                ->createFromResource($resource, $mimeType, $disposition)
-        );
+    public function createResponse(int $code = 200, string $reasonPhrase = ''): AttachmentResponse
+    {
+        if ($this->attachment === null) {
+            throw new RuntimeException(
+                sprintf(
+                    'Attachment not set. Did you forget to call `setAttachment()` on %s?',
+                    __CLASS__
+                )
+            );
+        }
+
+        return (new AttachmentResponse($this->attachment))
+            ->withStatus($code, $reasonPhrase);
     }
 }

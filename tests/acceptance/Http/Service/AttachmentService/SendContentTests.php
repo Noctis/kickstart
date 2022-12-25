@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Tests\Acceptance\Http\Response\Factory\AttachmentResponseFactory;
+namespace Tests\Acceptance\Http\Service\AttachmentService;
 
 use Noctis\KickStart\Http\Response\AttachmentResponse;
-use Noctis\KickStart\Http\Response\Factory\AttachmentResponseFactory;
+use Noctis\KickStart\Http\Service\AttachmentService;
 
-final class SendContentTests extends AttachmentResponseFactoryTestCase
+final class SendContentTests extends AttachmentServiceTestCase
 {
     public function test_it_creates_an_attachment_response(): void
     {
-        $factory = new AttachmentResponseFactory(
-            $this->getAttachmentFactory()
+        $service = new AttachmentService(
+            $this->getAttachmentFactory(),
+            $this->getAttachmentResponseFactory()
         );
 
-        $attachmentResponse = $factory->sendContent(
+        $attachmentResponse = $service->sendContent(
             'foo-content',
             'application/octet-stream',
             $this->getDisposition()
