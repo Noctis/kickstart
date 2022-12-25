@@ -23,7 +23,7 @@ trait RedirectTrait
     /**
      * @param array<string, string|int> $params
      */
-    public function redirectToRoute(string $name, array $params): RedirectResponse
+    public function redirectToRoute(string $name, array $params = []): RedirectResponse
     {
         return $this->redirectService
             ->redirectToRoute($name, $params);
