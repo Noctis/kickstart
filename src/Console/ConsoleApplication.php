@@ -76,7 +76,6 @@ final class ConsoleApplication implements RunnableInterface
         $commandMap = [];
         foreach ($commandsClassesNames as $className) {
             $reflection = new ReflectionProperty($className, 'defaultName');
-            $reflection->setAccessible(true);
             /** @var string $name */
             $name = $reflection->getValue();
 

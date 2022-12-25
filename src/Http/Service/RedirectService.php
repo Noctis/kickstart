@@ -14,6 +14,7 @@ use Psr\Http\Message\UriInterface;
 
 use function Psl\Regex\matches;
 use function Psl\Str\concat;
+use function Psl\Str\replace;
 
 final class RedirectService implements RedirectServiceInterface
 {
@@ -34,6 +35,7 @@ final class RedirectService implements RedirectServiceInterface
             ->withQuery(
                 http_build_query($queryParams)
             );
+
 
         return $this->redirectResponseFactory
             ->setUri($uri)
@@ -63,10 +65,14 @@ final class RedirectService implements RedirectServiceInterface
             $uri = $this->request
                 ->getUri()
                 ->withPath(
-                    concat(
-                        Configuration::getBaseHref(),
-                        '/',
-                        $path
+                    replace(
+                        concat(
+                            Configuration::getBaseHref(),
+                            '/',
+                            $path
+                        ),
+                        '//',
+                        '/'
                     )
                 );
         }
