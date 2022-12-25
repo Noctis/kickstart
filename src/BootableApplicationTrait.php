@@ -18,7 +18,7 @@ trait BootableApplicationTrait
      */
     public static function boot(ServicesProviderInterface ...$servicesProviders): self
     {
-        /** @psalm-suppress MixedArgumentTypeCoercion */
+        /** @psalm-suppress ArgumentTypeCoercion */
         $container = self::buildContainer(
             concat(
                 self::getObligatoryServiceProviders(),
