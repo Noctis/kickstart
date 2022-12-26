@@ -6,9 +6,11 @@ namespace Noctis\KickStart\Console;
 
 use Noctis\KickStart\BootableApplicationTrait;
 use Noctis\KickStart\Console\Command\AbstractCommand;
+use Noctis\KickStart\Console\Service\CommandNameExtractorInterface;
+use Noctis\KickStart\Provider\ConsoleServicesProvider;
+use Noctis\KickStart\Provider\ServicesProviderInterface;
 use Noctis\KickStart\RunnableInterface;
 use Psr\Container\ContainerInterface;
-use ReflectionProperty;
 use Symfony\Component\Console\Application as SymfonyConsoleApplication;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
@@ -23,10 +25,25 @@ final class ConsoleApplication implements RunnableInterface
     /** @var callable | null */
     private $commandLoaderFactory = null;
 
+    private CommandNameExtractorInterface $commandNameExtractor;
+
+    /**
+     * @inheritDoc
+     * @psalm-return list<ServicesProviderInterface>
+     */
+    protected static function getObligatoryServiceProviders(): array
+    {
+        return [
+            new ConsoleServicesProvider(),
+        ];
+    }
+
     public function __construct(
         private readonly ContainerInterface        $container,
         private readonly SymfonyConsoleApplication $consoleApp
     ) {
+        $this->commandNameExtractor = $this->container
+            ->get(CommandNameExtractorInterface::class);
     }
 
     public function run(): void
@@ -75,10 +92,8 @@ final class ConsoleApplication implements RunnableInterface
     {
         $commandMap = [];
         foreach ($commandsClassesNames as $className) {
-            $reflection = new ReflectionProperty($className, 'defaultName');
-            /** @var string $name */
-            $name = $reflection->getValue();
-
+            $name = $this->commandNameExtractor
+                ->extract($className);
             $commandMap[$name] = $className;
         }
 
