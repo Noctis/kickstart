@@ -14,6 +14,7 @@ use Noctis\KickStart\Http\Routing\Router\RouterInterface;
 use Noctis\KickStart\Http\Routing\RoutesCollection;
 use Noctis\KickStart\Http\Service\RequestDecoratorInterface;
 use Noctis\KickStart\Provider\HttpServicesProvider;
+use Noctis\KickStart\Provider\ServicesProviderInterface;
 use Noctis\KickStart\Provider\StandardServicesProvider;
 use Noctis\KickStart\Provider\TwigServiceProvider;
 use Noctis\KickStart\RunnableInterface;
@@ -27,6 +28,7 @@ final class WebApplication implements RunnableInterface
 
     /**
      * @inheritDoc
+     * @psalm-return list<ServicesProviderInterface>
      */
     protected static function getObligatoryServiceProviders(): array
     {
