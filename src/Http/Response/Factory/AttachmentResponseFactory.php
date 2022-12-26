@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Response\Factory;
 
+use Fig\Http\Message\StatusCodeInterface;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 use Noctis\KickStart\Http\Response\AttachmentResponse;
 use RuntimeException;
@@ -27,8 +28,10 @@ final class AttachmentResponseFactory implements AttachmentResponseFactoryInterf
     /**
      * @inheritDoc
      */
-    public function createResponse(int $code = 200, string $reasonPhrase = ''): AttachmentResponse
-    {
+    public function createResponse(
+        int $code = StatusCodeInterface::STATUS_OK,
+        string $reasonPhrase = ''
+    ): AttachmentResponse {
         if ($this->attachment === null) {
             throw new RuntimeException(
                 sprintf(

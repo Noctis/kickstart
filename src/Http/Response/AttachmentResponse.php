@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Http\Response;
 
+use Fig\Http\Message\StatusCodeInterface;
 use Laminas\Diactoros\Response;
 use Noctis\KickStart\Http\Response\Attachment\AttachmentInterface;
 
@@ -14,8 +15,11 @@ final class AttachmentResponse extends Response
     /**
      * @inheritDoc
      */
-    public function __construct(AttachmentInterface $attachment, int $status = 200, array $headers = [])
-    {
+    public function __construct(
+        AttachmentInterface $attachment,
+        int $status = StatusCodeInterface::STATUS_OK,
+        array $headers = []
+    ) {
         $headers = merge(
             $headers,
             [
