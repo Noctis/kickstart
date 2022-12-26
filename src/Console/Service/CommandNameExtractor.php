@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Console\Service;
 
 use ReflectionClass;
+use ReflectionException;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 
@@ -41,15 +42,17 @@ final class CommandNameExtractor implements CommandNameExtractorInterface
             return null;
         }
 
+        /** @var string|null */
         return $attributes[0]->getArguments()['name'] ?? null;
     }
 
     private function getNameFromProperty(ReflectionClass $reflection): ?string
     {
         try {
+            /** @var string|null */
             return $reflection->getProperty('defaultName')
                 ->getValue();
-        } catch (\ReflectionException $ex) {
+        } catch (ReflectionException $ex) {
             return null;
         }
     }
