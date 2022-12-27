@@ -9,7 +9,7 @@ use Whoops\Run as Whoops;
 
 final class Debugging
 {
-    private static ?Whoops $whoops = null;
+    private static ?Whoops $debugger = null;
 
     private function __construct()
     {
@@ -25,7 +25,7 @@ final class Debugging
         ini_set('log_errors', 'On');
 
         /** @psalm-suppress PossiblyNullReference */
-        self::$whoops->register();
+        self::$debugger->register();
     }
 
     public static function off(): void
@@ -38,14 +38,14 @@ final class Debugging
         ini_set('error_reporting', 'On');
 
         /** @psalm-suppress PossiblyNullReference */
-        self::$whoops->unregister();
+        self::$debugger->unregister();
     }
 
     private static function boot(): void
     {
-        if (self::$whoops === null) {
-            self::$whoops = new Whoops();
-            self::$whoops->pushHandler(
+        if (self::$debugger === null) {
+            self::$debugger = new Whoops();
+            self::$debugger->pushHandler(
                 new PrettyPageHandler()
             );
         }
