@@ -15,6 +15,7 @@
         "composer-runtime-api": "^2",
         "azjezz/psl": "^2.3",
         "fig/http-message-util": "^1.1",
+        "filp/whoops": "^2.14",
         "laminas/laminas-diactoros": "^2.24",
         "laminas/laminas-httphandlerrunner": "^2.4",
         "laminas/laminas-session": "^2.16",
