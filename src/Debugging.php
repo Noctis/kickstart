@@ -11,6 +11,10 @@ final class Debugging
 {
     private static ?Whoops $whoops = null;
 
+    private function __construct()
+    {
+    }
+
     public static function on(): void
     {
         self::boot();
