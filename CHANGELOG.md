@@ -11,5 +11,6 @@
   [`Request` class](https://github.com/Noctis/kickstart/blob/4.0.0/src/Http/Request/Request.php) & replaced it with two 
   new methods: `fromQueryString()` & `fromBody()`,
 * Response factories now implement [PSR-17](https://www.php-fig.org/psr/psr-17/#22-responsefactoryinterface),
+* DIC compilation functionality has been removed due to issues in certain popular scenarios,
 * Psalm inspection now includes looking for leftover calls to `dump()` function,
 * Updated dependencies to their newest possible versions.
