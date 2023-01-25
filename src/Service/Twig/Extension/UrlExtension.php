@@ -28,7 +28,7 @@ final class UrlExtension extends AbstractExtension
     /**
      * @param array<string, string|int> $params
      */
-    private function getPath(string $routeName, array $params): string
+    private function getPath(string $routeName, array $params = []): string
     {
         return $this->pathGenerator
             ->toRoute($routeName, $params)
