@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Service;
 
+use Noctis\KickStart\Exception\RouteNotFoundException;
 use Noctis\KickStart\Http\Routing\RoutesCollection;
 use Noctis\KickStart\Http\Routing\RoutesCollectionInterface;
 use Noctis\KickStart\ValueObject\GeneratedUriInterface;
@@ -33,11 +34,14 @@ final class PathGenerator implements PathGeneratorInterface
         /** @psalm-suppress PossiblyNullReference */
         $route = $this->routes
             ->getNamedRoute($routeName);
-        $path = $route !== null
-            ? $route->getPath()
-            : $routeName;
+        if ($route === null) {
+            throw new RouteNotFoundException($routeName);
+        }
 
         return $this->urlGenerator
-            ->generate($path, $params);
+            ->generate(
+                $route->getPath(),
+                $params
+            );
     }
 }
