@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Acceptance\Service\PathGenerator;
 
+use Noctis\KickStart\Exception\RouteNotFoundException;
 use Noctis\KickStart\Http\Routing\Route;
 use Noctis\KickStart\Http\Routing\RoutesCollection;
 use Noctis\KickStart\Http\Routing\RoutesCollectionInterface;
@@ -14,22 +15,21 @@ use PHPUnit\Framework\TestCase;
 
 final class ToRouteTests extends TestCase
 {
-    public function test_it_returns_given_route_name_with_params_as_query_string_if_no_routes_were_provided(): void
+    public function test_it_throws_an_exception_if_no_routes_were_provided(): void
     {
+        $this->expectException(RouteNotFoundException::class);
+
         $generator = new PathGenerator(
             $this->getUrlGenerator()
         );
 
-        $path = $generator->toRoute('sign-in', ['foo' => 'bar']);
-
-        $this->assertSame(
-            'sign-in?foo=bar',
-            $path->toString()
-        );
+        $generator->toRoute('sign-in', ['foo' => 'bar']);
     }
 
-    public function test_it_returns_given_route_name_with_params_as_query_string_if_no_matching_route_exists(): void
+    public function test_it_throws_an_exception_if_no_matching_route_exists(): void
     {
+        $this->expectException(RouteNotFoundException::class);
+
         $generator = new PathGenerator(
             $this->getUrlGenerator()
         );
@@ -37,12 +37,7 @@ final class ToRouteTests extends TestCase
             $this->getRoutes(['home' => '/'])
         );
 
-        $path = $generator->toRoute('sign-in', ['foo' => 'bar']);
-
-        $this->assertSame(
-            'sign-in?foo=bar',
-            $path->toString()
-        );
+        $generator->toRoute('sign-in', ['foo' => 'bar']);
     }
 
     public function test_it_returns_route_based_path_if_matching_route_exists(): void
