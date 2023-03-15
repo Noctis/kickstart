@@ -52,7 +52,6 @@
     },
     "scripts": {
         "phpunit": "phpunit --configuration phpunit.xml.dist",
-        "psalm": "psalm --config=psalm.xml.dist --shepherd",
         "phpcs": "phpcs --standard=PSR12"
     },
     "config": {

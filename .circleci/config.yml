@@ -51,5 +51,5 @@ jobs:
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
       - run: composer run-script phpunit
-      - run: composer run-script psalm ./src
+      - run: vendor/bin/psalm --config=psalm.xml.dist --shepherd
       - run: vendor/bin/phpcs

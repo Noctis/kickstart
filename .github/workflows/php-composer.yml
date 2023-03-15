@@ -45,7 +45,7 @@ jobs:
       run: composer run-script phpunit
 
     - name: Run Psalm
-      run: composer run-script psalm ./src
+      run: vendor/bin/psalm --config=psalm.xml.dist --shepherd
 
     - name: Run Coding Style Check
       run: vendor/bin/phpcs
