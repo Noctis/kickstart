@@ -52,7 +52,7 @@
     },
     "scripts": {
         "phpunit": "phpunit --configuration phpunit.xml.dist",
-        "phpcs": "phpcs --standard=PSR12"
+        "phpcs": "phpcs --exclude=Generic.Files.LineEndings"
     },
     "config": {
         "sort-packages": true,
