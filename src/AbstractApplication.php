@@ -27,6 +27,7 @@ abstract class AbstractApplication
 
     /**
      * @param ServicesProviderInterface ...$servicesProviders
+     * @psalm-suppress MixedInferredReturnType
      */
     public static function boot(ServicesProviderInterface ...$servicesProviders): static
     {
@@ -38,6 +39,7 @@ abstract class AbstractApplication
             )
         );
 
+        /** @psalm-suppress MixedReturnStatement */
         return $container->get(static::class);
     }
 
