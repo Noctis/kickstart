@@ -25,7 +25,7 @@ abstract class AbstractApplication
     /**
      * @param ServicesProviderInterface ...$servicesProviders
      */
-    public static function boot(ServicesProviderInterface ...$servicesProviders): self
+    public static function boot(ServicesProviderInterface ...$servicesProviders): static
     {
         $container = self::buildContainer(
             ...concat(
