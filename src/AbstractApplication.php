@@ -32,6 +32,7 @@ abstract class AbstractApplication
     {
         $container = static::buildContainer(
             ...concat(
+                self::getObligatoryServiceProviders(),
                 static::getObligatoryServiceProviders(),
                 $servicesProviders
             )
