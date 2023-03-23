@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Console;
 
-use Noctis\KickStart\BootableApplicationTrait;
+use Noctis\KickStart\AbstractApplication;
 use Noctis\KickStart\Console\Command\AbstractCommand;
 use Noctis\KickStart\Console\Service\CommandNameExtractorInterface;
+use Noctis\KickStart\Http\Routing\Router\RouterInterface;
 use Noctis\KickStart\Provider\ConsoleServicesProvider;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
 use Noctis\KickStart\RunnableInterface;
-use Psr\Container\ContainerInterface;
+use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsoleApplication;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 
-final class ConsoleApplication implements RunnableInterface
+final class ConsoleApplication extends AbstractApplication implements RunnableInterface
 {
-    use BootableApplicationTrait;
-
     /** @var list<class-string<AbstractCommand>> */
     private array $commandsClassesNames = [];
 
@@ -39,9 +38,12 @@ final class ConsoleApplication implements RunnableInterface
     }
 
     public function __construct(
-        private readonly ContainerInterface        $container,
+        SettableContainerInterface                 $container,
+        RouterInterface                            $router,
         private readonly SymfonyConsoleApplication $consoleApp
     ) {
+        parent::__construct($container, $router);
+
         $this->commandNameExtractor = $this->container
             ->get(CommandNameExtractorInterface::class);
     }
