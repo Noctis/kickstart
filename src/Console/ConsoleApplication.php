@@ -10,6 +10,7 @@ use Noctis\KickStart\Console\Service\CommandNameExtractorInterface;
 use Noctis\KickStart\Http\Routing\Router\RouterInterface;
 use Noctis\KickStart\Provider\ConsoleServicesProvider;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
+use Noctis\KickStart\Provider\TwigServiceProvider;
 use Noctis\KickStart\RunnableInterface;
 use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Symfony\Component\Console\Application as SymfonyConsoleApplication;
@@ -34,6 +35,7 @@ final class ConsoleApplication extends AbstractApplication implements RunnableIn
     {
         return [
             new ConsoleServicesProvider(),
+            new TwigServiceProvider(),
         ];
     }
 
