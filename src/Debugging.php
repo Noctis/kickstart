@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart;
 
+use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run as Whoops;
+use Whoops\Util\Misc as MiscUtils;
 
 final class Debugging
 {
@@ -45,9 +47,12 @@ final class Debugging
     {
         if (self::$debugger === null) {
             self::$debugger = new Whoops();
-            self::$debugger->pushHandler(
-                new PrettyPageHandler()
-            );
+
+            $handler = MiscUtils::isCommandLine()
+                ? new PlainTextHandler()
+                : new PrettyPageHandler();
+
+            self::$debugger->pushHandler($handler);
         }
     }
 }
