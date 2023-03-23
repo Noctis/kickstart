@@ -31,8 +31,6 @@ final class WebApplication extends AbstractApplication implements RunnableInterf
     {
         return [
             new HttpServicesProvider(),
-            new TwigServiceProvider(),
-            new StandardServicesProvider()
         ];
     }
 

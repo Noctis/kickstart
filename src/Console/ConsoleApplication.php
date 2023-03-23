@@ -35,7 +35,6 @@ final class ConsoleApplication extends AbstractApplication implements RunnableIn
     {
         return [
             new ConsoleServicesProvider(),
-            new TwigServiceProvider(),
         ];
     }
 

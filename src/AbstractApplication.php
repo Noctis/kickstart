@@ -7,7 +7,10 @@ namespace Noctis\KickStart;
 use Noctis\KickStart\Http\Routing\RouteInterface;
 use Noctis\KickStart\Http\Routing\Router\RouterInterface;
 use Noctis\KickStart\Http\Routing\RoutesCollection;
+use Noctis\KickStart\Provider\RoutingProvider;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
+use Noctis\KickStart\Provider\StandardServicesProvider;
+use Noctis\KickStart\Provider\TwigServiceProvider;
 use Noctis\KickStart\Service\Container\PhpDi\ContainerBuilder;
 use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Psr\Container\ContainerInterface;
@@ -54,7 +57,11 @@ abstract class AbstractApplication
      */
     protected static function getObligatoryServiceProviders(): array
     {
-        return [];
+        return [
+            new TwigServiceProvider(),
+            new StandardServicesProvider(),
+            new RoutingProvider(),
+        ];
     }
 
     protected static function buildContainer(ServicesProviderInterface ...$servicesProviders): ContainerInterface
