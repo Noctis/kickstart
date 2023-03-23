@@ -27,14 +27,14 @@ abstract class AbstractApplication
      */
     public static function boot(ServicesProviderInterface ...$servicesProviders): static
     {
-        $container = self::buildContainer(
+        $container = static::buildContainer(
             ...concat(
-                self::getObligatoryServiceProviders(),
+                static::getObligatoryServiceProviders(),
                 $servicesProviders
             )
         );
 
-        return $container->get(self::class);
+        return $container->get(static::class);
     }
 
     /**
