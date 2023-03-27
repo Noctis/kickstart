@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Noctis\KickStart\Service\Container\PhpDi\Definition;
 
-use Closure;
 use DI\Definition\Helper\AutowireDefinitionHelper;
 use Noctis\KickStart\Service\Container\Definition\AutowireDefinitionInterface;
 use Noctis\KickStart\Service\Container\Definition\ContainerDefinitionInterface;
 
 use function DI\autowire;
+use function Psl\Vec\map;
 
 final class Autowire implements AutowireDefinitionInterface
 {
-    /** @var array<string, scalar | array | Closure | ContainerDefinitionInterface | object > */
+    /** @var array<string, mixed> */
     private array $constructorParameters = [];
 
-    /** @var array<string, scalar | array | Closure | ContainerDefinitionInterface | object> */
+    /** @var array<string, list<mixed>> */
     private array $methodParameters = [];
 
     /**
@@ -27,26 +27,16 @@ final class Autowire implements AutowireDefinitionInterface
     ) {
     }
 
-    /**
-     * @param scalar | array | Closure | ContainerDefinitionInterface | object $value
-     */
-    public function constructorParameter(
-        string $name,
-        string | int | float | bool | array | object $value
-    ): AutowireDefinitionInterface {
+    public function constructorParameter(string $name, mixed $value): AutowireDefinitionInterface
+    {
         $this->constructorParameters[$name] = $value;
 
         return $this;
     }
 
-    /**
-     * @param scalar | array | Closure | ContainerDefinitionInterface | object $value
-     */
-    public function method(
-        string $methodName,
-        string | int | float | bool | array | object $value
-    ): AutowireDefinitionInterface {
-        $this->methodParameters[$methodName] = $value;
+    public function method(string $methodName, mixed ...$values): AutowireDefinitionInterface
+    {
+        $this->methodParameters[$methodName] = array_values($values);
 
         return $this;
     }
@@ -54,25 +44,26 @@ final class Autowire implements AutowireDefinitionInterface
     public function __invoke(): AutowireDefinitionHelper
     {
         $helper = autowire($this->className);
+        /** @psalm-suppress MixedAssignment */
         foreach ($this->constructorParameters as $name => $value) {
             $helper = $helper->constructorParameter(
                 $name,
                 $this->resolve($value)
             );
         }
-        foreach ($this->methodParameters as $methodName => $value) {
+        foreach ($this->methodParameters as $methodName => $values) {
             $helper = $helper->method(
                 $methodName,
-                $this->resolve($value)
+                ...map(
+                    $values,
+                    $this->resolve(...)
+                )
             );
         }
 
         return $helper;
     }
 
-    /**
-     * @param array | object | scalar $value
-     */
     private function resolve(mixed $value): mixed
     {
         if ($value instanceof ContainerDefinitionInterface) {
