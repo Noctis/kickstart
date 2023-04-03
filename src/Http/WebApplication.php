@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Noctis\KickStart\Http;
 
 use Laminas\HttpHandlerRunner\Emitter\EmitterInterface;
-use Noctis\KickStart\BootableApplicationTrait;
+use Noctis\KickStart\AbstractApplication;
 use Noctis\KickStart\Http\Request\Request;
 use Noctis\KickStart\Http\Routing\MiddlewareStack;
 use Noctis\KickStart\Http\Routing\MiddlewareStackHandlerInterface;
 use Noctis\KickStart\Http\Routing\RouteInterface;
 use Noctis\KickStart\Http\Routing\Router\RouterInterface;
-use Noctis\KickStart\Http\Routing\RoutesCollection;
 use Noctis\KickStart\Http\Service\RequestDecoratorInterface;
 use Noctis\KickStart\Provider\HttpServicesProvider;
 use Noctis\KickStart\Provider\ServicesProviderInterface;
@@ -22,10 +21,8 @@ use Noctis\KickStart\Service\Container\SettableContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class WebApplication implements RunnableInterface
+final class WebApplication extends AbstractApplication implements RunnableInterface
 {
-    use BootableApplicationTrait;
-
     /**
      * @inheritDoc
      * @psalm-return list<ServicesProviderInterface>
@@ -34,19 +31,18 @@ final class WebApplication implements RunnableInterface
     {
         return [
             new HttpServicesProvider(),
-            new TwigServiceProvider(),
-            new StandardServicesProvider()
         ];
     }
 
     public function __construct(
-        private readonly SettableContainerInterface      $container,
+        SettableContainerInterface                       $container,
+        RouterInterface                                  $router,
         private ServerRequestInterface                   $request,
-        private readonly RouterInterface                 $router,
         private readonly MiddlewareStackHandlerInterface $middlewareStackHandler,
         private readonly RequestDecoratorInterface       $requestDecorator,
         private readonly EmitterInterface                $responseEmitter
     ) {
+        parent::__construct($container, $router);
     }
 
     public function run(): void
@@ -55,18 +51,6 @@ final class WebApplication implements RunnableInterface
 
         $this->responseEmitter
             ->emit($response);
-    }
-
-    /**
-     * @param array<int|string, RouteInterface> $routes
-     */
-    public function setRoutes(array $routes): void
-    {
-        $routes = new RoutesCollection($routes);
-        $this->router
-            ->setRoutes($routes);
-        $this->container
-            ->set('__routes', $routes);
     }
 
     private function generateResponse(): ResponseInterface
