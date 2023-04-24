@@ -8,6 +8,8 @@ use Noctis\KickStart\Service\PathGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+use function Psl\Regex\replace;
+
 final class UrlExtension extends AbstractExtension
 {
     public function __construct(
@@ -30,8 +32,14 @@ final class UrlExtension extends AbstractExtension
      */
     private function getRoute(string $routeName, array $params = []): string
     {
-        return $this->pathGenerator
+        $path = $this->pathGenerator
             ->toRoute($routeName, $params)
             ->toString();
+
+        if ($path !== '/') {
+            $path = replace($path, '/^\/+/', '');
+        }
+
+        return $path;
     }
 }
