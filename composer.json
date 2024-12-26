@@ -27,7 +27,7 @@
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
         "symfony/console": "^6.2",
-        "twig/twig": "^3.4.3"
+        "twig/twig": "^3.14.2"
     },
     "require-dev": {
         "php-standard-library/psalm-plugin": "^2.2",
