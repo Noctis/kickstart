@@ -1,3 +1,12 @@
+# 4.0.3
+
+* Bumped min. required version of `twig/twig` to `3.14.2` due to security issues
+  * [CVE-2024-45411](https://github.com/advisories/GHSA-6j75-5wfj-gh66) (medium),
+  * [CVE-2024-51755](https://github.com/advisories/GHSA-jjxq-ff2g-95vh) (low),
+  * [CVE-2024-51754](https://github.com/advisories/GHSA-6377-hfv9-hqf6) (low).
+* Bumped min. required version of `symfony/var-dumper` to `6.4.x`
+* Bumped min. required version of `symfony/console` to `6.4.x`
+
 # 4.0.2
 
 * Updated `laminas/laminas-diactoros` to `2.24.2` due to a 
